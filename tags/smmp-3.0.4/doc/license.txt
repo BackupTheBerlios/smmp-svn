@@ -1,0 +1,31 @@
+By viewing or using any part of the program package
+SMMP you accept the following terms:
+
+SMMP is free software; it can be used modified and
+redistributed under the terms of the GNU General
+Public License (http://www.gnu.org/licenses/gpl.html)
+s published by the Free Software Foundation, EXCEPT
+WHERE RESTRICTED BY ONE OF THE FOLLOWING CLAUSES.
+
+SMMP's shall not be used  for commercial and/or military 
+purposes, or in the context of commercial and/or military 
+research.
+
+The use of SMMP has to be acknowledged in all resulting
+publications by quoting F. Eisenmenger, U.H.E. Hansmann, 
+S. Hayryan and C.K. Hu, [SMMP] A Modern Package for
+Protein Simulations, Comp.Phys. Comm.  (2001), 138 (2001) 
+192-212; An Enhanced Version of SMMP -Open-Source Software 
+Package for simulation of Proteins, submitted);J. H. Meinke, 
+S. Mohanty, F. Eisenmenger and U.H.E. Hansmann, SMMP v. 3.0 --- 
+Simulating proteins and protein interactions in Python and 
+Fortran, submitted to Comp.Phys.Comm.
+
+The authors request notification if any part of SMMP is 
+incorporated into other pograms.
+
+SMMP is distributed in the hope that it will be useful, but 
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
+the GNU General Public License (http://www.gnu.org/licenses/gpl-2.0.html)
+for more details. 

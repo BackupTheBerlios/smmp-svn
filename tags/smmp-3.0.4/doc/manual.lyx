@@ -1,0 +1,7851 @@
+#LyX 1.5.0rc2 created this file. For more info see http://www.lyx.org/
+\lyxformat 276
+\begin_document
+\begin_header
+\textclass revtex4
+\begin_preamble
+\usepackage{listings}
+\usepackage[]{hyperref}
+\end_preamble
+\options rmp, superscriptaddress
+\language english
+\inputencoding auto
+\font_roman times
+\font_sans helvet
+\font_typewriter courier
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\paperfontsize 10
+\spacing single
+\papersize a4paper
+\use_geometry false
+\use_amsmath 1
+\use_esint 0
+\cite_engine natbib_numerical
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "Jan H. Meinke" 
+\end_header
+
+\begin_body
+
+\begin_layout Title
+
+\size huge
+SMMP v.
+ 3
+\end_layout
+
+\begin_layout Author
+F.
+ Eisenmenger
+\end_layout
+
+\begin_layout Author Email
+eisenmenger@fmp-berlin.de
+\end_layout
+
+\begin_layout Affiliation
+Leibniz-Institut f
+\begin_inset ERT
+status inlined
+
+\begin_layout Standard
+
+{
+\backslash
+"u}
+\end_layout
+
+\end_inset
+
+r Molekulare Pharmakologie, 13125 Berlin, Germany
+\end_layout
+
+\begin_layout Author
+U.H.E.
+ Hansmann
+\end_layout
+
+\begin_layout Author Email
+hansmann@mtu.edu
+\end_layout
+
+\begin_layout Affiliation
+Michigan Technological University, Houghton, MI 49931-1291, USA
+\end_layout
+
+\begin_layout Affiliation
+Computational Biology and Biophysics, NIC, 52428 J
+\begin_inset ERT
+status inlined
+
+\begin_layout Standard
+
+{
+\backslash
+"u}
+\end_layout
+
+\end_inset
+
+lich, Germany
+\end_layout
+
+\begin_layout Author
+Sh.
+ Hayryan
+\end_layout
+
+\begin_layout Author Email
+shura@phys.sinica.edu.tw
+\end_layout
+
+\begin_layout Author
+C.-K.
+ Hu
+\end_layout
+
+\begin_layout Author Email
+huck@phys.sinica.edu.tw
+\end_layout
+
+\begin_layout Affiliation
+Institute of Physics, Academia Sinica, Nankang, Taipei 11529, Taiwan
+\end_layout
+
+\begin_layout Author
+J.
+ H.
+ Meinke
+\end_layout
+
+\begin_layout Author Email
+j.meinke@fz-juelich.de
+\end_layout
+
+\begin_layout Affiliation
+Computational Biology and Biophysics, NIC, 52428 J
+\begin_inset ERT
+status inlined
+
+\begin_layout Standard
+
+{
+\backslash
+"u}
+\end_layout
+
+\end_inset
+
+lich, Germany
+\end_layout
+
+\begin_layout Author
+S.
+ Mohanty
+\end_layout
+
+\begin_layout Author Email
+s.mohanty@fz-juelich.de
+\end_layout
+
+\begin_layout Affiliation
+Computational Biology and Biophysics, NIC, 52428 J
+\begin_inset ERT
+status inlined
+
+\begin_layout Standard
+
+{
+\backslash
+"u}
+\end_layout
+
+\end_inset
+
+lich, Germany
+\end_layout
+
+\begin_layout Standard
+\noindent
+\begin_inset LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Introduction
+\end_layout
+
+\begin_layout Standard
+The SMMP (
+\series bold
+S
+\series default
+imple 
+\series bold
+M
+\series default
+olecular 
+\series bold
+M
+\series default
+echanics for 
+\series bold
+P
+\series default
+roteins) package is designed for molecular simulations of linear proteins
+ within the standard geometry model.
+ The package contains various modern Monte Carlo algorithms and energy minimizat
+ion routines.
+ The energy of a protein can be calculated by exploiting one of four force
+ fields: ECEPP/2, ECEPP/3 
+\begin_inset LatexCommand citep
+key "ECEPP3"
+
+\end_inset
+
+, FLEX or Lund.
+ Two subroutines for approximating protein-solvent interactions by means
+ of calculating the solvent accessible surface area of atomic groups are
+ included.
+ Nine sets of solvation parameters are available.
+ All calculations are done with double precision, but the user can easily
+ modify this option by changing the corresponding IMPLICIT statement.
+\end_layout
+
+\begin_layout Standard
+This manual provides the user with the necessary information for installation
+ of the program, the format of the input and output files, a brief description
+ of the important routines, and describes some limitations of the package.
+ A few example runs providing detailed explanation of input and output are
+ added.
+ More information on SMMP, definitions, background and references for force
+ fields and algorithms as used in the program package can be found in 
+\begin_inset LatexCommand citep
+key "Eisenmenger2001,Eisenmenger2006"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+SMMP is offered as Open Source.
+ The program is written in standard FORTRAN.
+ We encourage users to improve the code and add their own modules.
+ Please send us your modifications and additions, so we can add them to
+ future releases.
+ Or send us a note and let us know where users can download your modules.
+ The usage and distribution of the program are governed by the following
+ license agreement:
+\newline
+ 
+\end_layout
+
+\begin_layout Quote
+SMMP is free software; it can be used, modified, and redistributed under
+ the terms of the GNU General Public License version 2 (
+\shape italic
+http://www.gnu.org/licenses/gpl.html
+\shape default
+) as published by the Free Software Foundation, EXCEPT WHERE RESTRICTED
+ BY ONE OF THE FOLLOWING CLAUSES.
+ 
+\newline
+SMMP shall not be used for commercial or military purposes.
+ The authors request notification if parts of SMMP are incorporated in other
+ programs.
+\newline
+The use of SMMP has to be acknowledged in all resulting publications
+ by quoting: 
+\shape italic
+F.
+ Eisenmenger, U.H.E.
+ Hansmann, S.
+ Hayryan and C.K.
+ Hu,
+\shape default
+ 
+\series bold
+[SMMP] A Modern Package for Protein Simulations
+\series default
+, 
+\shape italic
+Comp.
+ Phys.
+ Comm.
+ 138 (2001) 192-212
+\shape default
+; 
+\series bold
+An Enhanced Version of SMMP - Open-Source Software Package for Simulation
+ of Proteins
+\series default
+, 
+\shape italic
+Comp.
+ Phys.
+ Comm.
+ 174 (2006) 422-
+\shape default
+429.
+ 
+\emph on
+J.
+ H.
+ Meinke, S.
+ Mohanty, F.
+ Eisenmenger and U.H.E.
+ Hansmann,
+\series bold
+\emph default
+ SMMP v.
+ 3.0 --- Simulating proteins and protein interactions in Python and Fortran
+\series default
+, submitted to 
+\emph on
+Comp.\InsetSpace ~
+Phys.\InsetSpace ~
+Comm.
+\emph default
+
+\newline
+ SMMP is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+ 
+\end_layout
+
+\begin_layout Standard
+\noindent
+The most recent version of SMMP can be found on the program package's web
+ sites: 
+\series bold
+http://www.smmp05.net
+\series default
+ or 
+\series bold
+http://www.phy.mtu.edu/biophys/smmp.htm
+\series default
+.
+ Any suggestions for improvements of the code or reports on bugs are welcome.
+ Please send your remarks to the authors.
+\end_layout
+
+\begin_layout Standard
+\noindent
+
+\series bold
+Acknowledgments:
+\series default
+
+\newline
+ U.H.
+ acknowledges support by a research grant (CHE-9981874) of the National
+ Science Foundation (USA).
+ S.H.
+ and C.K.H.
+ are supported by Academia Sinica (Taipei) and by the National Science Council
+ of the Republic of China (Taiwan) under Contract No.
+ NSC 89-2112-M-001-084.
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+newpage
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Changes from Previous Version
+\end_layout
+
+\begin_layout Subsection
+New Features
+\end_layout
+
+\begin_layout Subsubsection
+New Force Field
+\end_layout
+
+\begin_layout Paragraph
+Lund Force Field
+\end_layout
+
+\begin_layout Standard
+The Lund force fields is a fast force field that uses a minimal set of parameter
+s to obtain good folding statistics.
+ It has been used successfully for protein folding, unfolding, and aggregation
+ simulations.
+ For details see 
+\begin_inset LatexCommand citep
+key "Irback2005"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection
+Multi-molecule simulations
+\end_layout
+
+\begin_layout Standard
+SMMP 3.0 implements inter-molecular interactions based on the ECEPP/3 force
+ field.
+\end_layout
+
+\begin_layout Subsubsection
+Biased Gaussian Step
+\end_layout
+
+\begin_layout Standard
+A new Monte Carlo move that interpolates smoothly between two nearly fixed
+ end points.
+\end_layout
+
+\begin_layout Subsubsection
+Parallel energy calculation
+\end_layout
+
+\begin_layout Standard
+The energy calculation for the ECEPP/3 force field can now be done in parallel
+ making it possible to speed up simulations for serial algorithms.
+ Combining the parallel energy calculation with parallel tempering, SMMP
+ can be used efficiently on 2048 processors on an IBM BlueGene/L super computer.
+\end_layout
+
+\begin_layout Subsubsection
+Python bindings
+\end_layout
+
+\begin_layout Standard
+We now provide Python bindings to SMMP that make the data structure and
+ algorithms available from (interactive) Python scripts.
+ 
+\end_layout
+
+\begin_layout Subsection
+API Changes
+\end_layout
+
+\begin_layout Standard
+In previous versions of SMMP the parameters for each algorithm were given
+ in the source code of the algorithm using PARAMETER statements.
+ Now, the parameters are passed as function arguments making the program
+ much more flexible.
+ The following functions and subroutines now have a different signature:
+ anneal, canon, minim, mulcan_par, mulcan_sim, outpdb, outvar, partem_p,
+ and regul.
+ For details see Section\InsetSpace ~
+
+\begin_inset LatexCommand ref
+reference "sec:Frequently-used-Functions"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Installation
+\end_layout
+
+\begin_layout Standard
+SMMP requires a FORTRAN 90 compatbile compiler.
+ We have compiled it using gfortran, pgif, xlf, and ifort on various platforms.
+ It should compile and link on any platform with a contemporary FORTRAN
+ compiler.
+ All subroutines are stored in *.f or *.f90 files.An example Makefile is included
+ in the package.
+ There are no machine dependent routines included in SMMP.
+ All COMMON blocks and the limiting parameters are gathered in INCL.H, which
+ is attached to the necessary modules through an INCLUDE statement.
+ After uncompressing and unpacking (via 'tar -xvf' command) the SMMP package
+ into a separate directory For the installation of SMMP the user needs to
+ run 
+\family typewriter
+make
+\family default
+ in the directory with the source code.
+ You should edit the Makefile to customize the compiler command and compiler
+ options used.
+ 
+\end_layout
+
+\begin_layout Subsection
+Building pySMMP
+\end_layout
+
+\begin_layout Standard
+This version of SMMP includes Python bindings to SMMP.
+ To build them, you need f2py, which is part of the numpy package.
+ If f2py is already installed on your system, pySMMP is built by issuing
+ the command 
+\emph on
+make pybind
+\emph default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+newpage
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+
+\emph on
+\noun on
+Biased Gaussian Steps
+\end_layout
+
+\begin_layout Subsection
+Introduction
+\end_layout
+
+\begin_layout Standard
+The Bias Gaussian Step, BGS for short, is a semi-local conformational update,
+ involving a concerted rotation of the backbone angles of 4 consecutive
+ residues in the protein chain.
+ The upstream part of the protein backbone, 
+\begin_inset Quotes eld
+\end_inset
+
+before
+\begin_inset Quotes erd
+\end_inset
+
+ the first of the 4 residues used for BGS is left unchanged.
+ The downstream part, 
+\begin_inset Quotes eld
+\end_inset
+
+after
+\begin_inset Quotes erd
+\end_inset
+
+ those 4 residues is moved slightly as a rigid body.
+ The section containing the 4 BGS residues is locally deformed.
+ 
+\end_layout
+
+\begin_layout Subsection
+Parameters
+\end_layout
+
+\begin_layout Standard
+The increments to the backbone angles involved in the update are first chosen
+ from a Gaussian distribution, and then biased to impart minimal changes
+ to the downstream parts of the chain.
+ If this later 
+\begin_inset Quotes eld
+\end_inset
+
+locality
+\begin_inset Quotes erd
+\end_inset
+
+ condition is relaxed, they would be trivially Gaussian-distributed.
+ There are two parameters of relevance, called 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$a_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$b_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+, declared in the common block 
+\noun on
+bgs_r
+\noun default
+.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$a_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+ controls the size of the increments, and hence directly influences the
+ acceptance rate of the updates.
+ Smaller the value of 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$a_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+, smaller the increments, and hence greater the chances of the update being
+ accepted.
+ Since a trivial zero size update is of little practical interest, even
+ if it is always accepted, it is desirable to have the value of 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$a_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+ as large as possible.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$b_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+ controls the degree of locality of the update, i.e., to what extent the downstrea
+m parts should be allowed to move.
+ Larger 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$b_{
+\backslash
+mathrm{BGS}}$
+\end_layout
+
+\end_inset
+
+ means a stricter locality criterion, and smaller acceptance.
+ These two parameters should not be arbitrarily changed.
+ The default values in SMMP, 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$a_{
+\backslash
+mathrm{BGS}}=300$
+\end_layout
+
+\end_inset
+
+ and 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+$b_{
+\backslash
+mathrm{BGS}}=10$
+\end_layout
+
+\end_inset
+
+ are tuned, to ensure maximum acceptance at a reasonable update size and
+ locality constraint.
+ 
+\end_layout
+
+\begin_layout Subsection
+Detailed balance and BGS
+\end_layout
+
+\begin_layout Standard
+Information about the current state of the protein is used inside BGS to
+ bias the increments towards greater locality.
+ Thus the current conformation affects the distribution of the incremental
+ angles.
+ This means that the reverse update would have a different probability of
+ being proposed.
+ Because of this, in order to ensure detail balance, an extra multiplicative
+ weight factor is needed for BGS along with the standard Metropolis weight,
+ to decide whether an update should be accepted.
+ The implementation of BGS in SMMP calculates this weight and evaluates
+ whether or not the proposed update was accepted.
+ 
+\end_layout
+
+\begin_layout Subsection
+The function BGS in SMMP
+\end_layout
+
+\begin_layout Standard
+BGS is implemented in SMMP as a function with the following signature:
+\end_layout
+
+\begin_layout Standard
+integer function bgs(eol1,dummy)
+\end_layout
+
+\begin_layout Standard
+The parameter eol1 passed to BGS is the energy of the system before the
+ call.
+ The argument 
+\begin_inset Quotes eld
+\end_inset
+
+dummy
+\begin_inset Quotes erd
+\end_inset
+
+ is a function that calculates the exponent of the Metropolis weight function.
+ The return value is 1 for an accepted BGS move and 0 for a rejected move.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Using BGS in SMMP
+\end_layout
+
+\begin_layout Standard
+To use BGS, one must ensure that the subroutine init_lund, which initialises
+ several arrays used in BGS, is called during the initialisation phase of
+ the program.
+ These arrays store information about the BGS-capable angles in the protein
+ chain.
+ Therefore, init_lund should be called again, in case the program changes
+ the amino acid sequence of a molecule or the total number of molecules
+ in the system.
+ 
+\end_layout
+
+\begin_layout Standard
+The global switch 
+\noun on
+upchswitch
+\noun default
+ controls how BGS is used by the metropolis subroutine, which is normally
+ the routine that calls BGS.
+ For 
+\noun on
+upchswitch=0, BGS 
+\noun default
+is never used.
+ For 
+\noun on
+upchswitch=1, 
+\noun default
+it is used with a probabilty 
+\noun on
+bgsprob
+\noun default
+, which is another global parameter.
+ For 
+\noun on
+upchswitch=2, 
+\noun default
+BGS is used when possible with a temperature dependent probability.
+ At higher temperatures abrupt single angle changes are more effective in
+ browsing the conformation space quickly.
+ A local update like BGS should therefore have a small probability at high
+ temperatures.
+ At low temperatures, often the system is in a compact state with significant
+ secondary structure, and it is desirable to explore the neighbourhood of
+ that state to refine the structure.
+ BGS is more efficient at this compared to single angle updates, and hence
+ should have a higher probability at lower temperatures.
+ The choice, 
+\noun on
+upchswitch=2 
+\noun default
+uses this scheme for BGS use.
+ 
+\end_layout
+
+\begin_layout Section
+Getting Started
+\end_layout
+
+\begin_layout Standard
+The quickest way to get started is to use one of the examples in the EXAMPLES
+ directory as a template.
+ The examples are described in Section\InsetSpace ~
+
+\begin_inset LatexCommand ref
+reference "sec:Examples"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+SMMP does not include an interpretor of user-defined commands instead the
+ preparation of a simulation is done in the MAIN module calling corresponding
+ simulation subroutine(s).
+ After adjusting MAIN to your needs, SMMP has to be re-compiled.
+ We provide a sample main file with detailed comments.
+ For a comment-free version see Listing 
+\begin_inset LatexCommand ref
+reference "listing:mainmc"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "float=h,language=Fortran,numbers=left"
+inline false
+status open
+
+\begin_layout Standard
+
+      program main
+\end_layout
+
+\begin_layout Standard
+
+      include "../INCL.H"
+\end_layout
+
+\begin_layout Standard
+
+     
+\end_layout
+
+\begin_layout Standard
+
+      character*80 libdir, seqfile, varfile
+\end_layout
+
+\begin_layout Standard
+
+      character grpn*4,grpc*4       
+\end_layout
+
+\begin_layout Standard
+
+      integer nequi, nsweeps, nmes       
+\end_layout
+
+\begin_layout Standard
+
+      double precision tmax, tmin       
+\end_layout
+
+\begin_layout Standard
+
+      logical lrand 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+      libdir = '../SMMP/'
+\end_layout
+
+\begin_layout Standard
+
+      ientyp = 0       
+\end_layout
+
+\begin_layout Standard
+
+      sh2 = .true.
+          
+\end_layout
+
+\begin_layout Standard
+
+      itysol = 0
+\end_layout
+
+\begin_layout Standard
+
+      call init_energy(libdir)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+      grpn = 'nh2'
+\end_layout
+
+\begin_layout Standard
+
+      grpc = 'cooh'
+\end_layout
+
+\begin_layout Standard
+
+      iabin = 1
+\end_layout
+
+\begin_layout Standard
+
+      seqfile='EXAMPLES/enkefa.seq'      
+\end_layout
+
+\begin_layout Standard
+
+      varfile='EXAMPLES/enkefa.var'       
+\end_layout
+
+\begin_layout Standard
+
+      ntlml = 0              
+\end_layout
+
+\begin_layout Standard
+
+      call init_molecule(iabin,grpn,grpc,seqfile,varfile) 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+      seed = 81236       
+\end_layout
+
+\begin_layout Standard
+
+      call sgrnd(seed)       
+\end_layout
+
+\begin_layout Standard
+
+      upchswitch= 0 
+\end_layout
+
+\begin_layout Standard
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+      nequi=100       
+\end_layout
+
+\begin_layout Standard
+
+      nsweeps=100000       
+\end_layout
+
+\begin_layout Standard
+
+      nmes=1000       
+\end_layout
+
+\begin_layout Standard
+
+      temp = 300             
+\end_layout
+
+\begin_layout Standard
+
+      lrand=.true.
+        
+\end_layout
+
+\begin_layout Standard
+
+      call canon(nequi, nsweeps, nmes, temp,lrand) 
+\end_layout
+
+\begin_layout Standard
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+      end program main
+\end_layout
+
+\begin_layout Standard
+
+\begin_inset Caption
+
+\begin_layout Standard
+The basic main function for a Monte Carlo Simulation
+\begin_inset LatexCommand label
+name "listing:mainmc"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The following steps summarize how to run SMMP: 
+\end_layout
+
+\begin_layout Enumerate
+Assign the path to the directory containing the standard amino acid residue
+ libraries and the file 'charges' to the character variable 'libdir' (Line
+ 10).
+\end_layout
+
+\begin_layout Enumerate
+Select the force field and solvation model by setting the four paramters
+ 'flex', 'sh2', 'epsd', and 'itysol' to their appropriate values: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+    * ientyp = 0   : ECEPP 
+\end_layout
+
+\begin_layout Standard
+
+               1   : FLEX 
+\end_layout
+
+\begin_layout Standard
+
+               2   : LUND
+\end_layout
+
+\begin_layout Standard
+
+               3   : ECEPP + Abagyan
+\end_layout
+
+\begin_layout Standard
+
+   * sh2 =.TRUE.
+  : ECEPP/2 potential, sh2=.FALSE.:  ECEPP/3
+\end_layout
+
+\begin_layout Standard
+
+   * epsd=.TRUE.
+  :  Distant dependent dielectric permittivity
+\end_layout
+
+\begin_layout Standard
+
+     epsd=.FALSE.
+ : epsilon = 2
+\end_layout
+
+\begin_layout Standard
+
+   * itysol = 0   : gas phase,
+\end_layout
+
+\begin_layout Standard
+
+     itysol > 0   : approximation of protein-solvent interactions by means
+\end_layout
+
+\begin_layout Standard
+
+                    of a solvent accessible surface area approach with
+\end_layout
+
+\begin_layout Standard
+
+                    numerical estimation of the accessible area,
+\end_layout
+
+\begin_layout Standard
+
+     itysol < 0   : same as above, but the accessible area is calculated
+\end_layout
+
+\begin_layout Standard
+
+                    analytically (considerably than itysol > 0).
+\end_layout
+
+\begin_layout Standard
+
+   
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ (Line 11--13).
+\end_layout
+
+\begin_layout Enumerate
+
+\shape italic
+call init_energy(libdir)
+\shape default
+ to initialize the energy parametrization (Line 12).
+\end_layout
+
+\begin_layout Enumerate
+Choose the N-terminal and C-terminal groups by assigning to appropriate
+ strings to variables 'grpn' and 'grpc' (Line 16--17)
+\end_layout
+
+\begin_layout Enumerate
+Choose how the initial input is read in: 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+   * iabin = 0   : read from PDB-file
+\end_layout
+
+\begin_layout Standard
+
+   * iabin = 1   : read from sequence (and configuration) file
+\end_layout
+
+\begin_layout Standard
+
+   
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ (Line 18)
+\end_layout
+
+\begin_layout Enumerate
+Enter the names of the corresponding file(s) '
+\shape italic
+seqfil
+\shape default
+' and '
+\shape italic
+varfil
+\shape default
+' (Line 19--20).
+ If there are empty, they'll be requested through an interactive command
+ line dialog, issued by '
+\shape italic
+call init_molecule
+\shape default
+' (Line 22).
+ The user can easily just supply the corresponding file names in a "here
+ document", as shown in the example scripts .
+\end_layout
+
+\begin_layout Enumerate
+At this point the program is ready for calling task subroutines.
+ Here we perform a canonical Monte Carlo simulation at T=300K.
+ Two kinds of updates are avaible: a single angle update and the biased
+ Gaussian step (bgs).
+ For this simulation we turn bgs off by setting 
+\family typewriter
+upchswitch=0
+\family default
+.
+ Detailed examples for this and other simulation tasks can be found in the
+ following section.
+ Normally, simulation subroutines write data in output files, but one can
+ also use output routines such as `
+\shape italic
+outpdb
+\shape default
+' in '
+\shape italic
+main
+\shape default
+'.
+ The minimal output (written into standard output) is the name of the sequence
+ file (extension .seq), name of configuration file (extension .var), and for
+ each residue a list of dihedral angles together with their initially assigned
+ values.
+ 
+\end_layout
+
+\begin_layout Enumerate
+For parallel tempering jobs on on a multiprocessor system one has to replace
+ '
+\shape italic
+main
+\shape default
+' by '
+\shape italic
+pmain
+\shape default
+'.
+ The above protocol still applies, but one has to provide in addition the
+ number of nodes with the variable '
+\shape italic
+no
+\shape default
+'.
+ 
+\end_layout
+
+\begin_layout Section
+Programming with SMMP
+\end_layout
+
+\begin_layout Standard
+While SMMP provides several efficient sampling algorithms, you may want
+ to improve an existing or implement a new algorithm.
+ This section goes into more details and explains some of the nuts and bolts
+ of SMMP.
+\end_layout
+
+\begin_layout Paragraph
+Where can I find information about atoms, residues, proteins, and dihedrals
+\end_layout
+
+\begin_layout Standard
+Configurations are stored in one dimensional arrays defined in INCL.H and
+ shared through common blocks.
+\begin_inset Note Note
+status collapsed
+
+\begin_layout Standard
+I hope, we'll have moved most of the arrays to modules before publication.
+\end_layout
+
+\end_inset
+
+ It helps to think somewhat object oriented to understand the structure
+ of the arrays.
+ In general integer arrays start with the letter 'i'.
+ The abbreviation 'ml' relates to molecules, 'rs' to residues, and 'at'
+ to atoms.
+ Several boundary arrays are pointers to the first and last element and
+ end in '1' for the first element and '2' for the last element.
+ For example, irsml1(i) is the index of the first residue in molecule 
+\begin_inset Formula $i$
+\end_inset
+
+, iatrs1(irsml(i)) is the index of the first atom of the first residue of
+ molecule 
+\begin_inset Formula $i$
+\end_inset
+
+.
+ If iat = iatrs1(irsml(i)), then we can access the coordinates of the atom
+ using xat(iat), yat(iat), z(iat).
+ Using this scheme we can cycle through all the atoms in the system.
+ An example is shown in Listing 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+ref{listing:outpdb}
+\end_layout
+
+\end_inset
+
+.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+lstset{language=Fortran}
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+begin{lstlisting}[float=p, caption={Using the indices to cycle through all
+ the atoms in the system.
+ This snippet is taken from the subroutine outpdb, which writes the current
+ configuration to a file using the pdb format.}, label=listing:outpdb]
+\end_layout
+
+\begin_layout Standard
+
+irs=0
+\end_layout
+
+\begin_layout Standard
+
+iat0 = 0
+\end_layout
+
+\begin_layout Standard
+
+do inml = nml0, nml1
+\end_layout
+
+\begin_layout Standard
+
+   iat = iat0
+\end_layout
+
+\begin_layout Standard
+
+   chid = char(64 + inml)
+\end_layout
+
+\begin_layout Standard
+
+   ifirs=irsml1(inml)
+\end_layout
+
+\begin_layout Standard
+
+   ifiat=iatrs1(ifirs)
+\end_layout
+
+\begin_layout Standard
+
+   do nrs=ifirs,irsml2(inml)
+\end_layout
+
+\begin_layout Standard
+
+      irs=irs+1
+\end_layout
+
+\begin_layout Standard
+
+      res(1:)=seq(nrs)(1:3)
+\end_layout
+
+\begin_layout Standard
+
+      do i=iatrs1(nrs),iatrs2(nrs)
+\end_layout
+
+\begin_layout Standard
+
+         iat=iat+1
+\end_layout
+
+\begin_layout Standard
+
+         atnm=' '
+\end_layout
+
+\begin_layout Standard
+
+         atnm(2:5)=nmat(i) ! nmat(i) contains the name of atom i
+\end_layout
+
+\begin_layout Standard
+
+         if (atnm(5:5).ne.' ') then
+\end_layout
+
+\begin_layout Standard
+
+            atnm(1:1)=atnm(5:5) !!
+\end_layout
+
+\begin_layout Standard
+
+            atnm(5:5)=' '
+\end_layout
+
+\begin_layout Standard
+
+         endif 
+\end_layout
+
+\begin_layout Standard
+
+         z=zat(i)-rz
+\end_layout
+
+\begin_layout Standard
+
+         call toupst(atnm) ! converts a string to all uppercase
+\end_layout
+
+\begin_layout Standard
+
+         call toupst(res)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+         write (npdb,1) 'ATOM',iat,atnm,res(1:3),chid,irs,cdin,
+\end_layout
+
+\begin_layout Standard
+
+                         xat(i), yat(i),zat(i),occ,bva                 
+            
+\end_layout
+
+\begin_layout Standard
+
+      enddo 
+\end_layout
+
+\begin_layout Standard
+
+   enddo
+\end_layout
+
+\begin_layout Standard
+
+enddo
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{lstlisting}
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float table
+placement p
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="left" valignment="top" leftline="true" rightline="true" width="35col%">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Variable Name 
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ityat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Index of type of atom
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+xat, yat, zat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+arrays of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Cartesian coordinates of atom
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+cgat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Partial electric charge on atom
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+nmat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of character*4
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Name of atom, e.g., C, N, O, H1, H2
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+iowat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Index of preceeding atom (see Fig.\InsetSpace ~
+
+\begin_inset LatexCommand ref
+reference "fig:Enumeration-of-atoms"
+
+\end_inset
+
+), 0 if no preceeding atom.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+iyowat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Type of bond with preceeding atom.
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Maybe, this should be called ityinbdat.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+nbdat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Number of bonds to succeeding atom (outgoing bonds)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ibdat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+two dimensional array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Indices of successor atoms
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "tab:atomic-properties"
+
+\end_inset
+
+List of variables storing atomic properties.
+ All the properties of atom 
+\begin_inset Formula $i$
+\end_inset
+
+ are accessed as the 
+\begin_inset Formula $i$
+\end_inset
+
+th element of the arrays.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float table
+placement p
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="3">
+<features>
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" width="0">
+<column alignment="center" valignment="top" leftline="true" rightline="true" width="35col%">
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Name
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Type
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Description
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+xbaat, ybaat, zbaat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+3 arrays of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotation axis for valence angle.
+ (see Fig.
+ )
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+baat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Valence angle in radians
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+xtoat, ytoat, ztoat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+3 arrays of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Rotation axis for dihedral (torsion) angle.
+ (see Fig.)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+toat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Torsion angle defined by iowat(iowat(iowat(i))), iowat(iowat(i)), iowat(i),
+ i in radians (see Fig.)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+blat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of double
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Length of bond.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+ixmsat
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+array of int
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+Index of moving set belonging to atom
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row topline="true" bottomline="true">
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Standard
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "tab:dihedral-to-atom"
+
+\end_inset
+
+Each dihedral and valence angle and the corresponding moving set is associated
+ with a covalent bond which in turn is defined by its tail atom.
+ This table list the related variables.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+wide false
+sideways false
+status collapsed
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename angle_defs.eps
+	scaleBeforeRotation
+	subcaption
+
+\end_inset
+
+
+\begin_inset Graphics
+	filename dihedral_defs.eps
+	scaleBeforeRotation
+	subcaption
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:angle-defs-in-SMMP"
+
+\end_inset
+
+Angle in SMMP.
+ There are two different types of angles in SMMP (and proteins in general):
+ bond and torsional angles.
+ The bond or valence angle is show in (a).
+ The red arrow indicates the rotation axis and is proportional to the cross
+ product of the two bonds 
+\begin_inset Formula $(1,4)$
+\end_inset
+
+ and 
+\begin_inset Formula $(4,25)$
+\end_inset
+
+making up the angle.
+ The angle 
+\begin_inset Formula $\alpha$
+\end_inset
+
+ is associated with atom 
+\begin_inset Formula $4$
+\end_inset
+
+.
+ The dihedral or torsional angles are rotations around a bond and determined
+ by the angles between the two adjacent planes.
+ For example, the angle 
+\begin_inset Formula $\psi$
+\end_inset
+
+ in (b) is the angle between the plane defined by atoms 1, 4, and 25, and
+ the plane defined by 4, 25, and 28.
+ We could therefore reference this angle using the quadruplet (1, 4, 25,
+ 28).
+ Note that atom 1 is the predecessor of atom 4, atom 4 the predecessor of
+ 25, and, finally, atom 25 the predecessor of 28.
+ SMMP uses this relation to associate the angle 
+\begin_inset Formula $\psi$
+\end_inset
+
+ with atom 28.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Table 
+\begin_inset LatexCommand ref
+reference "tab:atomic-properties"
+
+\end_inset
+
+ lists the arrays containing the atomic properties such as charge, position,
+ and in- and outgoing bonds.
+ In the standard geometry configurations can defined by the dihedral angles.
+ The variables associated with the angles are given in Table 
+\begin_inset LatexCommand ref
+reference "tab:dihedral-to-atom"
+
+\end_inset
+
+ and a description of the angles can be found in Fig.\InsetSpace ~
+
+\begin_inset LatexCommand ref
+reference "fig:angle-defs-in-SMMP"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Paragraph
+\begin_inset Note Note
+status open
+
+\begin_layout Standard
+Why are the names so short and what do they mean?
+\end_layout
+
+\begin_layout Paragraph
+Setting up a force field
+\end_layout
+
+\begin_layout Paragraph
+Loading a molecule from a .seq and .var file
+\end_layout
+
+\begin_layout Standard
+fixed variables, default values, access?
+\end_layout
+
+\begin_layout Paragraph
+Loading a molecule from a PDB file
+\end_layout
+
+\begin_layout Standard
+where are things stored? what does regularization do? 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Limitations
+\end_layout
+
+\begin_layout Standard
+All parameters which limit the usage of SMMP are stored in the file INCL.H.
+ The most important ones are listed below.
+ The values of these parameters should be changed only in a consistent way!
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxml=1              max.
+ number of molecules 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxrs=100            max.
+ total number of residues 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxat=2000           max.
+ total number of atoms 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxbd=3              max.
+ number of bonds to following atoms 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxvr=mxrs*5         max.
+ number of local variables 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxms=mxvr*3         max.
+ total number of moving sets 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxvw=mxat*4         max.
+ number of vdw domains
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mx14=mxat*4         max.
+ number of '1-4' partners
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxath=100,          max.
+ number of atoms in help-arrays 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxvrh=mxath         max.
+ number of variables in help 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxtyat=18           max.
+ number of energetic atom-types 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxhbdo=4            max.
+ types of Hydrogens as donors in HB 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxhbac=6            max.
+ types of atoms as acceptors in HB 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxtyto=19           max.
+ number of types of torsional potentials 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+nrsty=35            max.
+ number of residue types 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+mxtysol=9           the number of solvation parameters sets 
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+Note also the following restrictions in the current version of SMMP: 
+\end_layout
+
+\begin_layout Enumerate
+A single amino acid residue can not be simulated with the FLEX potential
+\end_layout
+
+\begin_layout Enumerate
+A protein must not start with a prolyl residue.
+ 
+\end_layout
+
+\begin_layout Section
+Libraries and Parameter Files
+\end_layout
+
+\begin_layout Standard
+The residues which can be used with each parameter set are described in
+ files 
+\shape italic
+lib.sh2, lib.sh3
+\shape default
+, and 
+\shape italic
+lib.flex
+\shape default
+, respectively.
+ The file 
+\shape italic
+charges
+\shape default
+ is needed for N- and C-terminal residues with FLEX parameters.
+ The name of the directory, containing these 4 files should be given in
+ string 'libdir', which is assigned in module MAIN.
+ The choice between parameter sets for potentials ECEPP/2 and ECEPP/3 is
+ done by the logical variable '
+\shape italic
+sh2
+\shape default
+'.
+ The potential FLEX is set by the logical variable '
+\shape italic
+flex
+\shape default
+'.
+\end_layout
+
+\begin_layout Standard
+The amino acid residue libraries contain chemical and structural data for
+ each residue according the IUPAC-IUB nomenclature.
+ The library files consist of blocks of records with each block representing
+ one residue.
+ The first line in each block starts with a '#' and contains the name of
+ the residue and its total number of atoms.
+ Each following line within the block describes one atom.
+ Listed are: its name, the bond length and the valence angle to construct
+ this atom, the type and the name of corresponding torsion angle, the partial
+ charge for the atom, the type of the atom, as well as the previous and
+ the following atoms (max.
+ 3), it is connected to.
+ The atom and torsional parameters in the libraries are the same as in the
+ original ECEPP/2/3 and FLEX potentials.
+ However, it should be noted that SMMP has its own numeration of the atom
+ types and the types of torsions (see [1,2] for more details).
+\end_layout
+
+\begin_layout Standard
+The arrays with the parameters for non bonded pairwise potentials (Van der
+ Waals, hydrogen bonds, electrostatic) and the atomic solvation parameters
+ are stored in the BLOCK DATA section of '
+\shape italic
+init_energy.f
+\shape default
+'.
+\end_layout
+
+\begin_layout Standard
+SMMP employs 9 different sets of atomic solvation parameters.
+ We do not include references to the original works where these sets are
+ defined in this document, since this manual is only a supplement to our
+ articles 
+\begin_inset LatexCommand cite
+key "Eisenmenger2001,Eisenmenger2006"
+
+\end_inset
+
+ where all relevant references can be found.
+ The set of solvation parameters chosen is indicated by the value of integer
+ variable '
+\shape italic
+itysol
+\shape default
+' in the MAIN module.
+ If setting 
+\shape italic
+itysol
+\shape default
+ to a positive value between 
+\shape italic
+1
+\shape default
+ and 
+\shape italic
+9
+\shape default
+ in MAIN, the numerical method 
+\shape italic
+enysol
+\shape default
+ is applied to compute the solvation energy term.
+ By choosing a negative integer value for 
+\shape italic
+itysol
+\shape default
+ from the interval 
+\shape italic
+[-1,-9]
+\shape default
+, the analytical method 
+\shape italic
+esolan
+\shape default
+ is used to calculate the solvation energy.
+ The tesselation points for numerically calculating the solvent accessible
+ surface area have to be provided in an external file (named 
+\shape italic
+tes.dat
+\shape default
+ in our package) and read in during initialization of solvation parameters
+ in 
+\shape italic
+init_energy.f
+\shape default
+.
+\end_layout
+
+\begin_layout Section
+Input Files
+\end_layout
+
+\begin_layout Standard
+SMMP requires an input file that specifies the sequence of amino acid residues
+ of the protein in plain ASCII-format.
+ 
+\end_layout
+
+\begin_layout Subsection
+PDB-File
+\begin_inset LatexCommand label
+name "sub:PDB-File"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Setting the variable '
+\shape italic
+iabin = 0
+\shape default
+' in 
+\shape italic
+main.f
+\shape default
+ the sequence of amino acids is read from a PDB-file - the standard format
+ in which protein structures are deposited in the Protein Data Bank.
+ The atomic coordinates are also read from the PDB-file and can serve as
+ a start configuration.
+ However, the fixed bond lengths and angles in the standard geometry will
+ slightly differ from the actual bond lengths and angles in the PDB-structure.
+ Forcing the molecule into standard bonding geometry corresponding to a
+ given potential may lead to un-physically high energies.
+ Regularization through 
+\shape italic
+regul.f
+\shape default
+ allows to obtain an optimized structure with standard bonding geometry
+ with low internal energy without differing significantly from the PDB structure.
+ 
+\end_layout
+
+\begin_layout Subsection
+Sequence File
+\begin_inset LatexCommand label
+name "sub:Sequence-File"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Setting `
+\shape italic
+iabin = 1
+\shape default
+' the amino acid sequence is read from a separate sequence file.
+ Its first line must start with a '#' and may contain the name for the molecule.
+ The residues in the following lines should be named as in the library files
+ 
+\shape italic
+lib.sh2, lib.sh3
+\shape default
+, or 
+\shape italic
+lib.flex
+\shape default
+.
+ Residue names are not case-sensitive and should be separated from each
+ other by at least one white space.
+\end_layout
+
+\begin_layout Standard
+Currently, the following residue types can be used in SMMP: 
+\end_layout
+
+\begin_layout Enumerate
+Neutral:
+\newline
+ ala, arg, asn, asp, cys, gln, glu, gly, his* ; hise* ; hyp*, ile,
+ leu, lys, met, phe, pro* , ser, thr, trp, tyr, val
+\newline
+ (where the residues
+ marked by an asterix are characterized by:
+\newline
+ his - hydrogen at N-delta atom
+\newline
+
+ hise - hydrogen at N-epsilon atom
+\newline
+ pro, hyp - down-puckering) 
+\end_layout
+
+\begin_layout Enumerate
+Charged:
+\newline
+ arg+, asp-, glu-, his+, lys+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Variants, only with ECEPP/3 parameters:
+\newline
+ hypu, prou - up-puckering
+\newline
+ cpro,
+ cpru - cis-Pro with down-, up-puckering
+\newline
+ pron, pro+ - N-terminal neutral,
+ charged with respect to NH2+ Pro 
+\end_layout
+
+\begin_layout Standard
+End-groups need to be specified in 
+\shape italic
+main.f
+\shape default
+ and are added through subroutine 
+\shape italic
+addend
+\shape default
+ to the N- and C-terminus, correspondingly.
+ Possible values for the end groups are nh2 and nh3+ for the N terminal
+ and cooh and coo- for the C terminal.
+ Note, that the acetyl group ('
+\shape italic
+ace
+\shape default
+') and N'methylamide ('
+\shape italic
+nme
+\shape default
+') need to be added as 
+\shape italic
+residues
+\shape default
+ in the sequence file.
+ In that case, input into '
+\shape italic
+addend
+\shape default
+' will be ignored by SMMP.
+ Note also, that at present, molecules with only one single residue cannot
+ be simulated with the FLEX data set and the first residue should not be
+ a prolyl residue.
+\end_layout
+
+\begin_layout Standard
+An example sequence file (provided with SMMP) may look as follows: 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+------------------- enkefa.seq -------------------------- 
+\end_layout
+
+\begin_layout Standard
+
+# Met-Enkephalin 
+\end_layout
+
+\begin_layout Standard
+
+Tyr Gly Gly Phe Met 
+\end_layout
+
+\begin_layout Standard
+
+--------------------------------------------------------- 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Configuration File (Dihedrals)
+\begin_inset LatexCommand label
+name "sub:Configuration-File-(Dihedrals)"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With option '
+\shape italic
+iabin = 1
+\shape default
+' SMMP allows to provide a designated start configuration by listing dihedral
+ angles in a second input file.
+ If no name of any configuration file is given (or the name of a non-existing
+ file is entered), all variables retain their default values as defined
+ in the libraries.
+\end_layout
+
+\begin_layout Standard
+This configuration file has to follow a fixed structure in which each line
+ can be considered as a COMMAND for subroutine '
+\shape italic
+redvar
+\shape default
+'.
+ The following syntax has to be used in each COMMAND: RESIDUE : VARIABLE
+ : VALUE Hence, each line can consist of up to 3 FIELDS, separated by an
+ ':'.
+ In the first field the RESIDUE is selected through an INTEGER number which
+ marks its position in the amino acid sequence.
+ The second field should contain a string with the name of the VARIABLE,
+ i.e.
+ names the specific dihedral angle.
+ The last field provides the value for the VARIABLE (a REAL number) and
+ is mandatory.
+ A symbol '&' following this number indicates that the variable will be
+ fixed to that value throughout the whole simulation process.
+ Spaces are not significant and are therefore ignored.
+ Empty COMMANDS, as ' : : ', and empty lines or lines containing '#' are
+ ignored.
+ Missing fields are interpreted as 'for all': 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+1 : phi : 180         Set phi of residue #1 to 180 degrees 
+\end_layout
+
+\begin_layout Standard
+
+1 : phi : 180&        Keep phi of residue #1 fixed to 180 degrees 
+\end_layout
+
+\begin_layout Standard
+
+phi : 180             Set phi  of ALL residues to 180 degrees 
+\end_layout
+
+\begin_layout Standard
+
+180                   Set all variables to 180 degrees 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ Several consecutive residues or variables can be indicated by ZONES of
+ indices.
+ Several NAMES can be indicated by wild-card ('*') and are case-sensitive:
+ 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+1-4 : phi : 180       Set 'phi' of residues #1,#2,#3, and #4 to 180 deg.
+ 
+\end_layout
+
+\begin_layout Standard
+
+5 : x* : 60           Set all xi-angles of residue #5 to 60 deg.
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ Several NAMES or INDICES may be given in the same field, when separated
+ by ','.
+ Similarly, several commands may be given on the same line and must be separated
+ by ';' 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim} 
+\end_layout
+
+\begin_layout Standard
+
+phi, psi : -30        Set all phi & psi to -30 deg.
+ 
+\end_layout
+
+\begin_layout Standard
+
+phi:-65; psi:-45      Set all phi=-65, all psi=-45 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ Note, that dihedral angles are defined slightly differently in SMMP than
+ in standard ECEPP (residue index in parenthesis): 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ - psi of the i-th residue = defined by N (i-1) - CA(i-1) - C (i-1) - N(i)
+ 
+\end_layout
+
+\begin_layout Standard
+
+ - omg of the i-th residue = defined by CA(i-1) - C (i-1) - N (i) - CA(i)
+ 
+\end_layout
+
+\begin_layout Standard
+
+ - phi for the i-th residue = defined by C (i-1) - N (i) - CA(i) - C(i)
+ 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ except: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+phi for the 1st residue = defined by H1(1) - N (1) - CA(1) - C(1) 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ (H2-atom in the N-terminal NH2-group is added via dihedral 'H2-N-CA-C'=
+ phi + 120) 
+\end_layout
+
+\begin_layout Standard
+If a molecule consists of n residues then: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ - pst = defines dihedral N (n) - CA(n) - C (n) - Oxt(n) 
+\end_layout
+
+\begin_layout Standard
+
+ - omt = defines dihedral CA(n) - C (n) - Oxt(n) - Hxt(n) 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ (Oxt & Hxt comprise the hydroxyl of the C-terminal carboxyl group)
+\end_layout
+
+\begin_layout Standard
+The following example configuration file 
+\shape italic
+enkefa.var
+\shape default
+ is provided with the program and may be used with the sequence file 
+\shape italic
+enkefa.seq
+\shape default
+: 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+------------------- enkefa.var -------------------------- 
+\end_layout
+
+\begin_layout Standard
+
+1 : phi :  -86.24 
+\end_layout
+
+\begin_layout Standard
+
+1 : x1  : -172.59 
+\end_layout
+
+\begin_layout Standard
+
+1 : x2  :   78.71 
+\end_layout
+
+\begin_layout Standard
+
+1 : x6  : -165.88 
+\end_layout
+
+\begin_layout Standard
+
+2 : psi :  156.18 
+\end_layout
+
+\begin_layout Standard
+
+2 : omg :  180.00 
+\end_layout
+
+\begin_layout Standard
+
+2 : phi : -154.53 
+\end_layout
+
+\begin_layout Standard
+
+3 : psi :   83.64 
+\end_layout
+
+\begin_layout Standard
+
+3 : omg :  180.00 
+\end_layout
+
+\begin_layout Standard
+
+3 : phi :   83.66 
+\end_layout
+
+\begin_layout Standard
+
+4 : psi :  -73.86 
+\end_layout
+
+\begin_layout Standard
+
+4 : omg :  180.00 
+\end_layout
+
+\begin_layout Standard
+
+4 : phi : -137.04 
+\end_layout
+
+\begin_layout Standard
+
+4 : x1 :    58.79 
+\end_layout
+
+\begin_layout Standard
+
+4 : x2 :    94.60 
+\end_layout
+
+\begin_layout Standard
+
+5 : psi :   19.33 
+\end_layout
+
+\begin_layout Standard
+
+5 : omg : -180.00 
+\end_layout
+
+\begin_layout Standard
+
+5 : phi : -163.63 
+\end_layout
+
+\begin_layout Standard
+
+5 : x1 :    52.76 
+\end_layout
+
+\begin_layout Standard
+
+5 : x2 :   175.28 
+\end_layout
+
+\begin_layout Standard
+
+5 : x3 :  -179.83 
+\end_layout
+
+\begin_layout Standard
+
+5 : x4 :   -58.57 
+\end_layout
+
+\begin_layout Standard
+
+5 : pst :  160.45 
+\end_layout
+
+\begin_layout Standard
+
+5 : omt :  180.00 
+\end_layout
+
+\begin_layout Standard
+
+--------------------------------------------------------- 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Standard
+\align center
+\begin_inset Graphics
+	filename atom_numbering.eps
+	scaleBeforeRotation
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Caption
+
+\begin_layout Standard
+\begin_inset LatexCommand label
+name "fig:Enumeration-of-atoms"
+
+\end_inset
+
+Enumeration of atoms in SMMP.
+ Atoms are numbered starting from the N terminal of the protein.
+ The terminal nitrogen has the index 1.
+ Counting continues with the two attached hydrogens and then moves along
+ the backbone.
+ After the C
+\begin_inset Formula $_{\alpha}$
+\end_inset
+
+, we count along the side chain following a breadth-first scheme.
+ Rings are enumerated counter clockwise.
+ 
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Frequently used Functions and Subroutines
+\begin_inset LatexCommand label
+name "sec:Frequently-used-Functions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Task Subroutines
+\end_layout
+
+\begin_layout Standard
+In the following we describe some important simulation subroutines and their
+ requisites.
+ For more information see [1,2].
+ Following the philosophy behind SMMP these routines are rather simple and
+ may serve as templates which the user can modify according to his special
+ needs.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine init_molecule(iabin, grpn, grpc, seqfile, varfile)
+\end_layout
+
+\begin_layout Standard
+(Usage: '
+\emph on
+call init_molecule(iabin, grpn, grpc, seqfile, varfile)')
+\end_layout
+
+\begin_layout Standard
+Initializes a new molecule and adds it to the system.
+ The information is either read from a sequence (see 
+\begin_inset LatexCommand ref
+reference "sub:Sequence-File"
+
+\end_inset
+
+) and, optionally, a variable file (see 
+\begin_inset LatexCommand ref
+reference "sub:Configuration-File-(Dihedrals)"
+
+\end_inset
+
+) if 
+\emph on
+iabin=1
+\emph default
+ or from a pdb file (see 
+\begin_inset LatexCommand ref
+reference "sub:PDB-File"
+
+\end_inset
+
+) if 
+\emph on
+
+\begin_inset Formula $iabin\neq1$
+\end_inset
+
+
+\emph default
+.
+ If the molecule is read from a pdb file, the name of the file is given
+ in 
+\emph on
+seqfile
+\emph default
+.
+ By repeatedly calling init_molecule, you can add several interacting molecules.
+ The N-terminal group is determined by 
+\emph on
+grpng
+\emph default
+ and the C-terminal group 
+\emph on
+grpc.
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine REGUL(nml, iter, nsteps, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+)
+\begin_inset LatexCommand index
+name "REGUL"
+
+\end_inset
+
+ (file regul.f)
+\end_layout
+
+\begin_layout Standard
+(Usage: '
+\shape italic
+call regul(nml, iter, nsteps, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+)
+\shape default
+')
+\end_layout
+
+\begin_layout Standard
+For a given PDB-structure the actual bond lengths and bond angles generally
+ differ from those in the standard geometry model assumed with the ECEPP
+ or FLEX potential.
+ This subroutine is applied to determine the configuration within the standard
+ geometry that is as close as possible to a given PDB-structure with an
+ energy as low as possible.
+ This process of fitting a PDB structure into standard geometry is called
+ regularization.
+ '
+\shape italic
+regul
+\shape default
+' requires the PDB-structure to be read into SMMP by setting '
+\shape italic
+iabin = 0
+\shape default
+' in '
+\shape italic
+main
+\shape default
+'.
+ With this option, `
+\shape italic
+init_molecule
+\shape default
+' calls the subroutines `
+\shape italic
+pdbread
+\shape default
+' and `
+\shape italic
+pdbvars
+\shape default
+' that also to measure the dihedral angles in the PDB-structure.
+ Using these dihedral angles a first model of the molecule is built using
+ standard bonding geometry.
+ Hence, '
+\shape italic
+regul
+\shape default
+' has to be called AFTER '
+\shape italic
+init_molecule
+\shape default
+'.
+ '
+\shape italic
+nml
+\shape default
+' has to be set to 1 in the present version of SMMP.
+\end_layout
+
+\begin_layout Standard
+'
+\shape italic
+regul
+\shape default
+' starts with a minimization of the initial structure using only the sum
+ of squared distances between atom positions of the SMMP structure to the
+ PDB-structure as 
+\begin_inset Quotes erd
+\end_inset
+
+constraint energy
+\begin_inset Quotes erd
+\end_inset
+
+.
+ After this initial step, a list of bad atom contacts, i.e.
+ atoms with vdW-energy of more than 2 kcal/mol (as calculated by '
+\shape italic
+cnteny
+\shape default
+') and the root-mean-square-deviation (rmsd) to the PDB-structure is printed
+ out.
+ In a second step, the physical energy is minimized, allowing only hydrogens
+ to move, and bad contacts and the rmsd are evaluated, again.
+ A number of iterations follow where a composite energy as the weighted
+ sum of physical and constraint energy is minimized.
+ In this iterations the weight of the constraint energy is successively
+ lowered to zero, and that of the physical energy raised to one.
+ At the end, the dihedral angles of the final structure are printed out
+ together with its rmsd and list of remaining bad contacts.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine MINIM(imin, maxit, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+)
+\begin_inset LatexCommand index
+name "MINIM"
+
+\end_inset
+
+ (file minim.f):
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+'call minim(imin
+\shape default
+, maxit, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+)')
+\newline
+ This subroutine minimizes the current configuration of the molecule.
+ It can be called from any point during the simulation once a configuration
+ is defined.
+ When calling this subroutine one needs to specify the type of minimizer
+ through variable '
+\shape italic
+imin
+\shape default
+'.
+ Setting '
+\shape italic
+imin = 1
+\shape default
+' chooses a Quasi-Newton minimizer by calling '
+\shape italic
+minqsn
+\shape default
+', '
+\shape italic
+imin = 2
+\shape default
+' a Conjugate Gradient minimizer ('
+\shape italic
+mincjg
+\shape default
+').
+ The performance of these minimizers can be controlled by setting various
+ parameters in MINIM.
+ The two most commonly used ones, the accuracy ('
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+') and the total number of function calls 'mxit' are passed as arguments.
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine CANON(nequi, nswp, nmes, temp, lrand)
+\begin_inset LatexCommand index
+name "CANON"
+
+\end_inset
+
+ (file canon.f):
+\end_layout
+
+\begin_layout Standard
+(Usage: '
+\emph on
+call canon(nequi, nswp, nmes, temp, lrand)
+\emph default
+')
+\newline
+The subroutine carries out a canonical simulation at temperature 'temp'.
+ The simulation starts from a random configuration if the logical parameter
+ 'lrand' is set to 
+\shape italic
+.TRUE.
+\shape default
+.
+ Otherwise the simulation starts from the current conformation of dihedral
+ angles as stored in array 'vlvr'.
+ One also has to set the number of Monte Carlo sweeps for the simulation
+ 'nswp', and the equilibration 'nequi', as well as the number 'nmes' of
+ Monte Carlo sweeps between measurements.
+ Three output files are created: files `start.pdb' and 'final.pdb' are for
+ storing the start and final configurations of the molecule, respectively,
+ in a data format compatible with Protein Data Bank.
+ The file 'time.d' contains the time series of some quantities.
+ In our template we measure and store in this file the total energy 'eol';
+ the radius-of-gyration `rgy' (by means of subroutine RGYR (
+\begin_inset LatexCommand ref
+reference "ite:Subroutine-RGYR"
+
+\end_inset
+
+)); the number of helical (
+\begin_inset Formula $\beta$
+\end_inset
+
+-sheet-like) residues 'nhel' ('nbet') and segments 'mhel' (`mbet') using
+ subroutine HELIX (
+\begin_inset LatexCommand ref
+reference "ite:subroutine-HELIX"
+
+\end_inset
+
+); and the number of hydrogen bonds 'mhb' calculated through subroutine
+ HBOND (
+\begin_inset LatexCommand ref
+reference "ite:Subroutine-HBOND"
+
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine ANNEAL(nequi, nswp, nmes, tmax, tmin, lrand)
+\begin_inset LatexCommand index
+name "ANNEAL"
+
+\end_inset
+
+ (file: anneal.f):
+\end_layout
+
+\begin_layout Standard
+(Usage: '
+\emph on
+call anneal(nequi, nswp, nmes, tmax, tmin, lrand)
+\emph default
+')
+\end_layout
+
+\begin_layout Standard
+This subroutine allows for optimization of protein conformations by means
+ of simulated annealing.
+ When the logical parameter 'lrand' is set to 
+\shape italic
+.TRUE.
+
+\shape default
+ then the program will start from a random configuration.
+ Otherwise, the annealing process will start from the current configuration
+ as stored in the array 'vlvr'.
+ You have to set the initial and final temperatures 'tmax' and 'tmin', the
+ number of Monte Carlo sweeps for simulation nswp and equilibration 'nequi',
+ and the number 'nmes' of Monte Carlo sweeps between measurements.
+ Four output files are created in the same directory where the executable
+ is running: three of them contain the start (start.pdb), the final (final.pdb)
+ and the global minimum configuration (global.pdb), respectively, the 4th
+ file (time.d) contains the time series of the simulation.
+ In the presented template we measure and store in this file the actual
+ temperature 'temp', the total energy 'eol', the radius-of-gyration 'rgy'
+ (as calculated by subroutine RGYR) and the Zimmerman code (as character
+ variable 'zimm') of the present configuration as obtained through subroutine
+ ZIMMER.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine MULCAN_PAR(nsweep, nup, temp, kmin, kmax, binWidth, l_iter)
+\begin_inset LatexCommand index
+name "MULCANPAR"
+
+\end_inset
+
+ (file mulcan_mod_par.f):
+\end_layout
+
+\begin_layout Standard
+This subroutine is part of the module 
+\emph on
+multicanonical
+\emph default
+.
+ To use the function include the module with 
+\emph on
+use multicanonical
+\emph default
+ in your main file.
+ The subroutine calculates multicanonical weight factors and has two working
+ modes.
+ One is for improving the already existing set of multicanonical parameters
+ through further iterations, and another to calculate them anew.
+ In the first case the logical variable 'l_iter' is set to the value 
+\shape italic
+.TRUE.
+\shape default
+.
+ The histogram from a preliminary simulation as well as the existing values
+ of the parameters are read from the file 'mpar_full.d'.
+ In the second case ( 'l_iter' = .FALSE.) all arrays are initialized to zero.
+ The values of 'kmin' and 'kmax' together with and the size of the energy
+ bin 'ebinWidth' determine the energy range .
+ The total number of Monte Carlo sweeps is given by 'nsweep', 'nup' is the
+ number of Monte Carlo sweeps between updates of the multicanonical parameters,
+ and 'temp' is the temperature of the initial canonical simulation.
+ Every 'nup' sweeps the histogram of the preliminary simulation as well
+ as the existing values of the parameters are written to the file 'mpar_full.d'.
+ The final multicanonical parameters are written into the file 'muca.d'.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine MULCAN_SIM(nequi, nsweeps, nmes, nsave, kmin, kmax, binWidth,
+ restart)
+\begin_inset LatexCommand index
+name "MULCANSIM"
+
+\end_inset
+
+ (file mulcan_sim.f):
+\end_layout
+
+\begin_layout Standard
+This subroutine performs a Monte Carlo simulation of a protein using multicanoni
+cal weights.
+ Information necessary for a re-start are saved after every 'nsave' Monte
+ Carlo moves into the file 'start.d'.
+ You can restart a simulation by setting 'restart'=.TRUE.
+ otherwise the simulation starts from a random configuration.
+ Parameters 'binWidth', 'kmin', and 'kmax' set the energy-bin size and the
+ lower and upper limits of the energy interval, within which the multicanonical
+ parameters were defined (see MULCAN_PAR).
+ These parameters are read from the file 'muca.d' and have to be the same
+ as the ones used in MULCAN_PAR to generate the multicanonical weights.
+ The total number of Monte Carlo sweeps is 'nsweep', the number of Monte
+ Carlo sweeps needed for equilibration is 'nequi', and the interval between
+ successive measurements is 'nmes'.
+ In our example the output goes to 'time.d', in which the time series of
+ the simulation is written.
+ Measured quantities are the total potential energy 'eol', the number of
+ contacts 'nhx' and the number of native contacts 'nhy'.
+ The latter number counts the contacts that are the same in the present
+ configuration and the target structure.
+ Also measured is the Hamming distance 'dham' between the present and the
+ target configuration.
+ The latter three quantities are calculated by the subroutine CONTACTS.
+ The contact map needs to be initialized before calling mulcan_sim., for
+ example with the following code:
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+open(9,file='enkefa.ref')
+\end_layout
+
+\begin_layout Standard
+
+nresi=irsml2(1)-irsml1(1) + 1 
+\end_layout
+
+\begin_layout Standard
+
+! nresi: Number of residues 
+\end_layout
+
+\begin_layout Standard
+
+! Read reference contact map 
+\end_layout
+
+\begin_layout Standard
+
+nci = 0 
+\end_layout
+
+\begin_layout Standard
+
+do i=1,nresi 
+\end_layout
+
+\begin_layout Standard
+
+   read(9,*) (iref(i,j) , j=1,nresi) 
+\end_layout
+
+\begin_layout Standard
+
+end do
+\end_layout
+
+\begin_layout Standard
+
+do i=1,nresi 
+\end_layout
+
+\begin_layout Standard
+
+   do j=nresi,i+3,-1 
+\end_layout
+
+\begin_layout Standard
+
+      if(iref(i,j).eq.1) nci = nci + 1 
+\end_layout
+
+\begin_layout Standard
+
+   end do 
+\end_layout
+
+\begin_layout Standard
+
+end do 
+\end_layout
+
+\begin_layout Standard
+
+write(*,*) 'Number of contacts in reference conformation:',nci 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine PARTEM_S
+\begin_inset LatexCommand index
+name "PARTEMS"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+(file partem_s.f):
+\end_layout
+
+\begin_layout Standard
+This parameterless subroutine is designed to simulate a protein by means
+ of the parallel tempering technique on a single processor.
+ Before running a parallel tempering simulation using PARTEM_S one has to
+ set the following variables in this subroutine: the number of replicas
+ ('no') and the initial temperatures on each replica (array 'temp(no)');
+ the sum of the number of degrees of freedom over all replicas ('nvrmax');
+ the number of Monte Carlo sweeps at equilibration ('nequi') and the number
+ of Monte Carlo sweeps between measurements ('nmes').
+ Except for re-starts, the logical variable 'lstart' should be set to .FALSE.,
+ in which case all dihedral angles are set to random values.
+ At the end of the simulation all dihedral angles are stored in the file
+ 'startconf.d', from which the program reads its start configuration, if
+ 'lstart=.TRUE.'.
+ In the simulation, measurements are made every 'nmes' Monte Carlo sweeps.
+ In our template, we measure for each replica the radius-of gyration 'rgy'
+ and the end-to-end distance 'ee' by means of subroutine RGYR and write
+ both values together with the temperature 'temp0' , total energy 'energy',
+ Monte Carlo time 'nsw', and the index of the replicas 'k1' to an output
+ file 'time.d'.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+PMAIN and subroutine PARTEM_P
+\begin_inset LatexCommand index
+name "PARTEMP"
+
+\end_inset
+
+ (files pmain.f and partem_p.f)
+\end_layout
+
+\begin_layout Standard
+(Usage: '
+\emph on
+call partem_p(no, nequi, nswp, nmes, newsta, switch)
+\emph default
+')
+\end_layout
+
+\begin_layout Standard
+PMAIN and PARTEM_P are used for parallel tempering simulations on a parallel
+ computer with 'no' nodes.
+ PMAIN replaces MAIN in this case.
+ Both PMAIN and PARTEM_P utilize the MPI message-passing routines.
+ The number of nodes 'no' has to be set in the main program and equals the
+ number of replicas in the parallel tempering method.
+ In addition, one has to pass the following variables to PARTEM_P: the number
+ of Monte Carlo sweeps for equilibration nequi and the total simulation
+ nswp; and the number of Monte Carlo sweeps between measurements ('nmes').
+ Except for restarts the logical variable 'newsta' should be set to .FALSE..
+ If newsta is .TRUE., switch determines the starting configuration.
+ If switch=1, all dihedral angles are set to the random values.
+ If switch=-1, all dihedral angles are set to 180.
+ If switch=0, the configuration remains unchanged.
+ At the end of the simulation all dihedral angles are stored in the file
+ 'par_R.in', from which the program reads its start configurations if 'newsta=.TRU
+E.'.
+ Before running the program one has to prepare the file 'temp.d' with 'no'
+ lines.
+ Each line lists the index of replica 'j' and its temperature 'temp'.
+ In our template we measure every 'nmes' Monte Carlo sweeps for each replica
+ a number of quantities: the radius of gyration 'rgy', the number of residues
+ 'nhel' and segments 'mhel' in an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-helix, the number of residues in a 
+\begin_inset Formula $\beta$
+\end_inset
+
+-sheet 'nbet' and the number of such segments 'mbet', the number of hydrogen
+ bonds 'mhb', and the number of contacts 'nctot' and native contacts 'ncnat'.
+ The latter number counts the contacts which are same in the present configurati
+on and in the target structure For this, one has to prepare in advance the
+ file 'reference.d' with the contact matrix of the target structure.
+ All measured quantities are written together with energy, temperature and
+ the index of the corresponding replica in the file 'ts.d'.
+ At the end of the simulation the average energy and specific heat for each
+ temperature/replica and the acceptance rate of replica-exchange moves are
+ written to standard output.
+ 
+\end_layout
+
+\begin_layout Subsection
+Useful Subroutines
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine CONTACTS
+\begin_inset LatexCommand index
+name "CONTACTS"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call contacts(ncn,nham2,dham)
+\shape default
+):
+\end_layout
+
+\begin_layout Standard
+This subroutine calculates the matrix of the van-der-Waals contacts between
+ C
+\begin_inset Formula $^{\alpha}$
+\end_inset
+
+-atoms for a given configuration.
+ 'ncn' is the total number of such contacts, 'nham2' the number of native
+ contacts (i.e.
+ such con- tacts which are the same in the present configuration and the
+ reference configuration), and the Hamming distance 'dham' between the present
+ and the target configuration.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine CNTENY
+\begin_inset LatexCommand index
+name "CNTENY"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\emph on
+call cnteny(nml)
+\emph default
+)
+\end_layout
+
+\begin_layout Standard
+The subroutine '
+\emph on
+cnteny
+\emph default
+' displays a list of heavy atoms in molecule '
+\emph on
+nml
+\emph default
+' that have a contact energy of more than 2 kcal/mol.
+ If one sets the parameter '
+\emph on
+ieyel = 0
+\emph default
+' in '
+\emph on
+cnteny
+\emph default
+' the the contact energy is calculated with the van-der-Waals energy term,
+ only.
+ Setting '
+\emph on
+ieyel = 1
+\emph default
+' additionally includes the electrostatic energy into the contact energy,
+ and bad contacts are displayed if this energy exceeds a value of 10 kcal/mol
+ for an atom.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Functions ENERGY
+\begin_inset LatexCommand index
+name "ENERGY"
+
+\end_inset
+
+, ENYSHE
+\begin_inset LatexCommand index
+name "ENYSHE"
+
+\end_inset
+
+, ENYFLX
+\begin_inset LatexCommand index
+name "ENYFLX"
+
+\end_inset
+
+, ENYSOL
+\begin_inset LatexCommand index
+name "ENYSOL"
+
+\end_inset
+
+, ESOLAN
+\begin_inset LatexCommand index
+name "ESOLAN"
+
+\end_inset
+
+, and ENYREG
+\begin_inset LatexCommand index
+name "ENYREG"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+eny = energy()
+\shape default
+)
+\newline
+ The real*8 function `
+\shape italic
+energy
+\shape default
+' is a wrapping function that calculates the energy of a given configuration.
+ Depending on the choice of parameters '
+\shape italic
+flex
+\shape default
+', '
+\shape italic
+sh2
+\shape default
+', '
+\shape italic
+itysol
+\shape default
+' and '
+\shape italic
+ireg
+\shape default
+' in '
+\shape italic
+main
+\shape default
+' ('
+\shape italic
+pmain
+\shape default
+') the `vacuum' energy of the protein is calculated by the functions '
+\shape italic
+enyshe
+\shape default
+' (ECEPP/2 or ECEPP/3), or '
+\shape italic
+enyflex
+\shape default
+' (FLEX), and the solvation energy using the solvent accessible area method
+ with '
+\shape italic
+enysol
+\shape default
+' (approximate, but fast estimation of the solvated area) or '
+\shape italic
+esolan
+\shape default
+' (analytical, but slower calculation of the area).
+ '
+\shape italic
+enyreg
+\shape default
+' calculates the constraint energy term needed during regularization of
+ PDB-structures.
+ '
+\shape italic
+energy
+\shape default
+' returns the sum of these energy terms as selected by the parameters in
+ the 'main'-module.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine GRADIENT
+\begin_inset LatexCommand index
+name "GRADIENT"
+
+\end_inset
+
+, OPESHE
+\begin_inset LatexCommand index
+name "OPESHE"
+
+\end_inset
+
+, OPEFLX
+\begin_inset LatexCommand index
+name "OPEFLX"
+
+\end_inset
+
+, OPESOL
+\begin_inset LatexCommand index
+name "OPESOL"
+
+\end_inset
+
+, and OPEREG
+\begin_inset LatexCommand index
+name "OPEREG"
+
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call gradient()
+\shape default
+)
+\newline
+ The wrapping subroutine '
+\shape italic
+gradient
+\shape default
+' calculates the energy and partial derivatives (with respect to internal
+ degrees of freedom) for a given protein configuration.
+ Depending on the choice of parameters '
+\shape italic
+flex
+\shape default
+', '
+\shape italic
+sh2
+\shape default
+', '
+\shape italic
+itysol
+\shape default
+', and '
+\shape italic
+ireg
+\shape default
+', the subroutines '
+\shape italic
+opeshe
+\shape default
+' (ECEPP/2 or ECEPP/3), '
+\shape italic
+opeflx
+\shape default
+' (FLEX), '
+\shape italic
+opesol
+\shape default
+' (solvent accessible surface area) and/or '
+\shape italic
+opereg
+\shape default
+' (constraint energy term during regularization of PDB structures) are selected
+ and contribute to the total energy and its gradient that is calculated.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset LatexCommand label
+name "ite:Subroutine-HBOND"
+
+\end_inset
+
+Subroutine HBOND
+\begin_inset LatexCommand index
+name "HBOND"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call hbond(nml,mhb,ipr)
+\shape default
+):
+\newline
+ This subroutine determines the number 'mhb' of the hydrogen bonds for
+ the current conformation of the molecule and requires 'nml' as input -
+ the index of the present molecule.
+ The hydrogen bonds are printed out for '
+\begin_inset Formula $ipr>0$
+\end_inset
+
+'.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset LatexCommand label
+name "ite:subroutine-HELIX"
+
+\end_inset
+
+subroutine HELIX
+\begin_inset LatexCommand index
+name "HELIX"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+helix(nhel,mhel,nbet,mbet)
+\shape default
+): 
+\newline
+ HELIX determines whether a residue is part of an 
+\begin_inset Formula $\alpha$
+\end_inset
+
+-helix or 
+\begin_inset Formula $\beta$
+\end_inset
+
+-sheet according to its backbone dihedral angles (
+\begin_inset Formula $\phi,\psi$
+\end_inset
+
+) (ranges defined in a PARAMETER statement) and returnes the number of helical
+ residues 'nhel', the number of helical segments 'mhel', and the corresponding
+ quantities for 
+\begin_inset Formula $\beta$
+\end_inset
+
+-strand elements 'nbet' and 'mbet'.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset LatexCommand label
+name "ite:Subroutine-METROPOLIS"
+
+\end_inset
+
+Subroutine METROPOLIS
+\begin_inset LatexCommand index
+name "METROPOLIS"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call metropolis(eol,acz,weight)
+\shape default
+): 
+\newline
+ The subroutine implements one Metropolis move for every dihedral angle
+ and requires as input a weight function '
+\shape italic
+weight(eol)
+\shape default
+' and the energy 'eol' of the present configuration.
+ It returns in the variable 'eol' the energy of the configuration after
+ 'nvr' (the number of non-fixed dihedral angles) updates.
+ 'acz' accounts for the number of Metropolis moves were the proposed configurati
+on was accepted.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine OUTPDB
+\begin_inset LatexCommand index
+name "OUTPDB"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call outpdb(nml,pdbFileName)
+\shape default
+):
+\newline
+ The subroutine writes in the output file the coordinates of the atoms
+ of given molecule.
+ The format is compatible with the standard data representation format of
+ the Brookhaven Protein Data bank.
+ This subroutine requires as input the index 'nml' of the given molecule
+ and the file name of the output-file.
+ If nml=0, the configuration for all molecules in the system is written
+ to a multi-model pdb file.
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine OUTVAR
+\begin_inset LatexCommand index
+name "OUTVAR"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call outvar(nml, filename)
+\shape default
+):
+\end_layout
+
+\begin_layout Standard
+This subroutine writes the dihedral angles of the current configuration
+ of molecule '
+\shape italic
+nml
+\shape default
+' to either standard output ('filename = 
+\begin_inset Quotes eld
+\end_inset
+
+ 
+\begin_inset Quotes eld
+\end_inset
+
+') or a dedicated file, where filename is the name of the file).
+ The dihedral angles are written out in a form that allows to use them as
+ configuration input file for SMMP.
+ If nml=0, the configuration for all molecules in the system is printed.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Function grnd() and subroutine sgrnd(seed):
+\end_layout
+
+\begin_layout Standard
+Our package includes an implementation of the twister-mersenne random generator.
+ Initialize the random number generator using 
+\emph on
+call sgrnd(seed)
+\emph default
+, where 
+\emph on
+seed
+\emph default
+ is an integer.
+ Each call off 
+\emph on
+grnd()
+\emph default
+ returns a new random number between 0 and 1 taken from a uniform distribution.
+\end_layout
+
+\begin_layout Subsubsection
+\begin_inset LatexCommand label
+name "ite:Subroutine-RGYR"
+
+\end_inset
+
+Subroutine RGYR
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call rgyr(nml,rgy,ee)
+\shape default
+): 
+\newline
+ This subroutine calculates the radius-of-gyration 'rgy' and the end-to-end
+ distance 'ee' for the protein molecule 'nml'.
+ Both quantities characterize the compactness of a protein conformation.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Function RMSDFUN
+\begin_inset LatexCommand index
+name "RMSDFUN"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+rmsd = rmsdfun(nml,ir1,ir2,ixat,xrf,yrf,zrf,isl)
+\shape default
+)
+\newline
+ The real*8 function '
+\shape italic
+rmsdfun
+\shape default
+' calculates the root-mean square-deviation (rmsd) between atom postions
+ in the current configuration of molecule '
+\shape italic
+nml
+\shape default
+' for a range of residues '
+\shape italic
+[ir1,ir2]
+\shape default
+' and a reference structure given by arrays of atom coordinates '
+\shape italic
+xrf,yrf,zrf
+\shape default
+'.
+ For each atom position in the current SMMP-structure the array '
+\shape italic
+ixat
+\shape default
+' provides the index of the equivalent atom in the reference structure,
+ or yields a value of '
+\shape italic
+0
+\shape default
+' if there is no equivalent.
+ By setting '
+\shape italic
+isl=0
+\shape default
+' the rmsd is calculated over all non-hydrogen (heavy) atoms, for '
+\shape italic
+isl = 1
+\shape default
+' for backbone atoms only, and for '
+\shape italic
+isl = 2
+\shape default
+' the rmsd is calculated only between C
+\begin_inset Formula $^{\alpha}$
+\end_inset
+
+-atoms.
+ The routine '
+\shape italic
+rmsdfun
+\shape default
+' may only be called 
+\series bold
+after
+\series default
+ an initial call of the subroutine '
+\shape italic
+rmsinit(nml,string)
+\shape default
+'.
+ If 
+\shape italic
+string = 'smmp'
+\shape default
+ the reference configuration is a SMMP configuration, otherwise it is read
+ in from a PDB-file which name given by '
+\shape italic
+string
+\shape default
+'.
+ 
+\end_layout
+
+\begin_layout Subsubsection
+Subroutine ZIMMER
+\begin_inset LatexCommand index
+name "ZIMMER"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+(Usage: 
+\shape italic
+call zimmer(nresi)
+\shape default
+):
+\newline
+ This subroutine analyzes the backbone dihedrals of a given conformation
+ and characterizes the state of each pair of (
+\begin_inset Formula $\phi,\psi$
+\end_inset
+
+) by its Zimmerman code.
+ The subroutine requires as input the number of residues 'nresi' and returns
+ the character string 'zimm' with the Zimmerman code of the present configuratio
+n (through a common block).
+ 
+\end_layout
+
+\begin_layout Section
+How to cite SMMP
+\end_layout
+
+\begin_layout Standard
+Use of SMMP should be acknowledged by quoting the following reference: F.
+ Eisenmenger, U.H.E.
+ Hansmann, Sh.
+ Hayryan, C.-K.
+ Hu, 
+\series bold
+[SMMP] A Modern Package for Simulation of Proteins
+\series default
+, 
+\shape italic
+Comp.
+ Phys.
+ Comm.
+
+\shape default
+ 
+\series bold
+138
+\series default
+ (2001) 192-212;
+\newline
+F.
+ Eisenmenger, U.H.E.
+ Hansmann, Sh.
+ Hayryan, C.-K.
+ Hu, 
+\series bold
+An Enhanced Version of SMMP - Open-Source Software Package for Simulation
+ of Proteins
+\series default
+, 
+\shape italic
+Comp.Phys.
+ Comm.
+ 174 (2006) 422-
+\shape default
+429; 
+\newline
+
+\emph on
+J.
+ H.
+ Meinke, S.
+ Mohanty, F.
+ Eisenmenger and U.H.E.
+ Hansmann,
+\series bold
+\emph default
+ SMMP v.
+ 3.0 --- Simulating proteins and protein interactions in Python and Fortran
+\series default
+, submitted to 
+\emph on
+Comp.\InsetSpace ~
+Phys.\InsetSpace ~
+Comm.
+\newline
+
+\emph default
+Where appropriate, the program package's web-site should be quoted as: 
+\series bold
+SMMP, 
+\begin_inset LatexCommand url
+target "http://www.phy.mtu.edu/biophys/smmp.htm"
+
+\end_inset
+
+ or 
+\series default
+
+\begin_inset LatexCommand url
+target "http://www.smmp05.net"
+
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Section
+Examples
+\begin_inset LatexCommand label
+name "sec:Examples"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+All the examples can be found in the EXAMPLES subdirectory and should be
+ run from there.
+ All the serial examples can be built either from the top-level directory
+ with 
+\emph on
+make examples
+\emph default
+ or from within the EXAMPLES directory with 
+\emph on
+make
+\emph default
+.
+ The MPI parallel tempering example is built from within the EXAMPLES directory
+ with 
+\emph on
+make parallel_tempering_p.
+
+\emph default
+ The structure of all examples is very similar to Listing 
+\begin_inset LatexCommand ref
+reference "listing:mainmc"
+
+\end_inset
+
+.
+ We first initialize the force field we want to use, load the protein either
+ from a sequence and a configuration file or from a PDB file, set the simulation
+ parameters, and finally call the simulation subroutine.
+ We use
+\shape italic
+\emph on
+ 
+\emph default
+grpn = 'nh2', grpc = 'cooh'
+\emph on
+ as end groups in all of our examples.
+ We also use a fixed value for the dielectric constant, so that 
+\emph default
+epsd=.false.
+
+\emph on
+ in all cases.
+\end_layout
+
+\begin_layout Standard
+The first example 
+\begin_inset LatexCommand eqref
+reference "sub:Minimization-of-vacuum"
+
+\end_inset
+
+ minimizes the energy of met-enkaphalin, a small endorphin with only 5 amino
+ acids using a quasi-newton minimizer.
+ The second examples 
+\begin_inset LatexCommand eqref
+reference "sub:Structure-Determination-by"
+
+\end_inset
+
+ tries to find the minimum vacuum energy structure of met-enkaphalin using
+ simulated annealing.
+ The third example 
+\begin_inset LatexCommand eqref
+reference "sub:Calculation-of-Multicanonical"
+
+\end_inset
+
+ shows how to calculate the estmated weights necessary for a multi-canonical
+ Monte Carlo simulation.
+ Met-enkaphalin again serves as sample system.
+ In 
+\begin_inset LatexCommand eqref
+reference "sub:Regularization-of-the"
+
+\end_inset
+
+ we show how to regularize an experimental structure read from a PDB file.
+ The force fields implemented use fixed bond lengths and valence angles.
+ Without regularization, a structure read from a PDB file often has an unreasona
+bly high energy.
+ Finally, we show how to perform parallel tempering simulations on multiple
+ processors 
+\begin_inset LatexCommand eqref
+reference "sub:Parallel-Tempering-simulation"
+
+\end_inset
+
+ and on a single processor 
+\begin_inset LatexCommand eqref
+reference "sub:Parallel-tempering-on"
+
+\end_inset
+
+.
+ The sample output was generated on a system with two dual-core AMD Opteron
+ 2216 processor running SUSE LINUX 10.1 (X86-64).
+ The programs were compiled with Intels Fortran compiler with optimization
+ set to -O2.
+\end_layout
+
+\begin_layout Subsection
+Minimization of vacuum energy from a given configuration
+\begin_inset LatexCommand label
+name "sub:Minimization-of-vacuum"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The MAIN module in minimization.f, has the following settings: 
+\newline
+
+\shape italic
+\emph on
+ientyp = 0
+\newline
+sh2 = .false.
+ 
+\newline
+itysol = 0
+\newline
+iabin = 1
+\shape default
+,
+\newline
+
+\emph default
+
+\newline
+ which restrict energy calculations to evaluation of the ECEPP/3 energy
+ (no protein-solvent interactions taken into account), choses 
+\shape italic
+nh2
+\shape default
+ as N-terminal group and at the C-terminus the 
+\shape italic
+cooh
+\shape default
+-group, and the input is read from a sequence/configuration file.
+ The simulation task subroutine is called with
+\newline
+imin = 1
+\newline
+maxit=10000
+\newline
+eps=1.0d-9
+\newline
+
+\shape italic
+call minim(imin,mait,eps)
+\shape default
+,
+\newline
+ i.e.
+ the simulation task is the local minimization of the vacuum energy of a
+ configuration using the Quasi-Newton algorithm.
+ Compile the program with 
+\emph on
+make minimization
+\emph default
+, SMMP with this default settings will minimize the configuration given
+ in 
+\shape italic
+enkefa.var
+\shape default
+.
+ Running minimization from the EXAMPLES directory will lead to the following
+ output: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+init_energy: itysol =            0  
+\end_layout
+
+\begin_layout Standard
+
+init_energy: esol_scaling =  F  
+\end_layout
+
+\begin_layout Standard
+
+init_molecule: Solvent:            0  
+\end_layout
+
+\begin_layout Standard
+
+File with sequence is enkefa.seq  
+\end_layout
+
+\begin_layout Standard
+
+addend> Net charge of molecule # 1:   0.001
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+enkefa.var
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    1 Tyr : x1  set   -172.590
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    1 Tyr : x2  set     78.710  
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    1 Tyr : x6  set   -165.880 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    1 Tyr : phi set    -86.240
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    2 Gly : psi set    156.180
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    2 Gly : omg set   -180.000 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    2 Gly : phi set   -154.530 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    3 Gly : psi set     83.640 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    3 Gly : omg set    180.000 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    3 Gly : phi set     83.660 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    4 Phe : psi set    -73.860 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    4 Phe : omg set   -180.000 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    4 Phe : x1  set     58.790 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    4 Phe : x2  set     94.600 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    4 Phe : phi set   -137.040 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : psi set     19.330 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : omg set   -180.000 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : x1  set     52.760 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : x2  set    175.280 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : x3  set   -179.830 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : x4  set    -58.570 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : phi set   -163.630 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : pst set    160.450 
+\end_layout
+
+\begin_layout Standard
+
+redvar> Met-Enkephalin: residue    5 Met : omt set    180.000
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Energy BEFORE minimization:
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Total:  0.10354E+04    
+\end_layout
+
+\begin_layout Standard
+
+  Coulomb:  0.1991E+02 Lennard-Jones: 0.1142E+03 HB:  0.9008E+03    
+\end_layout
+
+\begin_layout Standard
+
+  Variables:  0.4511E+00  Solvatation:  0.0000E+00
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Step     1: energy  0.489976E+05  ( 0.867243E+13 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     2: energy  0.108241E+03  ( 0.964364E+07 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     3: energy -0.632755E+00  ( 0.498256E+04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     4: energy -0.739539E+01  ( 0.109979E+05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     5: energy  0.517957E+03  ( 0.678892E+09 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     6: energy -0.767774E+01  ( 0.143880E+05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     7: energy -0.818570E+01  ( 0.100364E+05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     8: energy -0.938401E+01  ( 0.172508E+04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step     9: energy -0.109799E+02  ( 0.105718E+04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    10: energy -0.116244E+02  ( 0.580821E+03 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    11: energy -0.116969E+02  ( 0.145676E+04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    12: energy -0.118569E+02  ( 0.856882E+03 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    13: energy -0.119576E+02  ( 0.521381E+03 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    14: energy -0.120897E+02  ( 0.398602E+03 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    15: energy -0.121476E+02  ( 0.222201E+03 )  
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+Step    70: energy -0.124285E+02  ( 0.194869E-04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    71: energy -0.124285E+02  ( 0.120524E-04 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    72: energy -0.124285E+02  ( 0.641640E-05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    73: energy -0.124285E+02  ( 0.182141E-05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    74: energy -0.124285E+02  ( 0.219308E-05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    75: energy -0.124285E+02  ( 0.348349E-05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    76: energy -0.124285E+02  ( 0.166901E-05 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    77: energy -0.124285E+02  ( 0.177102E-06 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    78: energy -0.124285E+02  ( 0.663522E-08 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    79: energy -0.124285E+02  ( 0.210693E-08 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    80: energy -0.124285E+02  ( 0.370905E-08 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    81: energy -0.124285E+02  ( 0.324300E-08 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    82: energy -0.124285E+02  ( 0.777363E-09 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    83: energy -0.124285E+02  ( 0.443358E-10 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    84: energy -0.124285E+02  ( 0.322695E-11 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    85: energy -0.124285E+02  ( 0.144369E-11 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    86: energy -0.124285E+02  ( 0.291517E-11 )  
+\end_layout
+
+\begin_layout Standard
+
+Step    87: energy -0.124285E+02  ( 0.322695E-11 )  
+\end_layout
+
+\begin_layout Standard
+
+---- CONVERGENCE ----
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Final energies __________________________________________________
+\end_layout
+
+\begin_layout Standard
+
+Total: -0.12429E+02    
+\end_layout
+
+\begin_layout Standard
+
+  Coulomb:  0.2143E+02 Lennard-Jones: -0.2923E+02 HB: -0.6706E+01
+\end_layout
+
+\begin_layout Standard
+
+  Variables:  0.2084E+01  Solvatation:  0.0000E+00
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Variables _________________
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+x1     1  -173.2    (  0.6)  
+\end_layout
+
+\begin_layout Standard
+
+x2     1    79.3    (  0.6)  
+\end_layout
+
+\begin_layout Standard
+
+x6     1  -166.3    (  0.5)  
+\end_layout
+
+\begin_layout Standard
+
+phi    1   -83.1    (  3.2)  
+\end_layout
+
+\begin_layout Standard
+
+psi    2   155.8    (  0.4)  
+\end_layout
+
+\begin_layout Standard
+
+omg    2  -177.1    (  2.9)  
+\end_layout
+
+\begin_layout Standard
+
+phi    2  -154.2    (  0.3)  
+\end_layout
+
+\begin_layout Standard
+
+psi    3    85.8    (  2.2)  
+\end_layout
+
+\begin_layout Standard
+
+omg    3   168.5    ( 11.5)  
+\end_layout
+
+\begin_layout Standard
+
+phi    3    83.0    (  0.7)  
+\end_layout
+
+\begin_layout Standard
+
+psi    4   -75.0    (  1.2)  
+\end_layout
+
+\begin_layout Standard
+
+omg    4  -170.0    ( 10.0)  
+\end_layout
+
+\begin_layout Standard
+
+x1     4    58.9    (  0.1)  
+\end_layout
+
+\begin_layout Standard
+
+x2     4    94.5    (  0.1)  
+\end_layout
+
+\begin_layout Standard
+
+phi    4  -136.8    (  0.2)  
+\end_layout
+
+\begin_layout Standard
+
+psi    5    19.1    (  0.2)  
+\end_layout
+
+\begin_layout Standard
+
+omg    5  -174.1    (  5.9)  
+\end_layout
+
+\begin_layout Standard
+
+x1     5    52.9    (  0.1)  
+\end_layout
+
+\begin_layout Standard
+
+x2     5   175.3    (  0.0)  
+\end_layout
+
+\begin_layout Standard
+
+x3     5  -179.9    (  0.0)  
+\end_layout
+
+\begin_layout Standard
+
+x4     5   -58.6    (  0.0)  
+\end_layout
+
+\begin_layout Standard
+
+phi    5  -163.4    (  0.2)  
+\end_layout
+
+\begin_layout Standard
+
+pst    5   160.8    (  0.3)  
+\end_layout
+
+\begin_layout Standard
+
+omt    5  -179.8    (  0.2)
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+Gradient______________________________________________________________ 
+    
+\end_layout
+
+\begin_layout Standard
+
+0.000    0.000    0.000    0.000    0.000    0.000    0.000    0.000
+\end_layout
+
+\begin_layout Standard
+
+0.000    0.000    0.000    0.000    0.000    0.000    0.000    0.000   
+\end_layout
+
+\begin_layout Standard
+
+0.000    0.000    0.000    0.000    0.000    0.000    0.000    0.000 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Structure Determination by Simulated Annealing
+\begin_inset LatexCommand label
+name "sub:Structure-Determination-by"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For the following simulated annealing run for Met-Enkephalin defined through
+ its sequence file 
+\shape italic
+enkefa.seq
+\shape default
+, another configuration file 
+\shape italic
+enkefa.ann
+\shape default
+ is used.
+ In this configuration file the dihedral angles 
+\shape italic
+omg
+\shape default
+ and 
+\shape italic
+omt
+\shape default
+ are fixed at 180.0 degrees using 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+om*:  180.0 & 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+.
+ Simulated annealing performs only poorly when these angles are free to
+ change.
+ In this example we choose ECEPP/2 ( setting 
+\shape italic
+sh2 = .true.
+
+\shape default
+ and no protein-solvation interaction.
+ Hence, we have the following settings for parameters in 
+\shape italic
+annealing.f
+\shape default
+: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ientyp = 0
+\end_layout
+
+\begin_layout Standard
+
+sh2 = .true.
+ 
+\end_layout
+
+\begin_layout Standard
+
+itysol = 0 
+\end_layout
+
+\begin_layout Standard
+
+iabin = 1
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+.
+ Our simulated annealing run consists of 100 Monte Carlo sweeps at the highest
+ temperature (1000 K) followed by 100,000 sweeps during which the temperature
+ is gradually decreased to a final temperature of 100 K.
+ The progress of the simulation is monitored by writing data into the file
+ `
+\shape italic
+time.d
+\shape default
+' every 1000 sweeps.
+ The simulation starts from a random configuration.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+lrand=.true.
+ 
+\end_layout
+
+\begin_layout Standard
+
+nequi=100, 
+\end_layout
+
+\begin_layout Standard
+
+nswp=100000
+\end_layout
+
+\begin_layout Standard
+
+nmes=1000 
+\end_layout
+
+\begin_layout Standard
+
+tmax=1000.0
+\end_layout
+
+\begin_layout Standard
+
+tmin=100.0
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+call anneal(nequi, nsweeps, nmes, tmax, tmin, lrand)
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+After compiling the example with 
+\emph on
+make annealing
+\emph default
+ in the sub-directory 
+\shape italic
+EXAMPLES,
+\shape default
+ 
+\shape italic
+\emph on
+we run the program by calling
+\shape default
+\emph default
+ 
+\shape italic
+annealing.
+
+\shape default
+ The output will contain the energy of the start configuration, energy after
+ equilibration, the average acceptance rate of moves in the simulated annealing
+ run, the final configuration (and its energy) and the configuration with
+ the lowest energy found in this run: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ init_energy: itysol =            0  
+\end_layout
+
+\begin_layout Standard
+
+ init_energy: esol_scaling =  F  
+\end_layout
+
+\begin_layout Standard
+
+ init_molecule: Solvent:            0 
+\end_layout
+
+\begin_layout Standard
+
+ File with SEQUENCE: enkefa.seq
+\end_layout
+
+\begin_layout Standard
+
+ enkefa.ann
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Met-Enkephalin: residue    2 Gly : omg set    180.000   Fixed
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Met-Enkephalin: residue    3 Gly : omg set    180.000   Fixed
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Met-Enkephalin: residue    4 Phe : omg set    180.000   Fixed
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Met-Enkephalin: residue    5 Met : omg set    180.000   Fixed
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Met-Enkephalin: residue    5 Met : omt set    180.000   Fixed
+\end_layout
+
+\begin_layout Standard
+
+ redvar> Molecule Met-Enkephalin:    19 variable(s) remain unchanged
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+energy of start configuration:  0.75921E+09
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Energy after  equilibration:   11.0835755006373 
+\end_layout
+
+\begin_layout Standard
+
+ acceptance rate:  0.181430817270775
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ last energy  -8.03108763810183
+\end_layout
+
+\begin_layout Standard
+
+      1 :   1 : x1  :   -168.428
+\end_layout
+
+\begin_layout Standard
+
+      1 :   1 : x2  :     89.562
+\end_layout
+
+\begin_layout Standard
+
+      1 :   1 : x6  :     -2.861
+\end_layout
+
+\begin_layout Standard
+
+      1 :   1 : phi :   -112.654
+\end_layout
+
+\begin_layout Standard
+
+      1 :   2 : psi :    156.420
+\end_layout
+
+\begin_layout Standard
+
+      1 :   2 : omg :   -180.000  &
+\end_layout
+
+\begin_layout Standard
+
+      1 :   2 : phi :   -174.567
+\end_layout
+
+\begin_layout Standard
+
+      1 :   3 : psi :    146.718
+\end_layout
+
+\begin_layout Standard
+
+      1 :   3 : omg :   -180.000  &
+\end_layout
+
+\begin_layout Standard
+
+      1 :   3 : phi :     68.148
+\end_layout
+
+\begin_layout Standard
+
+      1 :   4 : psi :    -96.563
+\end_layout
+
+\begin_layout Standard
+
+      1 :   4 : omg :   -180.000  &
+\end_layout
+
+\begin_layout Standard
+
+      1 :   4 : x1  :     59.864
+\end_layout
+
+\begin_layout Standard
+
+      1 :   4 : x2  :    -83.907
+\end_layout
+
+\begin_layout Standard
+
+      1 :   4 : phi :   -141.914
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : psi :     20.747
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : omg :   -180.000  &
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : x1  :     61.133
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : x2  :   -174.118
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : x3  :    176.917
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : x4  :   -178.096
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : phi :   -162.246
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : pst :    161.616
+\end_layout
+
+\begin_layout Standard
+
+      1 :   5 : omt :   -180.000  &
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ lowest energy ever found:       63297  -9.40635361798398 
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ The random start configuration, final configuration and lowest-energy configura
+tion are also written in PDB-format into the files 
+\shape italic
+start.pdb
+\shape default
+, 
+\shape italic
+final.pdb
+\shape default
+ and 
+\shape italic
+global.pdb
+\shape default
+ allowing for easy visualization of these configurations with programs graphical
+ly displaying PDB-structures.
+ The progress of the simulated annealing run is monitored through the time
+ series in file 
+\shape italic
+time.d
+\shape default
+ which list the Monte Carlo sweep, temperature, ECEPP/2 energy, radius-of-gyrati
+on, the partial energy terms 
+\begin_inset Formula $E_{\mbox{hb}}$
+\end_inset
+
+, 
+\begin_inset Formula $E_{\mbox{vdW}}$
+\end_inset
+
+, 
+\begin_inset Formula $E_{\mbox{C}}$
+\end_inset
+
+, 
+\begin_inset Formula $E_{\mbox{vr}}$
+\end_inset
+
+and the Zimmerman-coding of the present configuration.
+ All the terms related to the solvent have been replaced by a single dot
+ per column in the sample below.
+ 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ # $Id: anneal.f 192 2007-01-02 14:06:25Z meinke $
+\end_layout
+
+\begin_layout Standard
+
+ # nsw, temp, eol, eysl, eyslh, eyslp, asa, rgy, 
+\end_layout
+
+\begin_layout Standard
+
+ # rgyh, rgyp, eyhb, eyvw, eyel, eyvr, zimm
+\end_layout
+
+\begin_layout Standard
+
+     0 1000.000  8.045 ....
+ 4.542 ..
+ -3.992 -14.929 23.308 3.658 ghcBD
+\end_layout
+
+\begin_layout Standard
+
+  1000  977.237 16.397 ....
+ 5.835 ..
+ -2.029 -11.821 24.061 6.186 BDeCG
+\end_layout
+
+\begin_layout Standard
+
+  2000  954.993 16.147 ....
+ 5.302 ..
+ -1.786 -11.072 25.230 3.775 AdEDA
+\end_layout
+
+\begin_layout Standard
+
+  3000  933.254 26.320 ....
+ 6.434 ..
+ -1.324  -4.642 25.514 6.771 EecFC
+\end_layout
+
+\begin_layout Standard
+
+  4000  912.011 14.884 ....
+ 5.145 ..
+ -2.474 -13.559 25.449 5.469 EHDDB
+\end_layout
+
+\begin_layout Standard
+
+  5000  891.251 21.650 ....
+ 5.882 ..
+ -1.179  -8.380 27.125 4.083 EHfEB
+\end_layout
+
+\begin_layout Standard
+
+  6000  870.964 13.854 ....
+ 5.806 ..
+ -2.271 -12.703 25.621 3.207 EcaEh
+\end_layout
+
+\begin_layout Standard
+
+  7000  851.138 19.786 ....
+ 5.439 ..
+ -1.952  -9.254 26.428 4.565 EHaAE
+\end_layout
+
+\begin_layout Standard
+
+  8000  831.764 14.299 ....
+ 5.986 ..
+ -1.596 -16.538 24.699 7.735 EECEF
+\end_layout
+
+\begin_layout Standard
+
+  9000  812.831  7.773 ....
+ 4.915 ..
+ -2.819 -16.392 24.850 2.134 EECBB
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+...
+\end_layout
+
+\begin_layout Standard
+
+ 91000  123.027 -8.381 ....
+ 4.414 ..
+ -5.162 -26.932 22.230 1.483 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 92000  120.226 -6.302 ....
+ 4.439 ..
+ -4.825 -25.727 22.824 1.426 EEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 93000  117.490 -6.655 ....
+ 4.413 ..
+ -4.355 -25.081 21.937 0.845 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 94000  114.815 -8.190 ....
+ 4.523 ..
+ -6.848 -24.025 21.598 1.086 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 95000  112.202 -5.965 ....
+ 4.434 ..
+ -5.052 -24.021 21.995 1.114 EEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 96000  109.648 -7.081 ....
+ 4.444 ..
+ -4.717 -25.137 22.669 0.104 EEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 97000  107.152 -8.042 ....
+ 4.561 ..
+ -4.969 -25.544 21.850 0.621 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 98000  104.713 -7.342 ....
+ 4.439 ..
+ -4.737 -26.152 22.463 1.083 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+ 99000  102.329 -6.561 ....
+ 4.438 ..
+ -3.975 -25.213 21.963 0.664 FEcDE
+\end_layout
+
+\begin_layout Standard
+
+100000  100.000 -8.031 ....
+ 4.433 ..
+ -5.231 -25.792 22.659 0.333 EEcDE
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Calculation of Multicanonical Parameters
+\begin_inset LatexCommand label
+name "sub:Calculation-of-Multicanonical"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the following example, multicanonical parameters are calculated for met-enkep
+halin (with fixed omega angles) in gas-phase simulations relying on the
+ ECEPP/3 force-field.
+ 
+\shape italic
+\emph on
+The functions
+\shape default
+\emph default
+ 
+\shape italic
+mulcan_par
+\shape default
+ 
+\shape italic
+\emph on
+and
+\shape default
+\emph default
+ 
+\shape italic
+mulcan_sim
+\shape default
+ are part of the module 
+\emph on
+multicanonical.
+
+\emph default
+ To use the module, include 
+\emph on
+use multicanonical
+\emph default
+ in 
+\emph on
+main
+\emph default
+.
+ For this example, we set the following parameters in '
+\shape italic
+main
+\shape default
+': 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ientyp = 0
+\end_layout
+
+\begin_layout Standard
+
+sh2 = .false.
+ 
+\end_layout
+
+\begin_layout Standard
+
+itysol = 0 
+\end_layout
+
+\begin_layout Standard
+
+iabin = 1
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+The simulation has a total of 100,000 Monte Carlo sweeps and the multicanonical
+ parameters are updated every 2,000 sweeps.
+ The parameters are calculated from scratch, and we attempt to obtain a
+ histogram in energy in the interval [-12,20] Kcal/mol with energy bin size
+ 1 Kcal/mol.
+ We expect that at temperature 1000 K we are clearly in the high-energy
+ phase where successive configurations have little correlation.
+ This leads to the following set of arguments for calling 
+\emph on
+mulcan
+\emph default
+_
+\emph on
+par
+\emph default
+: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+l_iter=.false.
+\end_layout
+
+\begin_layout Standard
+
+kmin=-12
+\end_layout
+
+\begin_layout Standard
+
+kmax=20
+\end_layout
+
+\begin_layout Standard
+
+ebin=1.0d0
+\end_layout
+
+\begin_layout Standard
+
+nsweep=100000
+\end_layout
+
+\begin_layout Standard
+
+nup=5000
+\end_layout
+
+\begin_layout Standard
+
+temp=1000.0
+\end_layout
+
+\begin_layout Standard
+
+call mulcan_par(nsweep, nup, temp, kmin, kmax, l_iter)
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+This example is available in the file 
+\emph on
+multicanonical.f
+\emph default
+ in the EXAMPLES directory.
+ After compiling it with 
+\emph on
+make
+\emph default
+ 
+\emph on
+multicanonical
+\emph default
+ and running the program using 
+\emph on
+multicanonical
+\emph default
+ the calculated multicanonical parameters are written into the file '
+\shape italic
+muca.d
+\shape default
+'.
+ For further iteration of these parameters additional quantities such as
+ the accumulated histogram are written into a file '
+\shape italic
+mpar_full.d
+\shape default
+' (out of which '
+\shape italic
+mulcan_par
+\shape default
+' reads them if '
+\shape italic
+l_iter=.true.
+\shape default
+' is set).
+ We show here only the file '
+\shape italic
+muca.d
+\shape default
+' which lists the index of the energy bin, the 
+\begin_inset Formula $\beta(E)$
+\end_inset
+
+ and the 
+\begin_inset Formula $\alpha(E)$
+\end_inset
+
+ parameters (see 
+\begin_inset LatexCommand citep
+key "Eisenmenger2001"
+
+\end_inset
+
+) for more detailed explanations and references on multicanonical simulations):
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+-12   11.8671041270715        93.0982188015155     
+\end_layout
+
+\begin_layout Standard
+
+-11   6.74942546567488        34.2449141954539     
+\end_layout
+
+\begin_layout Standard
+
+-10   4.76239638525333        13.3811088510276     
+\end_layout
+
+\begin_layout Standard
+
+ -9   2.62566106761319       -6.91787666655369     
+\end_layout
+
+\begin_layout Standard
+
+ -8   2.76891298156071       -5.70023539799973     
+\end_layout
+
+\begin_layout Standard
+
+ -7   2.98636199792932       -4.06936777523520     
+\end_layout
+
+\begin_layout Standard
+
+ -6   2.62458524605883       -6.42091666239336     
+\end_layout
+
+\begin_layout Standard
+
+ -5   2.68953283146133       -6.06370494267963     
+\end_layout
+
+\begin_layout Standard
+
+ -4   1.99405651648455       -9.19334836007513     
+\end_layout
+
+\begin_layout Standard
+
+ -3   2.37207855308226       -7.87027123198313     
+\end_layout
+
+\begin_layout Standard
+
+ -2   1.80430850778520       -9.28969634522579     
+\end_layout
+
+\begin_layout Standard
+
+ -1   1.91571656031594       -9.12258426642968     
+\end_layout
+
+\begin_layout Standard
+
+  0   1.72752866077015       -9.21667821620257     
+\end_layout
+
+\begin_layout Standard
+
+  1   1.66881722525666       -9.18732249844583     
+\end_layout
+
+\begin_layout Standard
+
+  2   1.50004119691055       -8.93415845592665     
+\end_layout
+
+\begin_layout Standard
+
+  3   1.39142908670518       -8.66262818041324     
+\end_layout
+
+\begin_layout Standard
+
+  4   1.16605491925085       -7.87381859432308     
+\end_layout
+
+\begin_layout Standard
+
+  5   1.88002935687926       -11.0867035636509     
+\end_layout
+
+\begin_layout Standard
+
+  6  0.784923700785834       -5.06362245513708     
+\end_layout
+
+\begin_layout Standard
+
+  7   1.15928001690741       -7.49693850992732     
+\end_layout
+
+\begin_layout Standard
+
+  8   1.53630835441332       -10.3246510412217     
+\end_layout
+
+\begin_layout Standard
+
+  9  0.804876443148135       -4.10747979546758     
+\end_layout
+
+\begin_layout Standard
+
+ 10   1.20439627142663       -7.90291816411324     
+\end_layout
+
+\begin_layout Standard
+
+ 11  0.843296201282429       -4.11136742759918     
+\end_layout
+
+\begin_layout Standard
+
+ 12   1.03327436670481       -6.29611632995659     
+\end_layout
+
+\begin_layout Standard
+
+ 13  0.847836723791197       -3.97814579353639     
+\end_layout
+
+\begin_layout Standard
+
+ 14  0.794466332096526       -3.25764550565833     
+\end_layout
+
+\begin_layout Standard
+
+ 15  0.665347460625295       -1.38542186932548     
+\end_layout
+
+\begin_layout Standard
+
+ 16  0.897108190646473       -4.97771318465375     
+\end_layout
+
+\begin_layout Standard
+
+ 17  0.527634627532446        1.11860060672770     
+\end_layout
+
+\begin_layout Standard
+
+ 18  0.591554662202600       0.000000000000000E+000
+\end_layout
+
+\begin_layout Standard
+
+ 19  0.591554662202600       0.000000000000000E+000
+\end_layout
+
+\begin_layout Standard
+
+ 20  0.591554662202600       0.000000000000000E+000
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+A test simulation of 100,000 Monte Carlo sweeps (using subroutine '
+\shape italic
+mulcan_sim
+\shape default
+' with these weights led to the following histogram that is flat over the
+ studied energy range (as is characteristic for the multicanonical ensemble)
+ (note that the last energy bin contains all entries for energies larger/equal
+ than 20 Kcal/mol): 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+-9    105
+\end_layout
+
+\begin_layout Standard
+
+-8    828
+\end_layout
+
+\begin_layout Standard
+
+-7   1945
+\end_layout
+
+\begin_layout Standard
+
+-6   3108
+\end_layout
+
+\begin_layout Standard
+
+-5   3247
+\end_layout
+
+\begin_layout Standard
+
+-4   3054
+\end_layout
+
+\begin_layout Standard
+
+-3   2844
+\end_layout
+
+\begin_layout Standard
+
+-2   2531
+\end_layout
+
+\begin_layout Standard
+
+-1   2397
+\end_layout
+
+\begin_layout Standard
+
+ 0   2082
+\end_layout
+
+\begin_layout Standard
+
+ 1   2179
+\end_layout
+
+\begin_layout Standard
+
+ 2   2294
+\end_layout
+
+\begin_layout Standard
+
+ 3   2579
+\end_layout
+
+\begin_layout Standard
+
+ 4   3193
+\end_layout
+
+\begin_layout Standard
+
+ 5   2855
+\end_layout
+
+\begin_layout Standard
+
+ 6   2927
+\end_layout
+
+\begin_layout Standard
+
+ 7   3994
+\end_layout
+
+\begin_layout Standard
+
+ 8   3362
+\end_layout
+
+\begin_layout Standard
+
+ 9   3047
+\end_layout
+
+\begin_layout Standard
+
+10   3289
+\end_layout
+
+\begin_layout Standard
+
+11   3199
+\end_layout
+
+\begin_layout Standard
+
+12   3412
+\end_layout
+
+\begin_layout Standard
+
+13   3034
+\end_layout
+
+\begin_layout Standard
+
+14   3092
+\end_layout
+
+\begin_layout Standard
+
+15   3258
+\end_layout
+
+\begin_layout Standard
+
+16   3079
+\end_layout
+
+\begin_layout Standard
+
+17   2957
+\end_layout
+
+\begin_layout Standard
+
+18   3157
+\end_layout
+
+\begin_layout Standard
+
+19   3055
+\end_layout
+
+\begin_layout Standard
+
+20  19897
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Regularization of the B domain of protein A
+\begin_inset LatexCommand label
+name "sub:Regularization-of-the"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Frequently, one wants to compare the results of a simulation with experimental
+ data.
+ When we compare properties of calculated configurations with those of structure
+s from the Protein Data Bank (PDB), we have to remember that the actual
+ bond lengths and angles in the PDB-structure will differ from the fixed
+ values that are assumed with the ECEPP, FLEX, and Lund potentials.
+ Forcing the molecule into the standard bonding geometry model may lead
+ to un-physically high energies.
+ The process of finding an optimal structure within the standard geometry
+ model starting from a PDB-structure is called regularization.
+\end_layout
+
+\begin_layout Standard
+In our example, we regularize of the coordinates for residues 10-55 of the
+ B domain of 
+\shape italic
+Staphylococcus Aureus
+\shape default
+ Protein A, which were taken from entry 
+\shape italic
+1BDD
+\shape default
+ of the Protein Data Bank (see 
+\begin_inset LatexCommand url
+target "http://www.rcsb.org"
+
+\end_inset
+
+), as provided with this package in file 
+\shape italic
+1bdd.pdb
+\shape default
+.
+ Setting the variable '
+\shape italic
+iabin = 0
+\shape default
+' in 
+\shape italic
+main.f
+\shape default
+ makes 
+\shape italic
+init_molecule
+\shape default
+ call subroutine 
+\shape italic
+pdbread
+\shape default
+ that reads the amino acid sequence and the atomic coordinates from the
+ PDB- structure and stores this data in arrays declared in '
+\shape italic
+INCP.H
+\shape default
+'.
+ Then 
+\shape italic
+pdbvars
+\shape default
+ is automatically called to measure all dihedral angles.
+ In order to regularize the PDB-structure one has to 
+\shape italic
+call regul(nml, iter, nsteps, 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+)
+\shape default
+ as the task subroutine in '
+\shape italic
+main
+\shape default
+' .
+ Set the following parameters in '
+\shape italic
+main
+\shape default
+', accordingly:
+\newline
+
+\newline
+
+\shape italic
+ientyp=0
+\newline
+ sh2 = .false.
+\newline
+ itysol = 0
+\newline
+ iabin = 0
+\shape default
+
+\newline
+
+\newline
+ Note that '
+\shape italic
+regul
+\shape default
+', as any other task subroutine, has to be called AFTER '
+\shape italic
+init_molecule
+\shape default
+' .
+ The example is available in the EXAMPLES directory.
+ You can compile it by calling 
+\emph on
+make regularization.
+
+\emph default
+ Run the program by calling 
+\emph on
+regularization
+\emph default
+.
+ We use 10 iterations with up to 15000 sweeps each and 
+\begin_inset Formula $\varepsilon=10^{-7}$
+\end_inset
+
+.
+ A value for 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+ that is too large may lead to numerical instabilities.
+ 
+\end_layout
+
+\begin_layout Standard
+First '
+\shape italic
+regul
+\shape default
+' obtains its input from the arrays declared in '
+\shape italic
+INCP.H
+\shape default
+'.
+ In a first step a naive representation of the molecule is build in the
+ ECEPP geometry from the stored dihedral angles that were calculated from
+ the PDB coordinates.
+ This simple model serves as starting configuration for the regularization.
+ In our example, its root-mean-square deviation (over all heave atoms) compared
+ to the PDB-structure initially is 2.8 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+AA
+\end_layout
+
+\end_inset
+
+ and its ECEPP-energy 
+\begin_inset Formula $\approx10^{5}$
+\end_inset
+
+ kcal/mol, mainly due to excessive van-der-Waals repulsions.
+ The regularization starts by first minimizing a term that measures the
+ sum of squared distances between heavy atoms in the SMMP-structure and
+ the given PDB-structure.
+ This leads to a rmsd of 0.14 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Standard
+
+
+\backslash
+AA
+\end_layout
+
+\end_inset
+
+.
+ After this initial step a list of bad contacts (vdW-energy of more than
+ 2 kcal/mol) in the SMMP-structure is printed out.
+ In a second step the physical energy is minimized, allowing only the free
+ hydrogens to move, and the bad contacts and rmsd are displayed again.
+ This step reduces the ECEPP-energy to 
+\begin_inset Formula $\approx10^{3}$
+\end_inset
+
+ kcal/mol.
+ '
+\shape italic
+Regul
+\shape default
+' aims at further reducing this energy while at the same time keeping the
+ rmsd as small as possible.
+ This is done by minimizing a composite energy from the weighted sum of
+ physical ECEPP-energy and constraint energy (the quadratic distance measure)
+ over 10 iterations.
+ In each iteration the weight of the constraint energy is successively lowered
+ (from 1 to 0) and the weight of the ECEPP energy raised (from 0 to 1).
+ At the end, the dihedral angles of the final structure are printed out
+ together with its rmsd and a list of (eventually) remaining bad contacts.
+\end_layout
+
+\begin_layout Standard
+The following output is obtained from this last iteration with a weight
+ of 1 for the ECEPP-energy and a weight of 0 for the constraint energy,
+ that leads to a SMMP-configuration with a total ECEPP-energy of 
+\begin_inset Formula $-429.9$
+\end_inset
+
+ kcal/mol and a rmsd of 1.89 
+\begin_inset ERT
+status inlined
+
+\begin_layout Standard
+
+
+\backslash
+AA
+\end_layout
+
+\end_inset
+
+, compared to the PDB-structure: 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+ ================ Minimization #10   Wt(energy) =   0.100E+01  Wt(regul.)
+ =   0.000E+00
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Energy BEFORE minimization:
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Total: -0.39831E+03
+\end_layout
+
+\begin_layout Standard
+
+   Coulomb: -0.4685E+02 Lennard-Jones: -0.3306E+03 HB: -0.6915E+02
+\end_layout
+
+\begin_layout Standard
+
+   Variables:  0.4831E+02  Solvatation:  0.0000E+00 Regularization:  0.3315E+03
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Step     1: energy  0.259565E+13  ( 0.296722E+30, 0.363456E+12 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     2: energy  0.481884E+09  ( 0.572102E+22, 0.644342E+12 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     3: energy  0.444100E+10  ( 0.599018E+24, 0.617413E+12 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     4: energy  0.491253E+10  ( 0.220900E+25, 0.533540E+12 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     5: energy -0.355950E+03  ( 0.341264E+06, 0.495213E+10 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     6: energy -0.395467E+03  ( 0.762827E+06, 0.726715E+08 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     7: energy -0.398489E+03  ( 0.198935E+05, 0.137122E+08 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     8: energy -0.398761E+03  ( 0.409017E+05, 0.187175E+08 )
+\end_layout
+
+\begin_layout Standard
+
+ Step     9: energy -0.399231E+03  ( 0.197834E+05, 0.329551E+08 )
+\end_layout
+
+\begin_layout Standard
+
+ Step    10: energy -0.399787E+03  ( 0.143934E+06, 0.121392E+09 )
+\end_layout
+
+\begin_layout Standard
+
+ ...
+\end_layout
+
+\begin_layout Standard
+
+ ...
+\end_layout
+
+\begin_layout Standard
+
+ ...
+\end_layout
+
+\begin_layout Standard
+
+ Step   415: energy -0.429868E+03  ( 0.135007E-03, 0.523386E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   416: energy -0.429868E+03  ( 0.123681E-04, 0.523385E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   417: energy -0.429868E+03  ( 0.254870E-05, 0.523385E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   418: energy -0.429868E+03  ( 0.193334E-05, 0.523385E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   419: energy -0.429868E+03  ( 0.140748E-05, 0.523385E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   420: energy -0.429868E+03  ( 0.740869E-06, 0.523384E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   421: energy -0.429868E+03  ( 0.489693E-06, 0.523384E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   422: energy -0.429868E+03  ( 0.282056E-06, 0.523384E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   423: energy -0.429868E+03  ( 0.104563E-06, 0.523384E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   424: energy -0.429868E+03  ( 0.519142E-07, 0.523385E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ Step   425: energy -0.429868E+03  ( 0.104563E-06, 0.523384E+11 )
+\end_layout
+
+\begin_layout Standard
+
+ ---- CONVERGENCE ----
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Final energies __________________________________________________
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+ Total: -0.42987E+03
+\end_layout
+
+\begin_layout Standard
+
+   Coulomb: -0.5431E+02 Lennard-Jones: -0.3510E+03 HB: -0.7268E+02
+\end_layout
+
+\begin_layout Standard
+
+   Variables:  0.4809E+02  Solvatation:  0.0000E+00 Regularization:  0.2241E+05
+\end_layout
+
+\begin_layout Standard
+
+ ...
+\end_layout
+
+\begin_layout Standard
+
+ 
+\end_layout
+
+\begin_layout Standard
+
+  RMSD =    1.89099626258629     
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Parallel Tempering simulation of four A
+\begin_inset Formula $\beta_{16-22}$
+\end_inset
+
+ peptides
+\begin_inset LatexCommand label
+name "sub:Parallel-Tempering-simulation"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the following example, a parallel tempering simulation of the fragment
+ 16--22 of Alzheimer's 
+\begin_inset Formula $\beta$
+\end_inset
+
+-amyloid in solvent.
+ It relies on the ECEPP/3 force-field and all dihedral angles are free.
+ References for the algorithm can be found in 
+\begin_inset LatexCommand cite
+key "Eisenmenger2001"
+
+\end_inset
+
+.
+ The simulation is performed on a parallel computer on 
+\begin_inset Formula $n\times8$
+\end_inset
+
+ processors.
+ The example is available in the EXAMPLES directory as 
+\emph on
+parallel_tempering_p
+\emph default
+.
+ Commpile it using 
+\emph on
+make parallel_tempering
+\emph default
+.
+ Set the following parameters 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+num_replica = 8
+\end_layout
+
+\begin_layout Standard
+
+ientyp = 0
+\end_layout
+
+\begin_layout Standard
+
+sh2=.false.
+\end_layout
+
+\begin_layout Standard
+
+itysol=1
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+After initialization, the program calls 
+\emph on
+init_molecule
+\emph default
+ once for every molecule.
+ Only the last call contains a reference to a variable file.
+ It contains the global coordinates for each molecule
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+@ 1 : 100, 100, 100, 0, 0, 0 
+\end_layout
+
+\begin_layout Standard
+
+@ 2 : -100, -100, -100, 0, 0, 0 
+\end_layout
+
+\begin_layout Standard
+
+@ 3 : 100, -100, 100, 0, 0, 0 
+\end_layout
+
+\begin_layout Standard
+
+@ 4  : 100, -100, -100, 0, 0, 0
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The subroutine reads the distribution of temperatures (in our example 'temperatu
+res_abeta') that has to be provided.
+\end_layout
+
+\begin_layout Standard
+The simulation starts from a stretched configuration with 100 sweeps for
+ equilibration.
+ The molecule is then studied over 10,000 sweeps on each node, with measurements
+ taken every 10 sweep.
+ 
+\end_layout
+
+\begin_layout Standard
+Hence the following arguments have to be passed
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+      nequi=100
+\end_layout
+
+\begin_layout Standard
+
+      nswp=10000
+\end_layout
+
+\begin_layout Standard
+
+      nmes=10
+\end_layout
+
+\begin_layout Standard
+
+      nsave=1000
+\end_layout
+
+\begin_layout Standard
+
+      switch=0
+\end_layout
+
+\begin_layout Standard
+
+      newsta=.true.
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ by calling 
+\emph on
+partem_p(num_replica, nequi, nswp, nmes, nsave, newsta, switch, rep_id,
+ partem_comm).
+\end_layout
+
+\begin_layout Standard
+After compiling with 
+\emph on
+make parallel_tempering
+\emph default
+ the program is ready to run.
+ Note that you must first execute 
+\emph on
+make parallel
+\emph default
+ in the top-level directory.
+ We do not provide a script to launch the program since launching it depends
+ on the specific MPI installation.
+ The data are written into the file '
+\shape italic
+ts.d
+\shape default
+'.
+ In our case, the data are the sweep, the temperature index, the index of
+ the replica this temperature is currently associated, the inverse temperature,
+ and energy, radius-of gyration, number of residues that are part of a helix
+ or sheet, number of hydrogen bond, total number of contacts and the number
+ of contacts that appear also in the reference configuration: 
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+          10           1           1  0.503086435280445     
+\end_layout
+
+\begin_layout Standard
+
+   18.5259057594418       -101.020909189261       1.668390368424223E-004
+\end_layout
+
+\begin_layout Standard
+
+   153.870626474863                3           4           0
+\end_layout
+
+\begin_layout Standard
+
+          10           2           2  0.838477392134076     
+\end_layout
+
+\begin_layout Standard
+
+  -21.8597428563679       -112.839132565408       4.398819716124160E-005
+\end_layout
+
+\begin_layout Standard
+
+   164.067677362049                0          12           0
+\end_layout
+
+\begin_layout Standard
+
+          10           3           3   1.25771608820111     
+\end_layout
+
+\begin_layout Standard
+
+  -63.6878966409724       -115.697268416431       7.324283587028595E-005
+\end_layout
+
+\begin_layout Standard
+
+   162.383801785309                2           9           0
+\end_layout
+
+\begin_layout Standard
+
+          10           4           4   1.43738981508699     
+\end_layout
+
+\begin_layout Standard
+
+  -82.2329362395502       -118.850435462771      -2.589501558808733E-005
+\end_layout
+
+\begin_layout Standard
+
+   155.367430914339                3           8           0
+\end_layout
+
+\begin_layout Standard
+
+          10           5           5   1.67695478426815     
+\end_layout
+
+\begin_layout Standard
+
+  -89.8268073782128       -115.511880821486      -1.910806982598894E-004
+\end_layout
+
+\begin_layout Standard
+
+   156.197401324212                1          13           0
+\end_layout
+
+\begin_layout Standard
+
+          10           6           6   1.82940521920162     
+\end_layout
+
+\begin_layout Standard
+
+  -102.200054103571       -119.664523580541      -2.902461830424936E-005
+\end_layout
+
+\begin_layout Standard
+
+   158.377278261187                1           7           0
+\end_layout
+
+\begin_layout Standard
+
+          10           7           7   1.92017723389483     
+\end_layout
+
+\begin_layout Standard
+
+  -92.5898004594444       -111.866857243732       8.412738265616228E-005
+\end_layout
+
+\begin_layout Standard
+
+   156.691206902137                2          13           0
+\end_layout
+
+\begin_layout Standard
+
+          10           8           8   2.01234574112178     
+\end_layout
+
+\begin_layout Standard
+
+  -91.7374330640579       -118.481236403476      -1.450348059239640E-004
+\end_layout
+
+\begin_layout Standard
+
+   160.611273802438                0           9           0
+\end_layout
+
+\begin_layout Standard
+
+  ...
+\end_layout
+
+\begin_layout Standard
+
+  ...
+\end_layout
+
+\begin_layout Standard
+
+  ...
+\end_layout
+
+\begin_layout Standard
+
+       10000           1           2  0.503086435280445     
+\end_layout
+
+\begin_layout Standard
+
+   25.7121801637793       -112.113204586669      -7.981375910951304E-005
+\end_layout
+
+\begin_layout Standard
+
+   171.130731978089                0           5           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           2           4  0.838477392134076     
+\end_layout
+
+\begin_layout Standard
+
+  -83.1513580270155       -119.884471326212      -3.185178277838820E-005
+\end_layout
+
+\begin_layout Standard
+
+   179.222034577900                4           5           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           3           3   1.25771608820111     
+\end_layout
+
+\begin_layout Standard
+
+  -88.7115772801244       -109.660390359632       2.816222447889407E-005
+\end_layout
+
+\begin_layout Standard
+
+   169.412616033656                6           2           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           4           1   1.43738981508699     
+\end_layout
+
+\begin_layout Standard
+
+  -117.230892149812       -118.180458392844      -1.362571932424056E-004
+\end_layout
+
+\begin_layout Standard
+
+   155.662046672612                9           3           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           5           5   1.67695478426815     
+\end_layout
+
+\begin_layout Standard
+
+  -117.452066538358       -114.923193931984       9.292455852280616E-005
+\end_layout
+
+\begin_layout Standard
+
+   165.838174859018                8           4           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           6           8   1.82940521920162     
+\end_layout
+
+\begin_layout Standard
+
+  -114.553279087787       -116.322737335011       1.354655604376923E-005
+\end_layout
+
+\begin_layout Standard
+
+   161.094515087733                4           4           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           7           7   1.92017723389483     
+\end_layout
+
+\begin_layout Standard
+
+  -128.613090309274       -113.083234658370       6.618583172642824E-005
+\end_layout
+
+\begin_layout Standard
+
+   169.226190038938               10           0           0
+\end_layout
+
+\begin_layout Standard
+
+       10000           8           6   2.01234574112178     
+\end_layout
+
+\begin_layout Standard
+
+  -116.001290834057       -115.250965599594       8.095072332381373E-005
+\end_layout
+
+\begin_layout Standard
+
+   169.725277983610                8           4           0
+\end_layout
+
+\begin_layout Standard
+
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+At the end of the simulation, the final configurations are written into
+ external files (in our case '
+\shape italic
+conf_00??
+\shape default
+' where '??' marks the replica index.
+ Further information for re-starts are written into '
+\shape italic
+par_R.in
+\shape default
+' that also collects statistics on the run.
+ 
+\end_layout
+
+\begin_layout Subsection
+Parallel tempering on a serial machine.
+\begin_inset LatexCommand label
+name "sub:Parallel-tempering-on"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Parallel tempering is useful even if you have only a single processor machine
+ available.
+ The algorithm provides better convergence than canonical Monte Carlo and
+ avoids the scheduling problems of simulated annealing.
+ In this example (see 
+\emph on
+parallel_tempering_s.f
+\emph default
+ in the 
+\emph on
+EXAMPLES
+\emph default
+ sub directory), we perform a parallel tempering simulation on Met-enkaphalin
+ using 5 replicas.
+ Each replica runs at a different temperature.
+ The temperatures are read in from the file 
+\emph on
+temperatures
+\emph default
+.
+ The values are 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+1 1000
+\end_layout
+
+\begin_layout Standard
+
+2 600
+\end_layout
+
+\begin_layout Standard
+
+3 400
+\end_layout
+
+\begin_layout Standard
+
+4 300
+\end_layout
+
+\begin_layout Standard
+
+5 250.
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ We start the simulation from randomized configurations with 100 sweeps
+ for equilibration before we exchange any replicas.
+ The main simulation takes 10,000 sweeps with measurements taken every 10
+ sweeps.
+ An exchange of replicas is also attempted every 10 sweeps.
+ This gives us the following variables
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Standard
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Standard
+
+num_rep = 5
+\end_layout
+
+\begin_layout Standard
+
+nequi = 100       
+\end_layout
+
+\begin_layout Standard
+
+nsweep = 10000       
+\end_layout
+
+\begin_layout Standard
+
+nmes = 1       
+\end_layout
+
+\begin_layout Standard
+
+newsta = .true.
+       
+\end_layout
+
+\begin_layout Standard
+
+switch = 1
+\end_layout
+
+\begin_layout Standard
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+ and we call the simulation with
+\begin_inset listings
+lstparams "breaklines=true,float=h,language=Fortran,showstringspaces=false"
+inline false
+status collapsed
+
+\begin_layout Standard
+
+call partem_s(num_rep, nequi, nsweep, nmes, nmes, newsta, switch)
+\end_layout
+
+\end_inset
+
+The data is written into file 
+\emph on
+time.d
+\emph default
+.
+ The final configurations are stored in 
+\emph on
+conf_000?.var
+\emph default
+, where the question mark is replaced by the replica ID.
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand bibtex
+options "unsrt"
+bibfiles "/home/meinke/research/writeups/bibliography"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset LatexCommand printindex
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
