@@ -16,9 +16,9 @@
 # L_FLAGS=-O0 -g
 # Linker flags
 # Default flags, e.g., for gfortran, g77
-# L_FLAGS=-O2 -g
+L_FLAGS=-O2 -g
 # Flags for Intel's ifort
-L_FLAGS=-O3 -axW -g
+# L_FLAGS=-O3 -axW -g
 # FLAGS for Cray
 # L_FLAGS=-fastsse -Mipa
 # Flags for xlf
@@ -26,9 +26,9 @@ L_FLAGS=-O3 -axW -g
 # L_FLAGS=-fPIC -O3 -funroll-loops -mmmx -msse2 -msse -march=i686 -malign-double -fomit-frame-pointer
 # Compiler flags
 # Default flags, e.g., for gfortran, g77
-# F_FLAGS=-c -O2 -g
+F_FLAGS=-c -O2 -g
 # Flags for Intel's ifort
-F_FLAGS=-c -O3 -axW -g
+# F_FLAGS=-c -O3 -axW -g
 # Flags for debugging build
 # F_FLAGS=-c -O0 -g
 # FLAGS for Cray
@@ -37,8 +37,8 @@ F_FLAGS=-c -O3 -axW -g
 # F_FLAGS=-c -O3 -qhot -q64 -qipa -qextname=flush
 # F_FLAGS=-c -fPIC -O3 -funroll-loops -mmmx -msse2 -msse -march=i686 -malign-double -fomit-frame-pointer
 # Select your compiler
-#F90=gfortran
-F90=ifort
+F90=gfortran
+#F90=ifort
 #F90=pgf90
 #F90=xlf
 # F90=nagf90
