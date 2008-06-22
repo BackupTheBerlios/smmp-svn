@@ -270,7 +270,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -561,7 +561,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -848,7 +848,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -1134,7 +1134,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -1420,7 +1420,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -1704,7 +1704,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -1991,7 +1991,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -2280,7 +2280,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -2566,7 +2566,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -2850,7 +2850,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -3138,7 +3138,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -3423,7 +3423,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -3728,7 +3728,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -4016,7 +4016,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -4299,7 +4299,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -4639,7 +4639,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -4943,7 +4943,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -5289,7 +5289,7 @@ python module smmp ! in
             character dimension(3,800) :: nmvr
             real*8 :: boxsize
             integer :: seed
-            character*mxrs :: zimm
+            character*100 :: zimm
             integer*4 :: itysol
             logical :: isolscl
             real*8 dimension(100) :: rsstrg
@@ -5590,7 +5590,7 @@ python module smmp ! in
                 character dimension(3,800) :: nmvr
                 real*8 :: boxsize
                 integer :: seed
-                character*mxrs :: zimm
+                character*100 :: zimm
                 integer*4 :: itysol
                 logical :: isolscl
                 real*8 dimension(100) :: rsstrg
@@ -5881,7 +5881,7 @@ python module smmp ! in
                 character dimension(3,800) :: nmvr
                 real*8 :: boxsize
                 integer :: seed
-                character*mxrs :: zimm
+                character*100 :: zimm
                 integer*4 :: itysol
                 logical :: isolscl
                 real*8 dimension(100) :: rsstrg

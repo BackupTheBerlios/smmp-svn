@@ -1,13 +1,13 @@
       implicit integer*4 (i-n)
-      implicit real*8 (a-h,o-z)	
+      implicit real*8 (a-h,o-z)
       character*255 version
 
       integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath
       integer mxvr, mxms, mxvw, mx14, mxvrh, mxtyat, mxhbdo
-      integer mxhbac, mxtybl, mxtyba, mxtyto, mxrt, mxvrrt, mxrstu, 
+      integer mxhbac, mxtybl, mxtyba, mxtyto, mxrt, mxvrrt, mxrtsu
       integer nrsty
-      double precision pi, pi2, pi4, crd, cdr
-      integer izero, ione, zero, one
+      double precision pi, pi2, pi4, crd, cdr, zero, one
+      integer izero, ione
 
       parameter(MAX_PROC=2048)
       parameter (MAX_REPLICA = 2048)                                       ! max. number of replicas
