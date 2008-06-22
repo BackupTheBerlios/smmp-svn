@@ -2,9 +2,14 @@
       implicit real*8 (a-h,o-z)	
       character*255 version
 
-      integer MAX_REPLICA, MAX_PROC
+      integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath
+      integer mxvr, mxms, mxvw, mx14, mxvrh, mxtyat, mxhbdo
+      integer mxhbac, mxtybl, mxtyba, mxtyto, mxrt, mxvrrt, mxrstu, 
+      integer nrsty
+      double precision pi, pi2, pi4, crd, cdr
+      integer izero, ione, zero, one
 
-      PARAMETER(MAX_PROC=2048)
+      parameter(MAX_PROC=2048)
       parameter (MAX_REPLICA = 2048)                                       ! max. number of replicas
       parameter (mxml=10)                                                ! max. number of molecules
       parameter(mxrs=100)                                               ! max. total number of residues
