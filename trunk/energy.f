@@ -44,7 +44,7 @@
         if (ientyp.eq.0.or.ientyp.eq.3) then
           esm=esm+enyshe(i)
         else if (ientyp.eq.1) then 
-          esm=esm+enyshe(i)
+          esm=esm+enyflx(i)
         else if (ientyp.eq.2) then
            esm=enylun(i)
         endif
