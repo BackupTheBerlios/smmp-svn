@@ -80,11 +80,6 @@
                endif
             endif
          endif
-         enw1=energy()
-!          if (enw1.ne.eol) then
-!             write (*,*) 'metropolis: variable, enw1,eol,acptd',
-!      #           ivar,enw1,eol,acptd,(enw1-eol),enw
-!          endif
          acz=acz+iupstate*1.0
          call accanalyze(iupt,iupstate)
       end do
