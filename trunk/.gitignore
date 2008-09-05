@@ -1,0 +1,8 @@
+# Ignore objects and archives.
+*.[oa]
+# Ignore compiled python files
+*.pyc
+# Ignore backup files
+*~
+# Ignore library files
+*.so
