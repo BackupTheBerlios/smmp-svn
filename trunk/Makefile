@@ -38,7 +38,7 @@ L_FLAGS=-O2 -g
 # Default flags, e.g., for gfortran, g77
 F_FLAGS=-c -O2 -g
 # Flags for Intel's ifort
-# F_FLAGS=-c -O3 -axW -g -DONECALL -DBRANCHLESS
+# F_FLAGS=-c -O3 -axW -g
 # Flags for debugging build
 # F_FLAGS=-c -O0 -g
 # FLAGS for Cray
