@@ -263,14 +263,14 @@ class Protein:
                     print >>out, nursvr(i), ':', name, ':', smmp.var_r.vlvr[i] * crd, ' &'
         
     def zimmer(self):
-        first = smmp.mol_i.irsml1[self.__id][0] - 1
-        last = smmp.mol_i.irsml2[self.__id][0] - 1
-        nrs = smmp.mol_i.irsml2[smmp.mol_i.ntlml - 1][0] - 1
+        first = smmp.mol_i.irsml1[self.__id] - 1
+        last = smmp.mol_i.irsml2[self.__id]
+        nrs = smmp.mol_i.irsml2[smmp.mol_i.ntlml - 1] - 1
         smmp.zimmer(last)
         return smmp.zimme.zimm[first:last]
 
     def __len__(self):
-        return smmp.mol_i.irsml2[self.__id]  - smmp.mol_i.irsml1[self.__id]
+        return smmp.mol_i.irsml2[self.__id]  - smmp.mol_i.irsml1[self.__id] + 1
 
 
 if __name__ == "__main__":

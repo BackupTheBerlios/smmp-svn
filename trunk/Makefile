@@ -5,6 +5,9 @@
 %_p.o : %_p.f
 	$(MPIF90) $(F_FLAGS) $<
 	
+%_p.o : %_p.F
+	$(MPIF90) $(F_FLAGS) $<
+	
 .SUFFIXES:	.o .f
 .f.o:
 	$(F90) $(F_FLAGS) $<
@@ -35,7 +38,7 @@ L_FLAGS=-O2 -g
 # Default flags, e.g., for gfortran, g77
 F_FLAGS=-c -O2 -g
 # Flags for Intel's ifort
-# F_FLAGS=-c -O3 -axW -g
+# F_FLAGS=-c -O3 -axW -g -DONECALL -DBRANCHLESS
 # Flags for debugging build
 # F_FLAGS=-c -O0 -g
 # FLAGS for Cray
@@ -47,10 +50,10 @@ F_FLAGS=-c -O2 -g
 # F_FLAGS=-c -fPIC -O3 -funroll-loops -mmmx -msse2 -msse -march=i686 -malign-double -fomit-frame-pointer
 
 # Select your compiler
-F90=gfortran
 #F90=ifort
 #F90=pgf90
 #F90=xlf
+F90=gfortran
 MPIF90=mpif90
 
 
@@ -93,7 +96,7 @@ $(PROG):	$(OBJ) $(SOBJ) main.o
 parallel: $(OBJ) $(POBJ) main_p.o 
 	$(MPIF90) -o $(PROG) $(L_FLAGS) main_p.o $(OBJ) $(POBJ)
 
-# Cross compile for BlueGene/P 
+# Cross compile for BlueGene/L 
 bgl: BGL_L_FLAGS = -L$(BGLSYS)/lib -lmpich.rts -lfmpich.rts -lmsglayer.rts -lrts.rts -ldevices.rts -qextname=flush
 bgl: F_FLAGS = -c -O5 -qhot -g -I$(BGLSYS)/include -L$(BGLSYS)/lib -qarch=440 -qtune=440 -qextname=flush
 bgl: BGL_F90 = blrts_xlf
@@ -104,6 +107,19 @@ bgl: LIBSF_MPI=-lmpich.rts -lfmpich.rts -lmsglayer.rts -lrts.rts -ldevices.rts
 
 bgl: $(OBJ) $(POBJ) main_bgl_p.o
 	$(BGL_F90) -o $(PROG).rts $(BGL_L_FLAGS) main_bgl_p.o $(OBJ) $(POBJ) $(LIBSF_MPI)
+
+# Cross compile for BlueGene/P 
+bgp: BGP_SYS = /bgsys/drivers/ppcfloor/comm
+bgp: DIRCOMP = /opt/ibmcmp/xlf/bg/11.1/bin
+bgp: BGP_L_FLAGS = -O3 -qhot -g -I$(BGP_SYS)/include -qarch=440 -qtune=440 -qextname=flush
+bgp: F_FLAGS = -c -O3 -qhot -g -I$(BGP_SYS)/include -qarch=440 -qtune=440 -qextname=flush
+bgp: BGP_F90 = bgxlf
+bgp: F90 = $(BGP_F90)
+bgp: MPIF90 = $(BGP_F90)
+bgp: LIBS=-Wl,-allow-multiple-definition $(MASS) $(ESSL) -L$(BGP_SYS)/lib -lmpich.cnk -ldcmfcoll.cnk -ldcmf.cnk -L/bgsys/drivers/ppcfloor/runtime/SPI -lSPI.cna -lrt -lpthread
+
+bgp: $(OBJ) $(POBJ) main_p.o
+	$(BGP_F90) -o $(PROG).rts $(BGP_L_FLAGS) main_p.o $(OBJ) $(POBJ) $(LIBS)
 
 # Build the python bindings
 pybind: $(FILES)

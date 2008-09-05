@@ -13,10 +13,10 @@
 
 ! ..............................................................
 !
-! CALCULATES NUMBER OF CONTACTS IN GIVEN CONFORMATION, NUMBER OF
-! CONTACTS WHICH ARE THE SAME IN GIVEN AND REFERENCE ONFORMATION,
-! AND THE HAMMING DISTANCE BETWEEN GIVEN  CONFORMATION AND THE 
-! REFERENCE CONFORMATIONa
+! Calculates number of contacts in given conformation, number of
+! contacts which are the same in given and reference conformation,
+! and the hamming distance between given conformation and the 
+! reference conformation.
 !
 ! CALLS: c_cont
 ! ..............................................................

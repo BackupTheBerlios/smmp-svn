@@ -126,7 +126,6 @@
 ! 2 => temperature dependent choice 
       upchswitch=1
       rndord=.true.
-      if (ientyp.eq.2) call init_lundff
 !     =================================================================
 !     Distribute nodes to parallel tempering tasks
 !     I assume that the number of nodes available is an integer 
@@ -189,9 +188,13 @@
          call init_molecule(iabin, grpn, grpc,in_fil,
      &        fileNameMP(filebase, 6, 9, rep_id + 1))
       endif
+      call init_lund
+!     Must call init_lundff *after* molecule has been loaded.
+      if (ientyp.eq.2) call init_lundff
       if (ientyp.eq.3) call init_abgn
 
       nml = 1
+
 
 !     RRRRRRRRRRMMMMMMMMMMMMSSSSSSSSSSDDDDDDDDDDDDD
       call rmsinit(nml,'EXAMPLES/1bdd.pdb')

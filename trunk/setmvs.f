@@ -131,7 +131,12 @@
       i=l
       j=l+l-ii
       do while (j.le.k)
-        if (j.lt.k.and.iadvr1(iorvr(j)).lt.iadvr1(iorvr(j+1))) j=j+1
+!         if (j.lt.k.and.iadvr1(iorvr(j)).lt.iadvr1(iorvr(j+1))) j=j+1
+        if (j.lt.k) then
+            if (iadvr1(iorvr(j)).lt.iadvr1(iorvr(j+1))) then
+                j = j + 1
+            end if
+        end if
         if (n.lt.iadvr1(iorvr(j))) then
           iorvr(i)=iorvr(j)
           i=j
