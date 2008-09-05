@@ -1,25 +1,25 @@
-c**************************************************************
-c
-c This file contains the subroutines: setvar
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: setvar
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       
       subroutine setvar(nml,vlvrx)
 
-c ..............................................................
-c PURPOSE: Reset variables in molecule 'nml' to new values given
-c          in 'vlvrx' and rebuild molecule
-c          
-c ! assure constant PHASE angles for branches from same atom
-c
-c CALLS: bldmol,difang
-c ....................................................
+! ..............................................................
+! PURPOSE: Reset variables in molecule 'nml' to new values given
+!          in 'vlvrx' and rebuild molecule
+!          
+! ! assure constant PHASE angles for branches from same atom
+!
+! CALLS: bldmol,difang
+! ....................................................
 
       include 'INCL.H'
 

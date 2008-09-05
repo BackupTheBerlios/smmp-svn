@@ -131,7 +131,7 @@
       <filetype>*.java</filetype>
       <filetype>*.h</filetype>
       <filetype>*.H</filetype>
-      <filetype>*.hh</filetype>
+      <filetype>*.f90</filetype>
       <filetype>*.hxx</filetype>
       <filetype>*.hpp</filetype>
       <filetype>*.c</filetype>
@@ -142,6 +142,8 @@
       <filetype>*.cxx</filetype>
       <filetype>Makefile</filetype>
       <filetype>CMakeLists.txt</filetype>
+      <filetype>*.py</filetype>
+      <filetype>*.f</filetype>
     </filetypes>
     <blacklist/>
   </kdevcustomproject>

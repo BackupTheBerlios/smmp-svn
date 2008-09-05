@@ -1,26 +1,26 @@
-c **************************************************************
-c
-c This file contains the subroutines: outpdb
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: outpdb
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine outpdb(nml,fileName)
 
-c ..............................................
-c  PURPOSE:  write coordinates of molecule 'nml'
-c            in PDB-format (with specialities for hydrogens)
-c
-c  INPUT:    nml - number of molecule
-c
-c            npdb - unit of output-file
-c
-c  CALLS:    toupst,iendst
-c ..............................................
+! ..............................................
+!  PURPOSE:  write coordinates of molecule 'nml'
+!            in PDB-format (with specialities for hydrogens)
+!
+!  INPUT:    nml - number of molecule
+!
+!            npdb - unit of output-file
+!
+!  CALLS:    toupst,iendst
+! ..............................................
 
       include 'INCL.H'
 
@@ -89,7 +89,7 @@ c ..............................................
 
               j = iendst(atnm)
               if (ichar(atnm(j:j)).ge.i0.and.
-     #            ichar(atnm(j:j)).le.i9) then
+     &            ichar(atnm(j:j)).le.i9) then
                 atnm(1:1)=atnm(j:j)
                 atnm(j:j)=' '
               endif
@@ -101,7 +101,7 @@ c ..............................................
  
             linout = ' '
             write (linout,1) linty,iat,atnm,res(1:3),chid,irs,cdin,
-     #                       xat(i),yat(i),zat(i),occ,bva
+     &                       xat(i),yat(i),zat(i),occ,bva
             write(iout,'(a80)') linout
 
           enddo  ! atoms
@@ -114,8 +114,8 @@ c ..............................................
 
       enddo  ! molecules
 
-c ______________________________________ connectivity
-c                                        ( only bonds i-j with i<j)
+! ______________________________________ connectivity
+!                                        ( only bonds i-j with i<j)
 
       do iml = im1,im2
 

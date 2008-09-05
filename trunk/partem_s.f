@@ -4,8 +4,8 @@
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
 !                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
 !
 !
 ! **************************************************************

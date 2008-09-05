@@ -2,19 +2,19 @@
 !
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
-c *******************************
+! *******************************
       real*8 function enyreg(nml)
 
-c ----------------------------------------------------
-c
-c PURPOSE: sum( ( R_i - R^ref_j )**2 )
-c
-c    with: R_i     - atom position i in SMMP structure
-c          R^ref_j - corresponding atom j in PDB str.
-c
-c CALLS: none
-c
-c ----------------------------------------------------
+! ----------------------------------------------------
+!
+! PURPOSE: sum( ( R_i - R^ref_j )**2 )
+!
+!    with: R_i     - atom position i in SMMP structure
+!          R^ref_j - corresponding atom j in PDB str.
+!
+! CALLS: none
+!
+! ----------------------------------------------------
 
       include 'INCL.H'
       include 'INCP.H'
@@ -28,7 +28,7 @@ c ----------------------------------------------------
         if (j.gt.0) then  ! corresp. atom in ref. structure
 
           eny = eny + (xat(i)-xatp(j))**2+(yat(i)-yatp(j))**2+
-     #                (zat(i)-zatp(j))**2
+     &                (zat(i)-zatp(j))**2
         endif
       enddo   ! atoms
 

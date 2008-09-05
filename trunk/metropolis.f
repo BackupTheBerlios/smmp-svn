@@ -1,21 +1,21 @@
-c **************************************************************
-c
-c This file contains the subroutines:  metropolis
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines:  metropolis
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine metropolis(eol1,acz,dummy)
-C
-C SUBROUTINE FOR METROPOLIS UPDATE OF CONFIGURATIONS
-C
-C CALLS: energy,addang,grnd,dummy (function provided as argument)
-C
+!
+! SUBROUTINE FOR METROPOLIS UPDATE OF CONFIGURATIONS
+!
+! CALLS: energy,addang,grnd,dummy (function provided as argument)
+!
       include 'INCL.H'
       include 'INCP.H'
       include 'incl_lund.h'
@@ -24,13 +24,13 @@ C
       common/updstats/ncalls(5),nacalls(5)
       integer updtch1, updtch2,bgs
       double precision vrol(mxvr), gbol
-cf2py intent(in, out) eol
-cf2py intent(in, out) acz
+!f2py intent(in, out) eol
+!f2py intent(in, out) acz
       eol = energy()
-c     external rand
+!     external rand
       do nsw=1,nvr
-c Loop over dihedrals
-c
+! Loop over dihedrals
+!
          iupstate=0
          iupt=1
          if (rndord) then 
@@ -53,18 +53,18 @@ c
          if (iupt.eq.2) then
             iupstate=bgs(eol,dummy)
          else
-c           Simple twist of 
-c           Get Proposal configuration
+!           Simple twist of 
+!           Get Proposal configuration
             vrol=vlvr!(jv)  
             dv=axvr(jv)*(grnd()-0.5)
             vlvr(jv)=addang(vrol(jv),dv)
-c
-c           Get dummy of proposal configuration
-c
+!
+!           Get dummy of proposal configuration
+!
             enw = energy()
-c
+!
             delta =  dummy(enw) - dummy(eol)
-c           ___________________________ check acceptance criteria
+!           ___________________________ check acceptance criteria
             if (delta.le.0.0d0) then
                eol=enw  
                iupstate=1
@@ -89,7 +89,7 @@ c           ___________________________ check acceptance criteria
          call accanalyze(iupt,iupstate)
       end do
 
-c Updates on relative position of different molecules when there are many      
+! Updates on relative position of different molecules when there are many      
       if (ntlml.gt.1) then
          do iml=1, ntlml
             do i=1,3
@@ -103,15 +103,15 @@ c Updates on relative position of different molecules when there are many
                      gbpr(i, iml)=-boxsize
                   endif
                endif
-c     
-c              Get dummy of proposal configuration
-c     
+!     
+!              Get dummy of proposal configuration
+!     
                enw = energy()
-c
+!
                delta =  dummy(enw) - dummy(eol)
-c     
-c              ____________________________ check acceptance criteria
-c     
+!     
+!              ____________________________ check acceptance criteria
+!     
                if (delta.le.0.0d0) then
                   eol=enw
                   iupstate=1
@@ -137,15 +137,15 @@ c
                else               
                   gbpr(i, iml) = (grnd()-0.5) * pi2
                endif
-c     
-c              Get dummy of proposal configuration
-c     
+!     
+!              Get dummy of proposal configuration
+!     
                enw = energy()
-c     
+!     
                delta =  dummy(enw) - dummy(eol)
-c     
-c              ____________________________ check acceptance criteria
-c     
+!     
+!              ____________________________ check acceptance criteria
+!     
                if (delta.le.0.0d0) then
                   eol=enw
                   iupstate=1
@@ -165,9 +165,9 @@ c
             enddo
          enddo
       endif
-c     
-c     Re-calculate energy
-c     
+!     
+!     Re-calculate energy
+!     
       enw = energy()
       if(abs(eol-enw).gt.0.000001)  then
          write(*,*) 'metropolis: eol,enw,difference:', eol, enw, eol-enw
@@ -175,10 +175,10 @@ c
             stop 'metropolis: eol and enw difference unacceptable'
          endif
       endif
-c     
+!     
       eol1 = eol
       return
-c     
+!     
       end
       
       subroutine accanalyze(iuptype,iupdstate)

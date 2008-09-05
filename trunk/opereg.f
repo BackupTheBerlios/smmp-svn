@@ -1,43 +1,43 @@
-c **************************************************************
-c
-c This file contains the subroutines: opereg,gdtgbl,gdtreg
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: opereg,gdtgbl,gdtreg
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine opereg(nml)
 
-c .......................................................................
-c PURPOSE: calculate regul. energy & it's partial derivatives
-c          for molecule 'nml' vs. variables 'iv'
-c
-c  NB: if the unit axis for an internal variable coincides with a
-c      global axis (i.e. for torsion or bond length variation round
-c      or along 'xrfax', respectively, and bd. angle var. round
-c      'zrfax'): VdW & 14 interaction partners of moving set atoms
-c      should be used for calculation, instead of the mov. sets,
-c      with opposite sign.
-c
-c      Example: By the the way the molecule-fixed system is set up,
-c               changes in Phi_1 affect atomic positions BEFORE the
-c               N-C^alpha bond relatively to the space-fixed system,
-c               not the moving set of Phi_1.
-c
-c CALLS:    gdtgbl, gdtreg
-c ......................................................................
+! .......................................................................
+! PURPOSE: calculate regul. energy & it's partial derivatives
+!          for molecule 'nml' vs. variables 'iv'
+!
+!  NB: if the unit axis for an internal variable coincides with a
+!      global axis (i.e. for torsion or bond length variation round
+!      or along 'xrfax', respectively, and bd. angle var. round
+!      'zrfax'): VdW & 14 interaction partners of moving set atoms
+!      should be used for calculation, instead of the mov. sets,
+!      with opposite sign.
+!
+!      Example: By the the way the molecule-fixed system is set up,
+!               changes in Phi_1 affect atomic positions BEFORE the
+!               N-C^alpha bond relatively to the space-fixed system,
+!               not the moving set of Phi_1.
+!
+! CALLS:    gdtgbl, gdtreg
+! ......................................................................
 
       include 'INCL.H'
       include 'INCP.H'
 
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
-     #          xfrat(mxat),yfrat(mxat),zfrat(mxat),
+     &          xfrat(mxat),yfrat(mxat),zfrat(mxat),
 
-     #          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
-     #          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
+     &          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
+     &          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
 
       logical   lnb
 
@@ -45,7 +45,7 @@ c ......................................................................
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' opereg> No variables defined in molecule #',nml
+     &           ' opereg> No variables defined in molecule #',nml
         return
       endif
 
@@ -54,7 +54,7 @@ c ......................................................................
       ifivr=ivrml1(nml)         ! 1st var. &
       ilavr=ifivr+ntlvr-1       ! last var. of 'nml'
 
-c --------------------------- initializations
+! --------------------------- initializations
       do i=ifivr,ilavr
         gdeyrg(i)=0.d0
         xfvr(i)=0.d0
@@ -106,13 +106,13 @@ c --------------------------- initializations
           dy = 2.d0 * yji   ! The factor of 2 comes from the derivative
           dz = 2.d0 * zji
 
-c =============================================== global pars.
+! =============================================== global pars.
 
           gdeygb(ii+1) = gdeygb(ii+1) - dx   ! d(E_ij) / d(x_i)
           gdeygb(ii+2) = gdeygb(ii+2) - dy   ! d(E_ij) / d(y_i)
           gdeygb(ii+3) = gdeygb(ii+3) - dz   ! d(E_ij) / d(z_i)
 
-c -------------------------- r = r_i - r_1
+! -------------------------- r = r_i - r_1
           x = xi - x1
           y = yi - y1
           z = zi - z1
@@ -122,9 +122,9 @@ c -------------------------- r = r_i - r_1
           gdeygb(ii+5) = gdeygb(ii+5) +z*(dy*ca-dx*sa)+dz*(x*sa-y*ca) !  d(E_ij) / d(b)
 
           gdeygb(ii+6) = gdeygb(ii+6) +dx*(zk*y-yk*z)+dy*(xk*z-zk*x)  !  d(E_ij) / d(g)
-     #                                +dz*(yk*x-xk*y)
+     &                                +dz*(yk*x-xk*y)
 
-c =============================================== for internal vars.
+! =============================================== for internal vars.
 
           xfat(i) = dx
           yfat(i) = dy
@@ -163,7 +163,7 @@ c =============================================== for internal vars.
         yb=yat(ib)
         zb=zat(ib)
 
-c ---------------------------------------- axis for var.
+! ---------------------------------------- axis for var.
 
         if (it.eq.3) then      ! torsion
 
@@ -278,8 +278,8 @@ c ---------------------------------------- axis for var.
         if (it.eq.3.or.it.eq.2) then  ! torsion,b.angle
 
           gdeyrg(iv)= (ey*zb-ez*yb)*xfiv+(ez*xb-ex*zb)*yfiv+
-     #                (ex*yb-ey*xb)*zfiv
-     #               +ex*xfriv+ey*yfriv+ez*zfriv
+     &                (ex*yb-ey*xb)*zfiv
+     &               +ex*xfriv+ey*yfriv+ez*zfriv
 
         elseif (it.eq.1) then         ! b.length
 
@@ -293,12 +293,12 @@ c ---------------------------------------- axis for var.
 
       return
       end
-c **************************
+! **************************
       subroutine gdtgbl(nml)
-C
-C CALLS: bldmol,enyreg
-c
-c -------------------------- gradtest for 'gbpr'
+!
+! CALLS: bldmol,enyreg
+!
+! -------------------------- gradtest for 'gbpr'
 
       include 'INCL.H'
 
@@ -309,7 +309,7 @@ c -------------------------- gradtest for 'gbpr'
 
       do i = 1,6
 
-c ----------------------------- modify
+! ----------------------------- modify
         pro = gbpr(i,nml)
         gbpr(i,nml) = pro+del
         call bldmol(nml)
@@ -317,8 +317,8 @@ c ----------------------------- modify
         gdn = ( enyreg(nml) - eyrg ) / del
 
         write (*,*) ' Gb. var #',(ii+i),': ',gdeygb(ii+i),gdn,
-     #                                   abs(gdn-gdeygb(ii+i))
-c ----------------------------- restore
+     &                                   abs(gdn-gdeygb(ii+i))
+! ----------------------------- restore
         gbpr(i,nml) = pro
         call bldmol(nml)
 
@@ -326,16 +326,16 @@ c ----------------------------- restore
 
       return
       end
-c *****************************
+! *****************************
       subroutine gdtreg(nml,iv)
 
-c .................................................................
-c PURPOSE: calculate partial derivative of reg. energy for molecule
-c          'nml' vs. variable 'iv' NUMERICALLY and compare with
-c          its value obtained analytically
-c
-c CALLS:  setvar, enyreg
-c .................................................................
+! .................................................................
+! PURPOSE: calculate partial derivative of reg. energy for molecule
+!          'nml' vs. variable 'iv' NUMERICALLY and compare with
+!          its value obtained analytically
+!
+! CALLS:  setvar, enyreg
+! .................................................................
 
       include 'INCL.H'
 
@@ -343,7 +343,7 @@ c .................................................................
 
       dimension vlvrx(mxvr)
 
-c ____________________________ get & save values of variables
+! ____________________________ get & save values of variables
       do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
         it=ityvr(i)  ! type
         if (it.eq.3) then      ! torsion
@@ -365,9 +365,9 @@ c ____________________________ get & save values of variables
       gda=gdeyrg(iv)         ! analytical der.
 
       write (*,'(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
-     #       abs(gda-gdn),')'
+     &       abs(gda-gdn),')'
 
-c _________________________ restore vars
+! _________________________ restore vars
       vlvrx(iv)=ovr
       call setvar(nml,vlvrx)
 

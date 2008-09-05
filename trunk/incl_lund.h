@@ -7,7 +7,7 @@
       double precision epshb1,epshb2,powa,powb,sighb,cthb,cthb2
       double precision alhb,blhb,sighb2,cdon,cacc,casc
 
-c -----Probability for using BGS when it is possible
+! -----Probability for using BGS when it is possible
       double precision abgs,bbgs, dph(8)
       integer bgsnvar,bgsvar(mxrs), iph(8)
       common /bgs_i/ bgsnvar,iph
@@ -31,14 +31,14 @@ c -----Probability for using BGS when it is possible
       dimension asaexv(mxtyat,mxtyat),bsaexv(mxtyat,mxtyat)
 
       common /lundff/kbias,
-     #     epshb1,epshb2,powa,powb,sighb,cthb,
-     #     cthb2,
-     #     alhb,blhb,sighb2,cdon,cacc,casc,
-     #     ihpat,nhpat,hpstrg,
-     #     exvk,exvcut,exvcut2,
-     #     matcon,
-     #     sigsa,sig2lcp,asalcp,bsalcp,
-     #     lcp1,lcp2,ilpst,ilpnd,
-     #     exvlam,exvcutg,exvcutg2,
-     #     sig2exv,asaexv,bsaexv
+     &     epshb1,epshb2,powa,powb,sighb,cthb,
+     &     cthb2,
+     &     alhb,blhb,sighb2,cdon,cacc,casc,
+     &     ihpat,nhpat,hpstrg,
+     &     exvk,exvcut,exvcut2,
+     &     matcon,
+     &     sigsa,sig2lcp,asalcp,bsalcp,
+     &     lcp1,lcp2,ilpst,ilpnd,
+     &     exvlam,exvcutg,exvcutg2,
+     &     sig2exv,asaexv,bsaexv
       save /lundff/

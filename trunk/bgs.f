@@ -155,7 +155,7 @@
             bv(nph,2)=xiv(nph,2)-yat(iN(icurraa))
             bv(nph,3)=xiv(nph,3)-zat(iN(icurraa))
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
-     #           +bv(nph,3)*bv(nph,3)
+     &           +bv(nph,3)*bv(nph,3)
             iph(nph)=iphi(icurraa)
          endif 
          if (.not.fxvr(ipsi(icurraa))) then
@@ -167,7 +167,7 @@
             bv(nph,2)=xiv(nph,2)-yat(iCa(icurraa))
             bv(nph,3)=xiv(nph,3)-zat(iCa(icurraa))
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
-     #           +bv(nph,3)*bv(nph,3)
+     &           +bv(nph,3)*bv(nph,3)
             iph(nph)=ipsi(icurraa)
          endif
       enddo
@@ -184,11 +184,11 @@
       do i=1,3
          do j=1,nph
             dv(i,j,1)=(1.0/ab(j))*(bv(j,2)*(rv(i,3)-xiv(j,3))-
-     c           bv(j,3)*(rv(i,2)-xiv(j,2)))
+     &           bv(j,3)*(rv(i,2)-xiv(j,2)))
             dv(i,j,2)=(-1.0/ab(j))*(bv(j,1)*(rv(i,3)-xiv(j,3))-
-     c           bv(j,3)*(rv(i,1)-xiv(j,1)))
+     &           bv(j,3)*(rv(i,1)-xiv(j,1)))
             dv(i,j,3)=(1.0/ab(j))*(bv(j,1)*(rv(i,2)-xiv(j,2))-
-     c           bv(j,2)*(rv(i,1)-xiv(j,1)))
+     &           bv(j,2)*(rv(i,1)-xiv(j,1)))
          enddo
       enddo
       do i=1,nph 
@@ -272,7 +272,7 @@
             bv(nph,2)=xiv(nph,2)-yat(iN(icurraa))
             bv(nph,3)=xiv(nph,3)-zat(iN(icurraa))
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
-     #           +bv(nph,3)*bv(nph,3)
+     &           +bv(nph,3)*bv(nph,3)
             iph(nph)=iphi(icurraa)
          endif 
          if (.not.fxvr(ipsi(icurraa))) then 
@@ -284,7 +284,7 @@
             bv(nph,2)=xiv(nph,2)-yat(iCa(icurraa))
             bv(nph,3)=xiv(nph,3)-zat(iCa(icurraa))
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
-     #           +bv(nph,3)*bv(nph,3)
+     &           +bv(nph,3)*bv(nph,3)
             iph(nph)=ipsi(icurraa)
          endif
       enddo
@@ -301,11 +301,11 @@
       do i=1,3
          do j=1,nph
             dv(i,j,1)=(1.0/ab(j))*(bv(j,2)*(rv(i,3)-xiv(j,3))-
-     c           bv(j,3)*(rv(i,2)-xiv(j,2)))
+     &           bv(j,3)*(rv(i,2)-xiv(j,2)))
             dv(i,j,2)=(-1.0/ab(j))*(bv(j,1)*(rv(i,3)-xiv(j,3))-
-     c           bv(j,3)*(rv(i,1)-xiv(j,1)))
+     &           bv(j,3)*(rv(i,1)-xiv(j,1)))
             dv(i,j,3)=(1.0/ab(j))*(bv(j,1)*(rv(i,2)-xiv(j,2))-
-     c           bv(j,2)*(rv(i,1)-xiv(j,1)))
+     &           bv(j,2)*(rv(i,1)-xiv(j,1)))
          enddo
       enddo
       do i=1,nph 

@@ -1,31 +1,31 @@
-c **************************************************************
-c
-c This file contains the subroutines: enyflx
-c
-c Copyright 2003       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: enyflx
+!
+! Copyright 2003       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       real*8 function enyflx(nml)
 
-c .......................................................................
-c
-c  PURPOSE: Calculate internal energy of molecule 'nml' with FLEX dataset
-c
-c  CALLS: none
-c
-c .......................................................................
+! .......................................................................
+!
+!  PURPOSE: Calculate internal energy of molecule 'nml' with FLEX dataset
+!
+!  CALLS: none
+!
+! .......................................................................
 
       include 'INCL.H'
 
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' enyflx> No variables defined in molecule #',nml
+     &           ' enyflx> No variables defined in molecule #',nml
         return
       endif
 
@@ -91,7 +91,7 @@ c .......................................................................
                 rij12=rij6*rij6
                 rij=sqrt(rij2)
                 if(epsd) then
-c --------------------------------- distance dependent dielectric constant
+! --------------------------------- distance dependent dielectric constant
                 sr=slp_f*rij
                 ep=plt-(sr*sr+2.0*sr+2.0)*(plt-1.0)*exp(-sr)/2.0
                 else
@@ -118,12 +118,12 @@ c --------------------------------- distance dependent dielectric constant
                   endif
 
                   cth=(xij*px+yij*py+zij*pz)/(rij*
-     #                 sqrt(px*px+py*py+pz*pz))
+     &                 sqrt(px*px+py*py+pz*pz))
 
                   if (cth.gt.0.0) then
                     eyhb=eyhb+ evw + cth*(
-     #                   (ahb(ity,jty)-aij(ity,jty))/rij12-
-     #                   (chb(ity,jty)-cij(ity,jty))/rij6 )
+     &                   (ahb(ity,jty)-aij(ity,jty))/rij12-
+     &                   (chb(ity,jty)-cij(ity,jty))/rij6 )
                   else                             ! No Hydrogen Bond
                     eyvw=eyvw + evw
                   endif
@@ -152,7 +152,7 @@ c --------------------------------- distance dependent dielectric constant
               rij12=rij6*rij6
               rij=sqrt(rij2)
               if(epsd) then
-c --------------------------------- distance dependent dielectric constant
+! --------------------------------- distance dependent dielectric constant
               sr=slp_f*rij
               ep=plt-(sr*sr+2.0*sr+2.0)*(plt-1.)*exp(-sr)/2.0
               else
@@ -179,12 +179,12 @@ c --------------------------------- distance dependent dielectric constant
                 endif
 
                 cth=(xij*px+yij*py+zij*pz)/(rij*
-     #               sqrt(px*px+py*py+pz*pz))
+     &               sqrt(px*px+py*py+pz*pz))
 
                 if (cth.gt.0.0) then
                   eyhb=eyhb+ evw + cth*(
-     #                 (ahb(ity,jty)-a14(ity,jty))/rij12-
-     #                 (chb(ity,jty)-cij(ity,jty))/rij6 )
+     &                 (ahb(ity,jty)-a14(ity,jty))/rij12-
+     &                 (chb(ity,jty)-cij(ity,jty))/rij6 )
                 else                             ! No Hydrogen Bond
                   eyvw=eyvw + evw
                 endif

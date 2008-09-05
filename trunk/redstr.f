@@ -1,30 +1,30 @@
-c**************************************************************
-c
-c This file contains the subroutines: extstr,ibegst,iendst,
-c                                     iredin,iredrl,iopfil,
-c                                     tolost,toupst
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: extstr,ibegst,iendst,
+!                                     iredin,iredrl,iopfil,
+!                                     tolost,toupst
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine extstr(spr,ib,ie,str,strn,l)
 
-c ..........................................................
-c PURPOSE:  Extract substring preceeding separator 'spr'
-c           from 'str' searching from position 'ib' up to
-c           position 'ie' and put it into 'strn(1:l)'.
-c           'ib' is shifted to position following 'spr' or
-c           to 'ie+1', if 'spr' is not found
-c
-c          ! 'spr' should not be blank
-c
-c CALLS: ibegst,iendst
-c ..........................................................
+! ..........................................................
+! PURPOSE:  Extract substring preceeding separator 'spr'
+!           from 'str' searching from position 'ib' up to
+!           position 'ie' and put it into 'strn(1:l)'.
+!           'ib' is shifted to position following 'spr' or
+!           to 'ie+1', if 'spr' is not found
+!
+!          ! 'spr' should not be blank
+!
+! CALLS: ibegst,iendst
+! ..........................................................
 
       implicit integer*4 (i-n)
 
@@ -63,7 +63,7 @@ c ..........................................................
 
         l=0
         strn=blnk
-c ____________________________ make string in 'strn' left justified
+! ____________________________ make string in 'strn' left justified
       elseif (i.gt.1) then
         j=iendst(strn)
         l=j-i+1
@@ -74,20 +74,20 @@ c ____________________________ make string in 'strn' left justified
       endif
 
       return
-c ______________________________________________________________ Error
+! ______________________________________________________________ Error
     1 write (*,'(a)') ' extstr> Substring to be extracted is too long !'
       stop
 
       end
-c **********************************
+! **********************************
       integer*4 function ibegst(str)
 
-c .............................................................
-c PURPOSE: returns position of 1st non-blank character in 'str'
-c
-c CALLS: none
-c
-c .............................................................
+! .............................................................
+! PURPOSE: returns position of 1st non-blank character in 'str'
+!
+! CALLS: none
+!
+! .............................................................
 
       implicit integer*4 (i-n)
 
@@ -105,15 +105,15 @@ c .............................................................
 
       return
       end
-c **********************************
+! **********************************
       integer*4 function iendst(str)
 
-c ..............................................................
-c PURPOSE: returns position of last non-blank character in 'str'
-c
-c CALLS: none
-c
-c ..............................................................
+! ..............................................................
+! PURPOSE: returns position of last non-blank character in 'str'
+!
+! CALLS: none
+!
+! ..............................................................
 
       implicit integer*4 (i-n)
 
@@ -131,18 +131,18 @@ c ..............................................................
 
       return
       end
-c **************************************
+! **************************************
       integer*4 function iredin(line,in)
 
-c ..........................................
-c PURPOSE: Read integer*4 value 'in' from 'line'
-c          with format 'i9'
-c
-c          iredin=0 : error status
-c          iredin=1 : success
-c
-c CALLS: ibegst,iendst
-c ..........................................
+! ..........................................
+! PURPOSE: Read integer*4 value 'in' from 'line'
+!          with format 'i9'
+!
+!          iredin=0 : error status
+!          iredin=1 : success
+!
+! CALLS: ibegst,iendst
+! ..........................................
 
       implicit integer*4 (i-n)
 
@@ -171,24 +171,24 @@ c ..........................................
       endif
     1 return
       end
-c *************************************
+! *************************************
       integer*4 function iredrl(line,r)
 
-c ..........................................
-c PURPOSE: Read real*8 value 'r' from 'line'
-c          with format 'd17.6'
-c
-c          iredrl=0 : error status
-c          iredrl=1 : success
-c
-c CALLS: ibegst,iendst
-c ..........................................
+! ..........................................
+! PURPOSE: Read real*8 value 'r' from 'line'
+!          with format 'd17.6'
+!
+!          iredrl=0 : error status
+!          iredrl=1 : success
+!
+! CALLS: ibegst,iendst
+! ..........................................
 
       implicit integer*4 (i-n)
 
       parameter (mxd =17,   ! max. # of digits
-     #           mxap= 6,   ! max. # of digits after period
-     #           mxip=mxd-mxap)
+     &           mxap= 6,   ! max. # of digits after period
+     &           mxip=mxd-mxap)
  
       real*8 r
       character per,blnk,value*(mxd),line*(*)
@@ -221,14 +221,14 @@ c ..........................................
 
     1 return
       end
-c **************************
+! **************************
       subroutine tolost(str)
 
-c ..........................................
-c  PURPOSE:  converts 'string' to lower-case
-c  INPUT:    str - string to be converted
-c  CALLS:    ibegst,iendst
-c ..........................................
+! ..........................................
+!  PURPOSE:  converts 'string' to lower-case
+!  INPUT:    str - string to be converted
+!  CALLS:    ibegst,iendst
+! ..........................................
 
       include 'INCL.H'
 
@@ -245,14 +245,14 @@ c ..........................................
 
       return
       end
-c **************************
+! **************************
       subroutine toupst(str)
 
-c ..........................................
-c  PURPOSE:  converts 'string' to upper-case
-c  INPUT:    str - string to be converted
-c  CALLS:    ibegst,iendst
-c ..........................................
+! ..........................................
+!  PURPOSE:  converts 'string' to upper-case
+!  INPUT:    str - string to be converted
+!  CALLS:    ibegst,iendst
+! ..........................................
 
       include 'INCL.H'
 
@@ -269,18 +269,18 @@ c ..........................................
 
       return
       end
-c *****************************************************
+! *****************************************************
       integer*4 function iopfil(lun,filnam,stat,format)
 
-c ........................................................
-c PURPOSE: open 'lun' with 'filnam' 'stat' 'format'
-c
-c          returns: 1 = file successful opened
-c                   0 = error during open of existing file
-c                  -1 = file does not exist
-c
-c CALLS: ibegst
-c ........................................................
+! ........................................................
+! PURPOSE: open 'lun' with 'filnam' 'stat' 'format'
+!
+!          returns: 1 = file successful opened
+!                   0 = error during open of existing file
+!                  -1 = file does not exist
+!
+! CALLS: ibegst
+! ........................................................
 
       implicit integer*4 (i-n)
 
@@ -298,7 +298,7 @@ c ........................................................
             k=ibegst(format)
             if (j.gt.0.and.k.gt.0) then
               open(lun,file=filnam(i:),status=stat(j:),
-     #             form=format(k:),err=1)
+     &             form=format(k:),err=1)
               iopfil=1
             endif
           else

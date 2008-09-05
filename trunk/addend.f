@@ -1,25 +1,25 @@
-c **************************************************************
-c
-c
-c This file contains the subroutines:  addend, redchg, rplgrp
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c $Id: addend.f 334 2007-08-07 09:23:59Z meinke $
-c **************************************************************
+! **************************************************************
+!
+!
+! This file contains the subroutines:  addend, redchg, rplgrp
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! $Id: addend.f 334 2007-08-07 09:23:59Z meinke $
+! **************************************************************
       subroutine addend(nml,grpn,grpc)
 
-c ..............................................................
-c  PURPOSE:  modify terminal residues to complete bonding scheme
-c            with residue 'grpn' at N- and residue 'grpc' at C-terminus
-c            ! need initial co-ordinates for residues to modify
-c            ! for N-terminus: may add only simple groups
-c
-c  CALLS:  rplgrp,tolost,redchg
-c ..............................................................
+! ..............................................................
+!  PURPOSE:  modify terminal residues to complete bonding scheme
+!            with residue 'grpn' at N- and residue 'grpc' at C-terminus
+!            ! need initial co-ordinates for residues to modify
+!            ! for N-terminus: may add only simple groups
+!
+!  CALLS:  rplgrp,tolost,redchg
+! ..............................................................
  
       include 'INCL.H'
 
@@ -34,15 +34,15 @@ c ..............................................................
       call tolost(grc)
 
       if (grn(:3).eq.'ace'.or.grc(:3).eq.'ace'
-     #.or.grn(:3).eq.'nme'.or.grc(:3).eq.'nme') then
+     &.or.grn(:3).eq.'nme'.or.grc(:3).eq.'nme') then
 
         write(*,'(2a)') ' addend> N-Acetyl (ace) or N-Methylamide (nme)'
-     #   ,' should be put in SEQUENCE file, not added as end groups'
+     &   ,' should be put in SEQUENCE file, not added as end groups'
 
         stop
       endif
 
-c __________________________________________ N-terminus
+! __________________________________________ N-terminus
       ifirs=irsml1(nml)
       rpat='n   '
       res=seq(ifirs)
@@ -54,7 +54,7 @@ c __________________________________________ N-terminus
               sbrs='nh2+'
             else
               write (*,'(2a)') ' addend> ',
-     #         ' No N-terminal Hyp possible with ECEPP/3 dataset'
+     &         ' No N-terminal Hyp possible with ECEPP/3 dataset'
               stop
             endif
 
@@ -82,7 +82,7 @@ c __________________________________________ N-terminus
         else
 
           write(*,'(2a)') ' addend> Can add only ',
-     *     'nh2 or nh3+ to N-terminus'
+     &     'nh2 or nh3+ to N-terminus'
           stop
 
         endif
@@ -93,10 +93,10 @@ c __________________________________________ N-terminus
       else ! ace
 
         write(*,'(2a)') ' addend> Acetyl group',
-     #     ' at N-terminus not modified'
+     &     ' at N-terminus not modified'
       endif
 
-c __________________________________________ C-terminus
+! __________________________________________ C-terminus
       ilars=irsml2(nml)
       rpat='c   '
       res=seq(ilars)
@@ -123,7 +123,7 @@ c __________________________________________ C-terminus
         else
 
           write(*,'(2a)') ' addend> Can add only ',
-     #     'cooh or coo- to C-terminus'
+     &     'cooh or coo- to C-terminus'
           stop
 
         endif
@@ -134,36 +134,36 @@ c __________________________________________ C-terminus
       else  ! N'-methylamide
 
         write(*,'(2a)') ' addend> N-Methylamide',
-     #     ' at C-terminus not modified'
+     &     ' at C-terminus not modified'
 
       endif
 
-c ----------------------------- net charge of molecule
+! ----------------------------- net charge of molecule
       cg = 0.d0
       do i=iatrs1(irsml1(nml)),iatrs2(irsml2(nml))
         cg = cg + cgat(i)
       enddo
       if (abs(cg).gt.1.d-5) write(*,'(a,i2,a,f7.3,/)')
-     #        ' addend> Net charge of molecule #'
-     #        ,nml,': ',cg
+     &        ' addend> Net charge of molecule #'
+     &        ,nml,': ',cg
 
       return
       end
-c ****************************************
+! ****************************************
       subroutine rplgrp(nml,nrs,rpat,sbrs)
 
-c ...............................................................
-c PURPOSE: replace atom(s) rooted at atom 'rpat' in residue
-c          'nrs' of molecule 'nml' by atom(s) rooted at 
-c          'rpat' of residue 'sbrs' (same name of root
-c          atom 'rpat' maintains bonding geometry for
-c          preceeding atoms in 'nrs')
-c
-c          is NOT performed if 'rpat' is within mainchain,
-c          except it is first/last mainchain atom of 'nml'
-c
-c CALLS: dihedr,iopfil,iendst,eyring,fndbrn,redres,setsys,valang
-c ...............................................................
+! ...............................................................
+! PURPOSE: replace atom(s) rooted at atom 'rpat' in residue
+!          'nrs' of molecule 'nml' by atom(s) rooted at 
+!          'rpat' of residue 'sbrs' (same name of root
+!          atom 'rpat' maintains bonding geometry for
+!          preceeding atoms in 'nrs')
+!
+!          is NOT performed if 'rpat' is within mainchain,
+!          except it is first/last mainchain atom of 'nml'
+!
+! CALLS: dihedr,iopfil,iendst,eyring,fndbrn,redres,setsys,valang
+! ...............................................................
 
       include 'INCL.H'
 
@@ -179,7 +179,7 @@ c ...............................................................
       nxt=ixatrs(nrs)
       nfi=iatrs1(nrs)
       nla=iatrs2(nrs)
-c __________________________ indices of atoms to be replaced
+! __________________________ indices of atoms to be replaced
       do i=nfi,nla
         if (rpat.eq.nmat(i)) then
           nfirp=i
@@ -187,7 +187,7 @@ c __________________________ indices of atoms to be replaced
         endif
       enddo
       write (*,'(4a,i4,a,i4)') ' rplgrp> cannot find atom >',rpat,
-     #'< to be replaced in residue ',seq(nrs),nrs,' of molecule ',nml
+     &'< to be replaced in residue ',seq(nrs),nrs,' of molecule ',nml
       stop
 
     1 call fndbrn(nml,nrs,nfirp,nlarp,irng1,irng2,bb)
@@ -217,8 +217,8 @@ c __________________________ indices of atoms to be replaced
             if (iowat(ibd(i)).ne.nfirp) then
               if (ibdrg.ne.0) then
                 write (*,'(2a,i3)') 
-     #             ' rplgrp> Can handle only simple ring at 1st',
-     #             ' atom of molecule #',nml
+     &             ' rplgrp> Can handle only simple ring at 1st',
+     &             ' atom of molecule #',nml
                 stop
               endif
               ibdrg=ibd(i)
@@ -244,27 +244,27 @@ c __________________________ indices of atoms to be replaced
           goto 11
         else
           write (*,'(4a,i4,a,i4)') 
-     #      ' rplgrp> Cannot replace BACKBONE atom ',rpat,
-     #      ' of residue ',seq(nrs),nrs,' in molecule #',nml
+     &      ' rplgrp> Cannot replace BACKBONE atom ',rpat,
+     &      ' of residue ',seq(nrs),nrs,' in molecule #',nml
           stop
         endif
 
       endif  ! N-terminus
-c _________________________________ previous atoms
+! _________________________________ previous atoms
     2 if (nfirp.eq.nfi.and.nrs.eq.ifirs) goto 11
       nxtbb1=iowat(nfirp)
       if (nxtbb1.eq.nfi.and.nrs.eq.ifirs) goto 11
       nxtbb2=iowat(nxtbb1)
-c _______________________________ get data for substituent atoms
+! _______________________________ get data for substituent atoms
     3 if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
         write (*,'(a,/,a,i3,2a)') 
-     #    ' rplgrp> ERROR opening library of residues:',
-     #    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
+     &    ' rplgrp> ERROR opening library of residues:',
+     &    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
         stop
       endif
       call redres(sbrs,natsb,nxtsb,nvrsb)
       close (lunlib)
-c __________________________ indices of substituent atoms
+! __________________________ indices of substituent atoms
       do i=1,natsb
         if (rpat.eq.nmath(i)) then
           nfisb=i
@@ -272,7 +272,7 @@ c __________________________ indices of substituent atoms
         endif
       enddo
       write (*,'(4a)') ' rplgrp> Cannot find atom >',rpat,
-     #'< in substituent residue ',sbrs
+     &'< in substituent residue ',sbrs
       stop
 
     4 nlasb=nfisb
@@ -287,7 +287,7 @@ c __________________________ indices of substituent atoms
           nlasb=j
         enddo  ! ... branch atoms
     5 enddo  ! ... branches
-c _________________________________________________ local axes at 'nfirp'
+! _________________________________________________ local axes at 'nfirp'
       call setsys(nxtbb1,nfirp,nxtbb2,x1,x2,x3,y1,y2,y3,z1,z2,z3)
 
       xtoat(nfirp)=x1
@@ -297,7 +297,7 @@ c _________________________________________________ local axes at 'nfirp'
       ybaat(nfirp)=z2
       zbaat(nfirp)=z3
 
-c _____________________ add virtual atoms
+! _____________________ add virtual atoms
       if (ntbb) then
 
         ct=cstoat(nxtbb2)  ! t.angle_(+2)
@@ -305,7 +305,7 @@ c _____________________ add virtual atoms
         ca=csbaat(nxtbb1)  ! b.angle_(+1)
         sa=snbaat(nxtbb1)
 
-c ------------------- Eyring
+! ------------------- Eyring
         h2=-sa*ct
         h3=-sa*st
         x1=-ca*x1+h2*y1+h3*z1
@@ -330,13 +330,13 @@ c ------------------- Eyring
         ct=cstoat(nxtbb1)  ! t.angle_(+1)
         st=sntoat(nxtbb1)
 
-c -------------------- Eyring with b.angle = 90 deg.
+! -------------------- Eyring with b.angle = 90 deg.
         xat(-ione)=xat(izero)-ct*(z2*x3-z3*x2)-st*z1
         yat(-ione)=yat(izero)-ct*(z3*x1-z1*x3)-st*z2
         zat(-ione)=zat(izero)-ct*(z1*x2-z2*x1)-st*z3
 
       endif
-c _____________________________________________ Shift atom data
+! _____________________________________________ Shift atom data
       nrp=nlarp-nfirp
       nsb=nlasb-nfisb
       if (nrp.ne.nsb) then
@@ -406,7 +406,7 @@ c _____________________________________________ Shift atom data
           zbaat(ii)=zbaat(i)
 
         enddo
-c ____________________________________________ Shift residue data
+! ____________________________________________ Shift residue data
         do i=nrs+1,irsml2(ntlml)
           iatrs1(i)=iatrs1(i)+nsh
           iatrs2(i)=iatrs2(i)+nsh
@@ -417,7 +417,7 @@ c ____________________________________________ Shift residue data
       else
         nsh=0
       endif
-c _________________________________________ Correct data of 'nfirp'
+! _________________________________________ Correct data of 'nfirp'
       ish=nfirp-nfisb
       ityat(nfirp)=ityath(nfisb)
 
@@ -449,10 +449,10 @@ c _________________________________________ Correct data of 'nfirp'
           nb=nb+1
           if (nb.gt.mxbd) then
             write (*,'(6a,/,2a,3(i4,a))')
-     #      ' rplgrp> Cannot add atoms following ',rpat,
-     #      ' from group ',sbrs,' to atom ',rpat,
-     #      ' of residue ',seq(nrs),nrs,' in molecule #',nml,
-     #      ' because need >',(mxbd+1),' bonds'
+     &      ' rplgrp> Cannot add atoms following ',rpat,
+     &      ' from group ',sbrs,' to atom ',rpat,
+     &      ' of residue ',seq(nrs),nrs,' in molecule #',nml,
+     &      ' because need >',(mxbd+1),' bonds'
             stop
           endif
           ibd(nb+1)=ibdrg+nsh
@@ -473,7 +473,7 @@ c _________________________________________ Correct data of 'nfirp'
 
       endif
       nbdat(nfirp)=nb
-c _________________________________________ Add data for substituent
+! _________________________________________ Add data for substituent
       ii=nfirp
       do i=nfisb+1,nlasb
         ii=ii+1
@@ -526,8 +526,8 @@ c _________________________________________ Add data for substituent
         endif  ! ntbb
 
       enddo  ! substituent atoms
-c ___________________________________________________ Take care of Variables
-c (assume variables of replaced group/substituent to be stored CONSECUTIVELY)
+! ___________________________________________________ Take care of Variables
+! (assume variables of replaced group/substituent to be stored CONSECUTIVELY)
 
       ilavr=ivrml1(ntlml)+nvrml(ntlml)-1
       ifivr=ivrrs1(nrs)   ! variables to be replaced (#=ivrrp,last=lvrrp)
@@ -609,30 +609,30 @@ c (assume variables of replaced group/substituent to be stored CONSECUTIVELY)
       enddo
 
       return
-c __________________________________________ Errors
+! __________________________________________ Errors
    10 write (*,'(3a,/,2a,i4,a,i4,/,2a)') 
-     #   ' rplgrp> Cannot replace atom(s) following ',rpat,
-     #   ' from INSIDE a ring','    in residue: ',seq(nrs),nrs,
-     #   ' in molecule #',nml,' or in substitute: ',sbrs
+     &   ' rplgrp> Cannot replace atom(s) following ',rpat,
+     &   ' from INSIDE a ring','    in residue: ',seq(nrs),nrs,
+     &   ' in molecule #',nml,' or in substitute: ',sbrs
       stop
    11 write (*,'(4a,i4,a,i4,/,a)') 
-     #   ' rplgrp> Cannot replace atom(s) following ',rpat,
-     #   ' of residue ',seq(nrs),nrs,' in molecule #',nml,
-     #   ' since necessary 2 previous atoms are not available' 
+     &   ' rplgrp> Cannot replace atom(s) following ',rpat,
+     &   ' of residue ',seq(nrs),nrs,' in molecule #',nml,
+     &   ' since necessary 2 previous atoms are not available' 
       stop
 
       end
-c ****************************************
+! ****************************************
       subroutine redchg(nml,nrs,rpat,sbrs)
 
-c .........................................................
-c PURPOSE: read and place atomic point charges from residue
-c          'sbrs' to residue 'nrs' of molecule 'nml'
-c          from library 'chglib' with LUN=lunchg, if ilib=1
-c                       'reslib' with LUN=lunlib, if ilib=2
-c
-c CALLS: iopfil,iendst,tolost
-c ........................................................
+! .........................................................
+! PURPOSE: read and place atomic point charges from residue
+!          'sbrs' to residue 'nrs' of molecule 'nml'
+!          from library 'chglib' with LUN=lunchg, if ilib=1
+!                       'reslib' with LUN=lunlib, if ilib=2
+!
+! CALLS: iopfil,iendst,tolost
+! ........................................................
 
       include 'INCL.H'
 
@@ -676,8 +676,8 @@ c ........................................................
 
         if (iopfil(lunchg,chgfil,'old','formatted').le.izero) then
           write (*,'(a,/,a,i3,2a)') 
-     #      ' redchg> ERROR opening library of charges:',
-     #      ' LUN=',lunchg,' FILE=',chgfil(1:iendst(chgfil))
+     &      ' redchg> ERROR opening library of charges:',
+     &      ' LUN=',lunchg,' FILE=',chgfil(1:iendst(chgfil))
           stop
         endif
 
@@ -700,23 +700,23 @@ c ........................................................
                 endif
               enddo
               write (*,'(6a)') ' redchg> Cannot find atom: ',atnm,
-     #                        ' for entry: ',cgty,' in library: ',
-     #                        chgfil(1:iendst(chgfil))
+     &                        ' for entry: ',cgty,' in library: ',
+     &                        chgfil(1:iendst(chgfil))
               stop
     2       enddo
             return
           else
             write (*,'(4a)')
-     #       ' redchg> must increase MXATH to read data for entry: ',
-     #        cgty,' in library: ',chgfil(1:iendst(chgfil))
+     &       ' redchg> must increase MXATH to read data for entry: ',
+     &        cgty,' in library: ',chgfil(1:iendst(chgfil))
             close(lunchg)
             stop
           endif
         endif
         goto 1
     3   write (*,'(4a)')
-     #   ' redchg> Cannot find entry: ',cgty,' in library: ',
-     #      chgfil(1:iendst(chgfil))
+     &   ' redchg> Cannot find entry: ',cgty,' in library: ',
+     &      chgfil(1:iendst(chgfil))
         close(lunchg)
         stop
 
@@ -724,8 +724,8 @@ c ........................................................
 
         if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
           write (*,'(a,/,a,i3,2a)') 
-     #      ' redchg> ERROR opening library of residues:',
-     #      ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
+     &      ' redchg> ERROR opening library of residues:',
+     &      ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
           stop
         endif
 
@@ -747,31 +747,31 @@ c ........................................................
                 endif
               enddo
               write (*,'(6a)') ' redchg> Cannot find atom: ',atnm,
-     #                        ' for entry: ',cgty,' in library: ',
-     #                        reslib(1:iendst(reslib))
+     &                        ' for entry: ',cgty,' in library: ',
+     &                        reslib(1:iendst(reslib))
               stop
     5       enddo
             return
           else
             write (*,'(4a)')
-     #       ' redchg> must increase MXATH to read data for entry: ',
-     #        cgty,' in library: ',reslib(1:iendst(reslib))
+     &       ' redchg> must increase MXATH to read data for entry: ',
+     &        cgty,' in library: ',reslib(1:iendst(reslib))
             close(lunchg)
             stop
           endif
         endif
         goto 4
     6   write (*,'(4a)')
-     #   ' redchg> Cannot find entry: ',cgty,' in library: ',
-     #      reslib(1:iendst(reslib))
+     &   ' redchg> Cannot find entry: ',cgty,' in library: ',
+     &      reslib(1:iendst(reslib))
         close(lunchg)
         stop
 
       endif
 
    10 write (*,'(4a)')
-     #    ' redchg> Do not have charges for N/C-terminal residue ',
-     #    res,' modified with group :',sbrs
+     &    ' redchg> Do not have charges for N/C-terminal residue ',
+     &    res,' modified with group :',sbrs
       stop
 
       end

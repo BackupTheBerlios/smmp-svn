@@ -1,42 +1,42 @@
-c **************************************************************
-c
-c This file contains the subroutines:  opesol,gdtsol
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines:  opesol,gdtsol
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine opesol(nml)
 
-c ......................................................................
-c PURPOSE:  derivatives of solvatation energy vs. internal variables for
-c           molecule 'nml'
-c
-c  NB: if the unit axis for an internal variable coincides with a
-c      global axis (i.e. for torsion or bond length variation round
-c      or along 'xrfax', respectively, and bd. angle var. round
-c      'zrfax'): VdW & 14 interaction partners of moving set atoms
-c      should be used for calculation, instead of the mov. sets,
-c      with opposite sign.
-c
-c      Example: By the the way the molecule-fixed system is set up,
-c               changes in Phi_1 affect atomic positions BEFORE the
-c               N-C^alpha bond relatively to the space-fixed system,
-c               not the moving set of Phi_1.
-c
-c CALLS:    esolan, gdtsol
-c ......................................................................
+! ......................................................................
+! PURPOSE:  derivatives of solvatation energy vs. internal variables for
+!           molecule 'nml'
+!
+!  NB: if the unit axis for an internal variable coincides with a
+!      global axis (i.e. for torsion or bond length variation round
+!      or along 'xrfax', respectively, and bd. angle var. round
+!      'zrfax'): VdW & 14 interaction partners of moving set atoms
+!      should be used for calculation, instead of the mov. sets,
+!      with opposite sign.
+!
+!      Example: By the the way the molecule-fixed system is set up,
+!               changes in Phi_1 affect atomic positions BEFORE the
+!               N-C^alpha bond relatively to the space-fixed system,
+!               not the moving set of Phi_1.
+!
+! CALLS:    esolan, gdtsol
+! ......................................................................
 
       include 'INCL.H'
 
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
-     #          xfrat(mxat),yfrat(mxat),zfrat(mxat),
+     &          xfrat(mxat),yfrat(mxat),zfrat(mxat),
 
-     #          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
-     #          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
+     &          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
+     &          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
 
       logical   lnb
 
@@ -44,7 +44,7 @@ c ......................................................................
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' opesol> No variables defined in molecule #',nml
+     &           ' opesol> No variables defined in molecule #',nml
         return
       endif
 
@@ -65,7 +65,7 @@ c ......................................................................
 
       eysl = esolan(nml)
 
-c -------------------------------------------------- f & g for atoms
+! -------------------------------------------------- f & g for atoms
 
       do i=iatrs1(irsml1(nml)),iatrs2(irsml2(nml))
 
@@ -216,8 +216,8 @@ c -------------------------------------------------- f & g for atoms
         if (it.eq.3.or.it.eq.2) then  ! torsion,b.angle
 
           gdeysl(iv)= (ey*zb-ez*yb)*xfiv+(ez*xb-ex*zb)*yfiv+
-     #                 (ex*yb-ey*xb)*zfiv
-     #                +ex*xfriv+ey*yfriv+ez*zfriv
+     &                 (ex*yb-ey*xb)*zfiv
+     &                +ex*xfriv+ey*yfriv+ez*zfriv
 
         elseif (it.eq.1) then         ! b.length
 
@@ -231,16 +231,16 @@ c -------------------------------------------------- f & g for atoms
 
       return
       end
-c *****************************
+! *****************************
       subroutine gdtsol(nml,iv)
 
-c .....................................................................
-c PURPOSE: calculate partial derivative of solvation energy for molecule
-c          'nml' vs. variable 'iv' NUMERICALLY and compare with
-c          its value obtained analytically
-c
-c CALLS:  setvar, esolan
-c .....................................................................
+! .....................................................................
+! PURPOSE: calculate partial derivative of solvation energy for molecule
+!          'nml' vs. variable 'iv' NUMERICALLY and compare with
+!          its value obtained analytically
+!
+! CALLS:  setvar, esolan
+! .....................................................................
 
       include 'INCL.H'
 
@@ -249,7 +249,7 @@ c .....................................................................
       dimension vlvrx(mxvr)
 
 
-c ____________________________ get & save values of variables
+! ____________________________ get & save values of variables
       do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
         it=ityvr(i)  ! type
         if (it.eq.3) then      ! torsion
@@ -271,9 +271,9 @@ c ____________________________ get & save values of variables
       gdn=(eynw-eysl)/del    ! numerical derivative
 
       write (*,'(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
-     #       abs(gda-gdn),')'
+     &       abs(gda-gdn),')'
 
-c _________________________ restore vars
+! _________________________ restore vars
       vlvrx(iv)=ovr
 
       call setvar(nml,vlvrx)

@@ -111,3 +111,6 @@ class Universe:
     def save(self):
         """Saves the state of this Universe."""
         pass
+
+if __name__ == '__main__':
+    u=Universe()

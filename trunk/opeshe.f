@@ -1,34 +1,34 @@
-c **************************************************************
-c
-c This file contains the subroutines: opeshe,gdtshe
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: opeshe,gdtshe
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine opeshe(nml)
 
-c ......................................................................
-c PURPOSE: Calculate internal energy for ECEPP/3 dataset and its partial
-c          derivatives vs. variables using recursive algorithm from:
-c          Noguti T, Go N, J Phys Soc (Japan) v52 3685-3690 1984; Abe H,
-c          Braun W, Noguti T, Go N, Comp Chem v8 239-247 1984; Mazur A K,
-c          Abagyan R A, J Biomol Struct Dyn v6 815-832, which I modified
-c          for atomic forces instead of simple derivatives (see Lavery R,
-c          Sklenar H, Zakrzewska K, Pullman B, J Biomol Struct Dyn v3
-c          989-1014 1986)
-c
-c CALLS:   gdtshe 
-c ......................................................................
+! ......................................................................
+! PURPOSE: Calculate internal energy for ECEPP/3 dataset and its partial
+!          derivatives vs. variables using recursive algorithm from:
+!          Noguti T, Go N, J Phys Soc (Japan) v52 3685-3690 1984; Abe H,
+!          Braun W, Noguti T, Go N, Comp Chem v8 239-247 1984; Mazur A K,
+!          Abagyan R A, J Biomol Struct Dyn v6 815-832, which I modified
+!          for atomic forces instead of simple derivatives (see Lavery R,
+!          Sklenar H, Zakrzewska K, Pullman B, J Biomol Struct Dyn v3
+!          989-1014 1986)
+!
+! CALLS:   gdtshe 
+! ......................................................................
 
       include 'INCL.H'
 
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
-     #          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
-     #          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
+     &          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
+     &          xfrvr(mxvr),yfrvr(mxvr),zfrvr(mxvr)
 
 
       eyel=0.d0
@@ -40,7 +40,7 @@ c ......................................................................
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' opeshe> No variables defined in molecule #',nml
+     &           ' opeshe> No variables defined in molecule #',nml
         return
       endif
 
@@ -115,7 +115,7 @@ c ......................................................................
 
         endif
 
-c ============================================ Energies & Atomic forces
+! ============================================ Energies & Atomic forces
 
         xfiv=0.d0
         yfiv=0.d0
@@ -302,8 +302,8 @@ c ============================================ Energies & Atomic forces
         if (it.eq.3.or.it.eq.2) then  ! torsion,b.angle
 
           gdeyvr(iv)= (ey*zb-ez*yb)*xfiv+(ez*xb-ex*zb)*yfiv+
-     #                (ex*yb-ey*xb)*zfiv
-     #               +ex*xfriv+ey*yfriv+ez*zfriv -fvr
+     &                (ex*yb-ey*xb)*zfiv
+     &               +ex*xfriv+ey*yfriv+ez*zfriv -fvr
 
         elseif (it.eq.1) then         ! b.length
 
@@ -319,16 +319,16 @@ c ============================================ Energies & Atomic forces
 
       return
       end
-c *****************************
+! *****************************
       subroutine gdtshe(nml,iv)
 
-c .....................................................................
-c PURPOSE: calculate partial derivative of internal energy for molecule
-c          'nml' vs. variable 'iv' NUMERICALLY and compare with
-c          its value obtained analytically
-c
-c CALLS:  setvar, enyshe
-c .....................................................................
+! .....................................................................
+! PURPOSE: calculate partial derivative of internal energy for molecule
+!          'nml' vs. variable 'iv' NUMERICALLY and compare with
+!          its value obtained analytically
+!
+! CALLS:  setvar, enyshe
+! .....................................................................
 
       include 'INCL.H'
 
@@ -336,7 +336,7 @@ c .....................................................................
 
       dimension vlvrx(mxvr)
 
-c ____________________________ get & save values of variables
+! ____________________________ get & save values of variables
       do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
         it=ityvr(i)  ! type
         if (it.eq.3) then      ! torsion
@@ -359,9 +359,9 @@ c ____________________________ get & save values of variables
       gda=gdeyvr(iv)         ! analytical der.
 
       write (*,'(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
-     #       abs(gda-gdn),')'
+     &       abs(gda-gdn),')'
 
-c _________________________ restore
+! _________________________ restore
       vlvrx(iv)=ovr
       call setvar(nml,vlvrx)
 

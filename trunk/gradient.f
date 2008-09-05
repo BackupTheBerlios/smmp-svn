@@ -1,22 +1,22 @@
-C **************************************************************
-c
-c This file contains the subroutines: gradient
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: gradient
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine gradient()
 
-c -------------------------------------------
-c PURPOSE: calculate energy & gradients
-c
-c CALLS:   opeflx,opereg,opeshe,opesol,setvar
-c -------------------------------------------
+! -------------------------------------------
+! PURPOSE: calculate energy & gradients
+!
+! CALLS:   opeflx,opereg,opeshe,opesol,setvar
+! -------------------------------------------
 
       include 'INCL.H'
 

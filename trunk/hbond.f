@@ -1,38 +1,38 @@
-c**************************************************************
-c
-c This file contains the subroutines: hbond,chhb,ishybd,
-c                                     ishybdo,nursat,interhbond
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: hbond,chhb,ishybd,
+!                                     ishybdo,nursat,interhbond
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine hbond(nml,mhb,ipr)
-c .................................................................
-c PURPOSE: find hydrogen bonds in molecule 'nml'
-c
-c          prints HBonds, if ipr > 0
-c
-c OUTPUT: mhb - number of hyd.bds. of type i->i+4
-c  
-c   to INCL.H:
-c
-c         ntyhb  - number of different types of hyd. bds. found
-c         nutyhb - number of hyd.bds. found for each type
-c         ixtyhb - index for each type of hyd. bd. composed as
-c                  (atom idx. of H) * 1000 + atm.idx. of acceptor
-c
-c CALLS: chhb,ishybd  (ishybdo),nursat
-C
-c................................................................
+! .................................................................
+! PURPOSE: find hydrogen bonds in molecule 'nml'
+!
+!          prints HBonds, if ipr > 0
+!
+! OUTPUT: mhb - number of hyd.bds. of type i->i+4
+!  
+!   to INCL.H:
+!
+!         ntyhb  - number of different types of hyd. bds. found
+!         nutyhb - number of hyd.bds. found for each type
+!         ixtyhb - index for each type of hyd. bd. composed as
+!                  (atom idx. of H) * 1000 + atm.idx. of acceptor
+!
+! CALLS: chhb,ishybd  (ishybdo),nursat
+!
+!................................................................
 
       include 'INCL.H'
 
-cf2py intent(out) mhb  
+!f2py intent(out) mhb  
       parameter (atbase=mxat)      
       logical ishb
 
@@ -49,34 +49,34 @@ cf2py intent(out) mhb
         ntlvr=nvrml(nml)
         if (ntlvr.eq.0) then
           write (*,'(a,i4)')
-     #           ' hbond> No variables defined in molecule #',nml
+     &           ' hbond> No variables defined in molecule #',nml
           return
         endif
 
         ifivr=ivrml1(nml)
-c Index of last moving set
+! Index of last moving set
         i1s=imsml1(nml)+nmsml(nml)
       endif 
-c Loop over all variables
+! Loop over all variables
       do io=ifivr+ntlvr-1,ifivr,-1  
-c Get index of variable
+! Get index of variable
         iv=iorvr(io)       
-c Index of next to last moving set
+! Index of next to last moving set
         i2s=i1s-1      
-c Index of moving set belonging to iv
+! Index of moving set belonging to iv
         i1s=imsvr1(iv) 
-c Loop over all moving sets between the one belonging to iv and the 
-c next to last one
+! Loop over all moving sets between the one belonging to iv and the 
+! next to last one
         do ims=i1s,i2s  
-c First atom in moving set
+! First atom in moving set
           i1=latms1(ims)
-c Last atom in moving set
+! Last atom in moving set
           i2=latms2(ims)
-c Loop over all atoms in moving set.
+! Loop over all atoms in moving set.
           do i=i1,i2  
-c Loop over van der Waals domains of atom i
+! Loop over van der Waals domains of atom i
             do ivw=ivwat1(i),ivwat2(i)
-c Loop over atoms in van der Waals domain.  
+! Loop over atoms in van der Waals domain.  
               do j=lvwat1(ivw),lvwat2(ivw)  
 
                 call ishybd(i,j,ishb,ih,ia)   ! Thornton criteria
@@ -110,7 +110,7 @@ c Loop over atoms in van der Waals domain.
               j=l14at(i14)
 
               call ishybd(i,j,ishb,ih,ia)   ! Thornton criteria
-c              call ishybdo(i,j,ishb,ih,ia)  
+!              call ishybdo(i,j,ishb,ih,ia)  
 
               if (ishb) then
 
@@ -143,9 +143,9 @@ c              call ishybdo(i,j,ishb,ih,ia)
 
       mhb=0
 
-c     do inhb=1,ntyhb
-c      mhb = mhb+nutyhb(inhb)
-c     enddo
+!     do inhb=1,ntyhb
+!      mhb = mhb+nutyhb(inhb)
+!     enddo
 
       if (ipr.gt.0) write(*,'(1x,a,/)') ' hbond>  Hydrogen Bonds:'
 
@@ -172,14 +172,14 @@ c     enddo
 
               if (n.gt.0) then
                 write(*,'(1x,i3,a2,a4,a3,i3,1x,a4,a7,a4,a3,i3,1x,a4,a9,
-     #                    i2)')
-     #           ii,') ',nmat(ia),' ( ',na,seq(na),' ) <-- ',nmat(id),
-     #           ' ( ', nd,seq(nd),' ) = i +',n
+     &                    i2)')
+     &           ii,') ',nmat(ia),' ( ',na,seq(na),' ) <-- ',nmat(id),
+     &           ' ( ', nd,seq(nd),' ) = i +',n
               else
                 write(*,'(1x,i3,a2,a4,a3,i3,1x,a4,a7,a4,a3,i3,1x,a4,a9,
-     #                    i2)')
-     #           ii,') ',nmat(ia),' ( ',na,seq(na),' ) <-- ',nmat(id),
-     #           ' ( ', nd,seq(nd),' ) = i -',abs(n)
+     &                    i2)')
+     &           ii,') ',nmat(ia),' ( ',na,seq(na),' ) <-- ',nmat(id),
+     &           ' ( ', nd,seq(nd),' ) = i -',abs(n)
               endif
 
               call chhb(ia,id)
@@ -191,21 +191,21 @@ c     enddo
 
       return
       end
-c .....................................................................
-c Calculates hydrogen bonds between different chains.
-c 
-c @return number of intermolecular hydrogen bonds. Returns 0 if only 
-c         one molecule is present. The value is returned in the 
-c         variable mhb.
-c
-c @author Jan H. Meinke <j.meinke@fz-juelich.de>
-c                                            
-c .....................................................................
+! .....................................................................
+! Calculates hydrogen bonds between different chains.
+! 
+! @return number of intermolecular hydrogen bonds. Returns 0 if only 
+!         one molecule is present. The value is returned in the 
+!         variable mhb.
+!
+! @author Jan H. Meinke <j.meinke@fz-juelich.de>
+!                                            
+! .....................................................................
       subroutine interhbond(mhb)
 
       include 'INCL.H'
       
-cf2py intent(out) mhb     
+!f2py intent(out) mhb     
       
       logical ishb
       
@@ -232,7 +232,7 @@ cf2py intent(out) mhb
       enddo ! iml
       
       end ! subroutine interhbond
-c ************************
+! ************************
       subroutine chhb(i,j)
 
       include 'INCL.H'
@@ -248,12 +248,12 @@ c ************************
       endif
 
       dah=sqrt((xat(ih)-xat(ia))**2+(yat(ih)-yat(ia))**2+
-     #          (zat(ih)-zat(ia))**2)
+     &          (zat(ih)-zat(ia))**2)
 
       id=iowat(ih)
 
       dad=sqrt((xat(id)-xat(ia))**2+(yat(id)-yat(ia))**2+
-     #          (zat(id)-zat(ia))**2)
+     &          (zat(id)-zat(ia))**2)
       adha=valang(id,ih,ia)*crd
 
       ib=iowat(ia)
@@ -268,33 +268,33 @@ c ************************
 
       return
       end
-c *************************************
+! *************************************
       subroutine ishybd(i,j,ishb,ih,ia)
       
 
-c ..........................................................
-c  PURPOSE: checks for hydrogen bond between atoms 'i' & 'j'
-c           according to geometric criteria
-c 
-c  OUTPUT:  logical 'ishb' - true, if have Hydrogen bond
-c           ih - index of Hydrogen atom
-c           ia - index of Acceptor atom
-c
-c  [I.K.McDonald,J.M.Thornton,Satisfying hydrogen bond
-c   potential in proteins.J.Mol.Biol.238(5),777-793 (1994)]
-c
-c  D: hydrogen(=H) donor, A: acceptor, B: atom bound to A
-c
-c  Dis_HA <= 2.5 & Dis_DA <= 3.9 & Angle(D-H-A) > 90 &
-c  Angle(H-A-B) > 90 & Angle(D-A-B) > 90
-c ..........................................................
+! ..........................................................
+!  PURPOSE: checks for hydrogen bond between atoms 'i' & 'j'
+!           according to geometric criteria
+! 
+!  OUTPUT:  logical 'ishb' - true, if have Hydrogen bond
+!           ih - index of Hydrogen atom
+!           ia - index of Acceptor atom
+!
+!  [I.K.McDonald,J.M.Thornton,Satisfying hydrogen bond
+!   potential in proteins.J.Mol.Biol.238(5),777-793 (1994)]
+!
+!  D: hydrogen(=H) donor, A: acceptor, B: atom bound to A
+!
+!  Dis_HA <= 2.5 & Dis_DA <= 3.9 & Angle(D-H-A) > 90 &
+!  Angle(H-A-B) > 90 & Angle(D-A-B) > 90
+! ..........................................................
 
       include 'INCL.H'
 
       parameter (cdad=3.9d0,
-     #           cdah=2.5d0,
-     #           cang=110.d0)
-c     #           cang=90.d0)
+     &           cdah=2.5d0,
+     &           cang=110.d0)
+!     #           cang=90.d0)
 
       logical ishb
 
@@ -317,42 +317,42 @@ c     #           cang=90.d0)
       endif
 
       if (sqrt((xat(ih)-xat(ia))**2+(yat(ih)-yat(ia))**2+
-     #         (zat(ih)-zat(ia))**2).gt.cdah) return
+     &         (zat(ih)-zat(ia))**2).gt.cdah) return
 
       id=iowat(ih)
 
       if (id.le.0.or.sqrt((xat(id)-xat(ia))**2+(yat(id)-yat(ia))**2+
-     #                    (zat(id)-zat(ia))**2).gt.cdad
-     #           .or.valang(id,ih,ia).lt.cahb) return
+     &                    (zat(id)-zat(ia))**2).gt.cdad
+     &           .or.valang(id,ih,ia).lt.cahb) return
 
       ib=iowat(ia)
 
       if (ib.gt.0.and.valang(ih,ia,ib).ge.cahb
-     #           .and.valang(id,ia,ib).ge.cahb) ishb=.true.
+     &           .and.valang(id,ia,ib).ge.cahb) ishb=.true.
 
       return
       end
-c **************************************
+! **************************************
 
       subroutine ishybdo(i,j,ishb,ih,ia)
 
-c ..........................................................
-c  PURPOSE: checks for hydrogen bond between atoms 'i' & 'j'
-c           according to geometric criteria
-c 
-c  OUTPUT:  logical 'ishb' - true, if have Hydrogen bond
-c           ih - index of Hydrogen atom
-c           ia - index of Acceptor atom
-c
-c  D: hydrogen(=H) donor, A: acceptor
-c
-c    Dis_AH <= 2.5 & Angle(D-H-A) >= 160
-c ...........................................................
+! ..........................................................
+!  PURPOSE: checks for hydrogen bond between atoms 'i' & 'j'
+!           according to geometric criteria
+! 
+!  OUTPUT:  logical 'ishb' - true, if have Hydrogen bond
+!           ih - index of Hydrogen atom
+!           ia - index of Acceptor atom
+!
+!  D: hydrogen(=H) donor, A: acceptor
+!
+!    Dis_AH <= 2.5 & Angle(D-H-A) >= 160
+! ...........................................................
 
       include 'INCL.H'
 
       parameter (cdah=2.5d0,
-     #           cang=140.d0)
+     &           cang=140.d0)
 
       logical ishb
 
@@ -376,7 +376,7 @@ c ...........................................................
       endif
 
       if (sqrt((xat(ih)-xat(ia))**2+(yat(ih)-yat(ia))**2+
-     #         (zat(ih)-zat(ia))**2).gt.cdah) return
+     &         (zat(ih)-zat(ia))**2).gt.cdah) return
 
       id=iowat(ih)
 

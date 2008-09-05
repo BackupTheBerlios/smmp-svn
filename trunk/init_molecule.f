@@ -1,38 +1,38 @@
-c **************************************************************
-c
-c This file contains the subroutines: init_molecule
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
-c FIXME: Data in varfile determines which molecule is changed.
+! **************************************************************
+!
+! This file contains the subroutines: init_molecule
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
+! FIXME: Data in varfile determines which molecule is changed.
 
       subroutine init_molecule(iabin,grpn,grpc,seqfile,varfile)
 
-c ----------------------------------------------------------
-c PURPOSE: construct starting structure of molecule(s)
-c
-c          iabin = 1  : ab Initio using sequence & 
-c                       variables given in input files
-c          iabin != 1 : sequence, variable information
-c                       from PDB-file
-c
-c          grpn:        N-terminal group
-c          grpc:        C-terminal group
-c
-c CALLS:   addend,bldmol,c_alfa,getmol,iendst, mklist, nursvr,
-C          pdbread,pdbvars,redseq,redvar,setmvs
-C
-c ----------------------------------------------------------
+! ----------------------------------------------------------
+! PURPOSE: construct starting structure of molecule(s)
+!
+!          iabin = 1  : ab Initio using sequence & 
+!                       variables given in input files
+!          iabin != 1 : sequence, variable information
+!                       from PDB-file
+!
+!          grpn:        N-terminal group
+!          grpc:        C-terminal group
+!
+! CALLS:   addend,bldmol,c_alfa,getmol,iendst, mklist, nursvr,
+!          pdbread,pdbvars,redseq,redvar,setmvs
+!
+! ----------------------------------------------------------
 
       include 'INCL.H'
       include 'INCP.H'
 
-cf2py character*80 optional, intent(in) :: seqfile = ' '
-cf2py character*80 optional, intent(in) :: varfile = ' ' 
+!f2py character*80 optional, intent(in) :: seqfile = ' '
+!f2py character*80 optional, intent(in) :: varfile = ' ' 
       
       character grpn*4,grpc*4
       character navr*3, nars*4  
@@ -46,7 +46,7 @@ cf2py character*80 optional, intent(in) :: varfile = ' '
       write (*,*) 'init_molecule: Solvent: ', itysol
       if (iabin.eq.1) then  
          
-c     ----------------------------------------- get sequence for molecule(s)
+!     ----------------------------------------- get sequence for molecule(s)
          lunseq=11
          if (ntlml.gt.0) then
             ontlml = ntlml + 1
@@ -63,8 +63,8 @@ c     ----------------------------------------- get sequence for molecule(s)
          
          write (*,*) 'File with sequence is ', seqfil(1:iendst(seqfil))
          
-c     --------------------------------- read & assemble data from libraries
-c     initial coordinates, interaction lists
+!     --------------------------------- read & assemble data from libraries
+!     initial coordinates, interaction lists
          
          ntl = ntlml
          do i=ontlml, ntl
@@ -84,10 +84,10 @@ c     initial coordinates, interaction lists
             
          enddo
          
-c     --------------------------- Read the initial conformation if necessary
+!     --------------------------- Read the initial conformation if necessary
          if(readFromStdin) then 
             write (*,'(a,$)') ' file with VARIABLES:'
-c     
+!     
             varfil=' '
             read(*,'(a)',end=2,err=2) varfil
          else
@@ -104,7 +104,7 @@ c
          
  2       write(*,*) ' '
          
-c     -------------------- get: nvr,idvr, vlvr, olvlvr
+!     -------------------- get: nvr,idvr, vlvr, olvlvr
          nvr = 0
          do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
             
@@ -148,7 +148,7 @@ c     -------------------- get: nvr,idvr, vlvr, olvlvr
          
       endif
       
-c     -------------------------- set var. amplitudes for simulations
+!     -------------------------- set var. amplitudes for simulations
       
       do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
          
@@ -161,18 +161,18 @@ c     -------------------------- set var. amplitudes for simulations
             
             if (                         navr(1:2).eq.'om'
             
-     #     .or.nars(1:3).eq.'arg'.and.(navr(1:2).eq.'x5'
-     #           .or.navr(1:2).eq.'x6')
+     &     .or.nars(1:3).eq.'arg'.and.(navr(1:2).eq.'x5'
+     &           .or.navr(1:2).eq.'x6')
             
-     #           .or.(nars(1:3).eq.'asn'.or.nars(1:3).eq.'asp')
-     #           .and.navr(1:2).eq.'x3'
+     &           .or.(nars(1:3).eq.'asn'.or.nars(1:3).eq.'asp')
+     &           .and.navr(1:2).eq.'x3'
             
-     #           .or.(nars(1:3).eq.'gln'.or.nars(1:3).eq.'glu')
-     #           .and.navr(1:2).eq.'x4'
+     &           .or.(nars(1:3).eq.'gln'.or.nars(1:3).eq.'glu')
+     &           .and.navr(1:2).eq.'x4'
             
-     #           ) then
+     &           ) then
             
-c     axvr(i) = pi/9.d0  ! 20 deg.
+!     axvr(i) = pi/9.d0  ! 20 deg.
             axvr(i) = pi2       ! Trying out 360 deg. for these as well
             
          else
@@ -185,7 +185,7 @@ c     axvr(i) = pi/9.d0  ! 20 deg.
       
       enddo                     ! vars.
       
-c     --------------------- initialize solvation pars. if necessary
+!     --------------------- initialize solvation pars. if necessary
 
       if (itysol.ne.0) then
          

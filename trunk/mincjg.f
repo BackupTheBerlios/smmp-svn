@@ -1,55 +1,55 @@
-c **************************************************************
-c
-c This file contains the subroutines: mincjg
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c ********************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: mincjg
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! ********************************************************************
       subroutine mincjg(n,mxn,x,f,g,acur,d,xa,ga,dt,yt,gt,maxfun,nfun)
 
-c ....................................................................
-c
-c  Conjugate Gradient Minimizer
-c
-c  INPUT:   X,F,G - variables, value of FUNC, gradient at START/
-c           ACUR - convergence is assumed if ACUR > SUM ( G(I)**2 )
-c           MAXFUN - maximum overall number of function calls
-c
-c  OUTPUT:  X,F,G - variables, value of FUNC, gradient at MINIMUM
-c           NFUN  - overall number of function calls used
-c
-c  ARRAYS:  D,XA,GA,YT,DT,GT - dimension N
-c
-c  CALLS:   MOVE - calculate function & its gradients for current X
-c
-c  PARAMETERS:  AMF    - rough estimate of first reduction in F, used
-c                        to guess initial step of 1st line search
-c               MXFCON - see 'ier=4'
-c               MAXLIN -
-c
-c  DIAGNOSTICS (ier)
-c
-c           = 0: minimization completed successfully
-c           = 1: number of steps reached MAXFUN
-c           = 2: line search was abandoned
-c           = 3: search direction is uphill
-c           = 4: two consecutive line searches failed to reduce F
-c ....................................................................
+! ....................................................................
+!
+!  Conjugate Gradient Minimizer
+!
+!  INPUT:   X,F,G - variables, value of FUNC, gradient at START/
+!           ACUR - convergence is assumed if ACUR > SUM ( G(I)**2 )
+!           MAXFUN - maximum overall number of function calls
+!
+!  OUTPUT:  X,F,G - variables, value of FUNC, gradient at MINIMUM
+!           NFUN  - overall number of function calls used
+!
+!  ARRAYS:  D,XA,GA,YT,DT,GT - dimension N
+!
+!  CALLS:   MOVE - calculate function & its gradients for current X
+!
+!  PARAMETERS:  AMF    - rough estimate of first reduction in F, used
+!                        to guess initial step of 1st line search
+!               MXFCON - see 'ier=4'
+!               MAXLIN -
+!
+!  DIAGNOSTICS (ier)
+!
+!           = 0: minimization completed successfully
+!           = 1: number of steps reached MAXFUN
+!           = 2: line search was abandoned
+!           = 3: search direction is uphill
+!           = 4: two consecutive line searches failed to reduce F
+! ....................................................................
 
       implicit real*8 (a-h,o-z)
       implicit integer*4 (i-n)
 
       parameter (AMF = 10.d0,
-     #           MXFCON = 2,
-     #           MAXLIN = 5,
-     #           TOL = 1.d-7,  ! controls 'stepch'
-     #           EPS = .7d0)
+     &           MXFCON = 2,
+     &           MAXLIN = 5,
+     &           TOL = 1.d-7,  ! controls 'stepch'
+     &           EPS = .7d0)
 
       dimension x(mxn),g(mxn),
-     #          d(mxn),xa(mxn),ga(mxn),dt(mxn),yt(mxn),gt(mxn)
+     &          d(mxn),xa(mxn),ga(mxn),dt(mxn),yt(mxn),gt(mxn)
 
 
       ier = 0
@@ -153,7 +153,7 @@ c ....................................................................
       else  !   stepch is effectively zero
 
         if ( nfun .gt. (nfbeg + 1) .or.
-     #       abs(gdmi/gdit) .gt. EPS ) then
+     &       abs(gdmi/gdit) .gt. EPS ) then
 
           ier=2
           write(*,*) ' mincjg>  too small step in search direction'
@@ -204,7 +204,7 @@ c ....................................................................
       gspln = gdmi + stepch * ddspln
 
       if ( (gdmi * gspln) .lt. 0.d0 )  stepch = stepch * gdmi /
-     #                                          (gdmi - gspln)
+     &                                          (gdmi - gspln)
 
       goto 2
 
@@ -241,7 +241,7 @@ c ....................................................................
       else
 
         if (iterrs .ne. 0 .and. (iter - iterrs) .lt. (n-1) .and.
-     #      abs(sum) .lt. gsq2 ) then
+     &      abs(sum) .lt. gsq2 ) then
 
           gama = 0.d0
           sum = 0.d0

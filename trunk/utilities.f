@@ -113,33 +113,33 @@
 
       end subroutine distributeWorkLoad
       
-c-----------------------------------------------------------------------
-c     The function fileNameMP takes a template of a file name in the
-c     variable base. The position of the first and last character that
-c     may be replaced by rank in the string are given in i1 (first) and
-c     i2 (last).
-c     The function returns an empty string if the rank would need more
-c     characters than is allowed by the template.
-c     For example,
-c     \code
-c     rank = 11
-c     fileName = fileNameMP('base_0000.dat', 6, 9, rank)
-c     write (*,*), fileName
-c     \endcode
-c     will output base_0011.dat.
-c     
-c     @param base the base file name, e.g., base_0000.dat.
-c     @param i1 index of the first character that may be replaced
-c     @param i2 index of the last character that may be replaced
-c     @param rank the number that should be inserted into the file name.
-c     
-c     @return file name for rank
-c-----------------------------------------------------------------------
+!-----------------------------------------------------------------------
+!     The function fileNameMP takes a template of a file name in the
+!     variable base. The position of the first and last character that
+!     may be replaced by rank in the string are given in i1 (first) and
+!     i2 (last).
+!     The function returns an empty string if the rank would need more
+!     characters than is allowed by the template.
+!     For example,
+!     \code
+!     rank = 11
+!     fileName = fileNameMP('base_0000.dat', 6, 9, rank)
+!     write (*,*), fileName
+!     \endcode
+!     will output base_0011.dat.
+!     
+!     @param base the base file name, e.g., base_0000.dat.
+!     @param i1 index of the first character that may be replaced
+!     @param i2 index of the last character that may be replaced
+!     @param rank the number that should be inserted into the file name.
+!     
+!     @return file name for rank
+!-----------------------------------------------------------------------
       character*80 function fileNameMP(base, i1, i2, rank)
 
       character*(*) base
-c     i1, i2: Index of first and last character that can be replaced
-c     rank: rank of node
+!     i1, i2: Index of first and last character that can be replaced
+!     rank: rank of node
       integer i1, i2, rank
 
       fileNameMP = base
@@ -149,7 +149,7 @@ c     rank: rank of node
          stop
       endif
 
-c     TODO: Allow arbitrary rank
+!     TODO: Allow arbitrary rank
 
       if (rank.lt.10) then
          write(fileNameMP(i2:i2), '(i1)') rank
@@ -165,5 +165,5 @@ c     TODO: Allow arbitrary rank
          write(fileNameMP(i2-5:i2), '(i6)') rank
       endif
       end function fileNameMP 
-c     End fileNameMP
+!     End fileNameMP
 

@@ -1,43 +1,43 @@
-c**************************************************************
-c
-c This file contains the subroutines: zimmer
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c CALLS: none
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: zimmer
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! CALLS: none
+!
+! **************************************************************
 
       
          subroutine zimmer(nresi) 
 
-C Calculates the Zimmerman-code of a configuration (Zimmerman et. al.
-C Macromolecules, vol. 10 (1977) 1-9.)
-C
-C Note the difference in Notations:
-C    SMMP:                      Zimmerman, et.al.:
-C         A                                       A
-C         B                                       B
-C         C                                       C
-C         D                                       D
-C         E                                       E
-C         F                                       F
-C         G                                       G
-C         H                                       H
-C         a                                       A*
-C         b                                       B*
-C         c                                       C*
-C         d                                       D*
-C         e                                       E*
-C         f                                       F*
-C         g                                       G*
-C         h                                       H*
-C
+! Calculates the Zimmerman-code of a configuration (Zimmerman et. al.
+! Macromolecules, vol. 10 (1977) 1-9.)
+!
+! Note the difference in Notations:
+!    SMMP:                      Zimmerman, et.al.:
+!         A                                       A
+!         B                                       B
+!         C                                       C
+!         D                                       D
+!         E                                       E
+!         F                                       F
+!         G                                       G
+!         H                                       H
+!         a                                       A*
+!         b                                       B*
+!         c                                       C*
+!         d                                       D*
+!         e                                       E*
+!         f                                       F*
+!         g                                       G*
+!         h                                       H*
+!
       include 'INCL.H'
-cf2py intent(in) nresi
+!f2py intent(in) nresi
       character*1 zim
 
      

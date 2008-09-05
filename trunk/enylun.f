@@ -1,14 +1,14 @@
-c *******************************************************************
-c SMMP version of Anders Irback's force field, to be called the Lund
-c force field. This file contains the function enylun, which in turn 
-c calls all the terms in the energy function. The terms Bias (ebias), 
-c Hydrogen bonds (ehbmm and ehbms), Hydrophobicity (ehp) and the 
-c Excluded volume (eexvol and eloexv) are also implemented in this 
-c file.
-c
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
+! *******************************************************************
+! SMMP version of Anders Irback's force field, to be called the Lund
+! force field. This file contains the function enylun, which in turn 
+! calls all the terms in the energy function. The terms Bias (ebias), 
+! Hydrogen bonds (ehbmm and ehbms), Hydrophobicity (ehp) and the 
+! Excluded volume (eexvol and eloexv) are also implemented in this 
+! file.
+!
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
       subroutine init_lundff
       include 'INCL.H'
       include 'incl_lund.h'
@@ -16,13 +16,13 @@ c
       logical prlvr
 
       print *,'initializing Lund forcefield'
-c     Some parameters in the Lund force field.
-c     The correspondence between internal energy scale and kcal/mol
+!     Some parameters in the Lund force field.
+!     The correspondence between internal energy scale and kcal/mol
       eunit=1.3315
-c     Bias
+!     Bias
       kbias=100.0*eunit
-c      print *,'Bias'
-c     Hydrogen bonds
+!      print *,'Bias'
+!     Hydrogen bonds
       epshb1=3.1*eunit
       epshb2=2.0*eunit
       sighb=2.0
@@ -36,9 +36,9 @@ c     Hydrogen bonds
       cdon=1.0
       cacc=(1.0/1.23)**powb
       csacc=(1.0/1.25)**powb
-c      print *,'Hydrogen bonds'
-c     Hydrophobicity
-c      print *,'Hydrophobicity with nhptyp = ',nhptyp
+!      print *,'Hydrogen bonds'
+!     Hydrophobicity
+!      print *,'Hydrophobicity with nhptyp = ',nhptyp
 
       hpstrg(1)=0.0*eunit
       hpstrg(2)=0.1*eunit
@@ -60,8 +60,8 @@ c      print *,'Hydrophobicity with nhptyp = ',nhptyp
          mynm=seq(i)
          call tolost(mynm)
          if ((mynm.eq.'pro').or.(mynm.eq.'cpro')
-     #           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     #           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+     &           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
+     &           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
             prlvr=.true.        ! residue i is a proline variant
          else 
             prlvr=.false.
@@ -124,9 +124,9 @@ c      print *,'Hydrophobicity with nhptyp = ',nhptyp
             ihpat(i,3)=iCa(i)+19
          endif
       enddo
-c      print *,'Hydrophobicity'
+!      print *,'Hydrophobicity'
 
-c     Excluded volume and local pair excluded volume terms
+!     Excluded volume and local pair excluded volume terms
       exvk=0.1*eunit
       exvcut=4.3
       exvcut2=exvcut*exvcut
@@ -157,7 +157,7 @@ c     Excluded volume and local pair excluded volume terms
             bsalcp(i,j)=6*((sig2lcp(i,j)/exvcut2)**6.0)/exvcut2
          enddo
       enddo
-c      print *,'Local pair excluded volume constants'
+!      print *,'Local pair excluded volume constants'
 
       exvlam=0.75
       exvcutg=exvcut*exvlam
@@ -170,18 +170,18 @@ c      print *,'Local pair excluded volume constants'
             bsaexv(i,j)=6*((sig2exv(i,j)/exvcutg2)**6.0)/exvcutg2
          enddo
       enddo
-c      print *,'General excluded volume constants'
+!      print *,'General excluded volume constants'
 
-c     Initialization of the connections matrix matcon(i,j). The index
-c     i runs from -mxconr to +mxconr, and j from 1 to mxat. 
-c     matcon(i2-i1,i1) = 0, if the distance between atoms i1 and i2 is fixed
-c                      = 2, if atoms i1 and i2 are separated by 3 covalent
-c                           bonds and their distance can change
-c                      = 1, for all other pairs
-c     if abs(i2-i1) > mxconr, the atoms are assumed to be separated by 
-c     many bonds, and with no restriction on their distances. On a protein 
-c     molecule made of natural amino acids, atoms with indices separated
-c     by more than 35 can not be connected by three covalent bonds.
+!     Initialization of the connections matrix matcon(i,j). The index
+!     i runs from -mxconr to +mxconr, and j from 1 to mxat. 
+!     matcon(i2-i1,i1) = 0, if the distance between atoms i1 and i2 is fixed
+!                      = 2, if atoms i1 and i2 are separated by 3 covalent
+!                           bonds and their distance can change
+!                      = 1, for all other pairs
+!     if abs(i2-i1) > mxconr, the atoms are assumed to be separated by 
+!     many bonds, and with no restriction on their distances. On a protein 
+!     molecule made of natural amino acids, atoms with indices separated
+!     by more than 35 can not be connected by three covalent bonds.
 
       do i=1,mxat
          do j=-mxconr,mxconr
@@ -189,7 +189,7 @@ c     by more than 35 can not be connected by three covalent bonds.
          enddo
          matcon(0,i)=0
       enddo
-c     continued...
+!     continued...
       do iml=1,ntlml
          do iat1=iatrs1(irsml1(iml)),iatrs2(irsml2(iml))
             do j=1,nbdat(iat1)
@@ -223,11 +223,11 @@ c     continued...
             enddo
          enddo
 
-c         print *,'going to initialize connections for first residue'
-c         print *,'iN,iCa,iC =',iN(irsml1(iml)),
-c     #        iCa(irsml1(iml)),iC(irsml1(iml))
+!         print *,'going to initialize connections for first residue'
+!         print *,'iN,iCa,iC =',iN(irsml1(iml)),
+!     #        iCa(irsml1(iml)),iC(irsml1(iml))
          do iat1=iN(irsml1(iml))+1,iCa(irsml1(iml))-1
-c            print *,'connections for iat1 = ',iat1
+!            print *,'connections for iat1 = ',iat1
             matcon(iat1-iN(irsml1(iml)),iN(irsml1(iml)))=0
             matcon(iN(irsml1(iml))-iat1,iat1)=0
             matcon(iat1-iCa(irsml1(iml)),iCa(irsml1(iml)))=0
@@ -241,9 +241,9 @@ c            print *,'connections for iat1 = ',iat1
             matcon(iC(irsml1(iml))-iat1,iat1)=2
          enddo
 
-c     Below: for certain residues, some atoms separated by 3 or more bonds
-c     do not change distance. So, the connection matrix term for such pairs
-c     should be zero. 
+!     Below: for certain residues, some atoms separated by 3 or more bonds
+!     do not change distance. So, the connection matrix term for such pairs
+!     should be zero. 
 
          do irs=irsml1(iml),irsml2(iml)
             if (irs.eq.irsml1(iml)) then
@@ -259,8 +259,8 @@ c     should be zero.
             mynm=seq(irs)
             call tolost(mynm)
             if ((mynm.eq.'pro').or.(mynm.eq.'cpro')
-     #              .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     #              .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+     &              .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
+     &              .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
                prlvr=.true.     ! residue i is a proline variant
             else 
                prlvr=.false.
@@ -274,7 +274,7 @@ c     should be zero.
                   enddo
                enddo
             else if ((mynm.eq.'his').or.(mynm.eq.'hise')
-     #              .or.(mynm.eq.'hisd').or.(mynm.eq.'his+')) then
+     &              .or.(mynm.eq.'hisd').or.(mynm.eq.'his+')) then
                do iat1=iatoff+iatrs1(irs)+7,iatrs2(irs)-2-iatmrg
                   do iat2=iat1+1,iatrs2(irs)-2-iatmrg
                      matcon(iat2-iat1,iat1)=0
@@ -305,15 +305,15 @@ c     should be zero.
                   enddo
                enddo
             else if (prlvr) then
-c           Proline. Many more distances are fixed because of the fixed 
-c           phi angle
+!           Proline. Many more distances are fixed because of the fixed 
+!           phi angle
                do iat1=iatoff+iatrs1(irs),iatrs2(irs)-2-iatmrg
                   do iat2=iat1+1,iatrs2(irs)-2-iatmrg
                      matcon(iat2-iat1,iat1)=0
                      matcon(iat1-iat2,iat2)=0
                   enddo
                enddo
-c           distances to the C' atom of the previous residue are also fixed
+!           distances to the C' atom of the previous residue are also fixed
                if (irs.ne.irsml1(iml)) then
                   iat1=iowat(iatrs1(irs))
                   do iat2=iatrs1(irs),iatrs2(irs)-1-iatmrg
@@ -324,10 +324,10 @@ c           distances to the C' atom of the previous residue are also fixed
             endif
          enddo
       enddo
-c     finished initializing matrix conmat
-c      print *,'Connections matrix'
+!     finished initializing matrix conmat
+!      print *,'Connections matrix'
 
-c     Local pair excluded volume
+!     Local pair excluded volume
       do i=1,mxml
          ilpst(i)=1
          ilpnd(i)=0
@@ -341,7 +341,7 @@ c     Local pair excluded volume
          do iat1=iatrs1(irsml1(iml)),iatrs2(irsml2(iml))
             do iat2=iat1+1,iatrs2(irsml2(iml))
                if ((iat2-iat1.le.mxconr).and.
-     #                 matcon(iat2-iat1,iat1).eq.2) then
+     &                 matcon(iat2-iat1,iat1).eq.2) then
                   ilp=ilp+1
                   lcp1(ilp)=iat1
                   lcp2(ilp)=iat2
@@ -353,12 +353,12 @@ c     Local pair excluded volume
          if (iml.lt.ntlml) then 
             ilpst(iml+1)=ilp+1
          endif
-c         print *,'molecule ',iml,' lc pair range ',ilpst(iml),ilpnd(iml)
-c         print *,'local pair list'
+!         print *,'molecule ',iml,' lc pair range ',ilpst(iml),ilpnd(iml)
+!         print *,'local pair list'
          do lci=ilpst(iml),ilpnd(iml)
             iat1=lcp1(lci)
             iat2=lcp2(lci)
-c            print *,lci,iat1,iat2,matcon(iat2-iat1,iat1)
+!            print *,lci,iat1,iat2,matcon(iat2-iat1,iat1)
          enddo
       enddo
 
@@ -374,12 +374,12 @@ c            print *,lci,iat1,iat2,matcon(iat2-iat1,iat1)
       if (mynm.eq.'ala') then
          ityp=1
       else if ((mynm.eq.'val').or.(mynm.eq.'leu').or.(mynm.eq.'ile')
-     #        .or.(mynm.eq.'met').or.(mynm.eq.'pro').or.(mynm.eq.'cpro')
-     #        .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     #        .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+     &        .or.(mynm.eq.'met').or.(mynm.eq.'pro').or.(mynm.eq.'cpro')
+     &        .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
+     &        .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
          ityp=2
       else if ((mynm.eq.'phe').or.(mynm.eq.'tyr').or.(mynm.eq.'trp')) 
-     #        then
+     &        then
          ityp=3
       endif
       ihptype=ityp
@@ -407,8 +407,8 @@ c            print *,lci,iat1,iat2,matcon(iat2-iat1,iat1)
       ebiasrs=kbias*et
       return
       end
-c     Evaluates backbone backbone hydrogen bond strength for residues 
-c     i and j, taking the donor from residue i and acceptor from residue j
+!     Evaluates backbone backbone hydrogen bond strength for residues 
+!     i and j, taking the donor from residue i and acceptor from residue j
       real*8 function ehbmmrs(i,j)
       include 'INCL.H'
       include 'incl_lund.h'
@@ -423,20 +423,20 @@ c     i and j, taking the donor from residue i and acceptor from residue j
       dz=zat(a1)-zat(d2)
       r2=dx*dx+dy*dy+dz*dz
       if (r2.gt.cthb2) then 
-c         print *,'hbmm = 0 ',cthb2,r2,a1,a2,d1,d2
-c         print *,'a1,a2,d1,d2,r2 = ',a1,a2,d1,d2,r2,sighb2,cthb
+!         print *,'hbmm = 0 ',cthb2,r2,a1,a2,d1,d2
+!         print *,'a1,a2,d1,d2,r2 = ',a1,a2,d1,d2,r2,sighb2,cthb
          ehbmmrs=0
          return
       endif
       ca=(xat(d2)-xat(d1))*dx+(yat(d2)-yat(d1))*dy+(zat(d2)-zat(d1))*dz
       cb=(xat(a2)-xat(a1))*dx+(yat(a2)-yat(a1))*dy+(zat(a2)-zat(a1))*dz
       if (powa.gt.0.and.ca.le.0) then
-c         print *,'hbmm, returning 0 because of angle a'
+!         print *,'hbmm, returning 0 because of angle a'
          ehbmmrs=0
          return
       endif
       if (powb.gt.0.and.cb.le.0) then
-c         print *,'hbmm, returning 0 because of angle b'
+!         print *,'hbmm, returning 0 because of angle b'
          ehbmmrs=0
          return
       endif
@@ -445,13 +445,13 @@ c         print *,'hbmm, returning 0 because of angle b'
       r6=r6*r4
       evlu=((ca*ca/r2)**(0.5*powa))*((cb*cb/r2)**(0.5*powb))
       evlu=evlu*(r6*(5*r6-6*r4)+alhb+blhb*r2)
-c      print *,'found hbmm contribution ',evlu
+!      print *,'found hbmm contribution ',evlu
       ehbmmrs=epshb1*evlu
       return
       end
       real*8 function enylun(nml)
-c     nml = 1 .. ntlml. No provision exists to handle out of range values
-c     for nml inside this function.
+!     nml = 1 .. ntlml. No provision exists to handle out of range values
+!     for nml inside this function.
       include 'INCL.H'
       include 'incl_lund.h'
       character mynm*4
@@ -461,37 +461,37 @@ c     for nml inside this function.
       eysl=0.0   ! Hydrophobicity, replaces the solvent term of SMMP
       eyvr=0.0   ! Local pair excluded volume, in a sense a variable potential
       eyvw=0.0   ! atom-atom repulsion, excluded volume
-c     atom-atom repulsion is calculated on a system wide basis, instead of
-c     molecule by molecule for efficiency. Look into function exvlun.
+!     atom-atom repulsion is calculated on a system wide basis, instead of
+!     molecule by molecule for efficiency. Look into function exvlun.
 
       istres=irsml1(nml)
       indres=irsml2(nml)
 
-c     First, all terms that can be calculated on a residue by residue basis
+!     First, all terms that can be calculated on a residue by residue basis
       do i=istres,indres
          mynm=seq(i)
          call tolost(mynm)
          if ((mynm.eq.'pro').or.(mynm.eq.'cpro')
-     #           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     #           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+     &           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
+     &           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
             prlvr=.true.        ! residue i is a proline variant
          else 
             prlvr=.false.
          endif 
 
-c     Bias, or local electrostatic term. Excluded from the list are
-c     residues at the ends of the chain, glycine and all proline variants
+!     Bias, or local electrostatic term. Excluded from the list are
+!     residues at the ends of the chain, glycine and all proline variants
          if ((i.ne.istres).and.(i.ne.indres).and.
-     #           .not.prlvr.and.mynm.ne.'gly') then
+     &           .not.prlvr.and.mynm.ne.'gly') then
             eyel=eyel+ebiasrs(i)
          endif
-c     Backbone--backbone hydrogen bonds
+!     Backbone--backbone hydrogen bonds
          shbm1=1.0
          shbm2=1.0
          if ((i.eq.istres).or.(i.eq.indres)) shbm1=0.5
-c     Residue i contributes the donor, and j, the acceptor, so both i and
-c     j run over the whole set of amino acids.
-c     No terms for residue i, if it is a proline variant.
+!     Residue i contributes the donor, and j, the acceptor, so both i and
+!     j run over the whole set of amino acids.
+!     No terms for residue i, if it is a proline variant.
          if (.not.prlvr) then  
             do j=istres,indres
                if ((j.eq.istres).or.(j.eq.indres)) shbm2=0.5
@@ -499,11 +499,11 @@ c     No terms for residue i, if it is a proline variant.
                eyhb=eyhb+shbm1*shbm2*etmp
             enddo
          endif
-c     Hydrophobicity, only if residue i is hydrophobic to start with
+!     Hydrophobicity, only if residue i is hydrophobic to start with
          ihpi=ihptype(i)
          if (ihpi.ge.0) then 
-c        Unlike hydrogen bonds, the hydrophobicity potential is symmetric
-c        in i and j. So, the loop for j runs from i+1 to the end.
+!        Unlike hydrogen bonds, the hydrophobicity potential is symmetric
+!        in i and j. So, the loop for j runs from i+1 to the end.
 
             do j=i+1,indres
                ihpj=ihptype(j)
@@ -517,11 +517,11 @@ c        in i and j. So, the loop for j runs from i+1 to the end.
          endif
       enddo
 
-c     Terms that are not calculated residue by residue ...
+!     Terms that are not calculated residue by residue ...
 
-c     Local pair or third-neighbour excluded volume
-c     Numerically this is normally the term with largest positive
-c     contribution to the energy in an equilibrated stystem. 
+!     Local pair or third-neighbour excluded volume
+!     Numerically this is normally the term with largest positive
+!     contribution to the energy in an equilibrated stystem. 
 
       i1=ilpst(nml)
       i2=ilpnd(nml)
@@ -545,8 +545,8 @@ c     contribution to the energy in an equilibrated stystem.
             endif
             etmp=etmp+etmp1
          endif
-c         print *,'pair : ',iat1,iat2,' contribution ',etmp1 
-c         print *,exvcut2,r2
+!         print *,'pair : ',iat1,iat2,' contribution ',etmp1 
+!         print *,exvcut2,r2
       enddo
       eyvr=exvk*etmp
       eysm=eyel+eyhb+eyvr+eysl
@@ -568,8 +568,8 @@ c         print *,exvcut2,r2
 
       b2=20.25
       a2=12.25
-c      ihp1=ihptype(i1)
-c      ihp2=ihptype(i2)
+!      ihp1=ihptype(i1)
+!      ihp2=ihptype(i2)
       if ((ihp1.le.0).or.(ihp2.le.0)) then
          ehp=0.0
          return
@@ -608,12 +608,12 @@ c      ihp2=ihptype(i2)
       real*8 function exvlun(nml)
       include 'INCL.H'
       include 'incl_lund.h'
-c     For multi-chain systems it makes little sense to split the calculation
-c     of this term into an 'interaction part' and a contribution from 
-c     individual molecules. So, normally this should always be called with
-c     argument nml=0. Only for diagnostic reasons, you might want to find
-c     the contribution from one molecule in a multi-chain system assuming 
-c     there was no other molecule.
+!     For multi-chain systems it makes little sense to split the calculation
+!     of this term into an 'interaction part' and a contribution from 
+!     individual molecules. So, normally this should always be called with
+!     argument nml=0. Only for diagnostic reasons, you might want to find
+!     the contribution from one molecule in a multi-chain system assuming 
+!     there was no other molecule.
       dimension isort(mxat),ngbr(mxat),locccl(mxat),incell(mxcell)
       dimension icell(mxat)
       if (nml.eq.0) then 
@@ -625,18 +625,18 @@ c     there was no other molecule.
       endif
 
       eyvw=0.0
-c     The beginning part of this implementation is very similar to the 
-c     assignment of cells to the atoms during calculation of solvent 
-c     accessible surface area. So, much of that part is similar. But 
-c     unlike the accessible surface calculations, this term is symmetric
-c     in any two participating atoms. So, the part after the assignment
-c     of cells differs even in the structure of the code.
+!     The beginning part of this implementation is very similar to the 
+!     assignment of cells to the atoms during calculation of solvent 
+!     accessible surface area. So, much of that part is similar. But 
+!     unlike the accessible surface calculations, this term is symmetric
+!     in any two participating atoms. So, the part after the assignment
+!     of cells differs even in the structure of the code.
 
       do i=1,mxcell
          incell(i)=0
       enddo
-c      print *,'evaluating general excluded volume :',istat,',',indat
-c     Find minimal containing box
+!      print *,'evaluating general excluded volume :',istat,',',indat
+!     Find minimal containing box
       xmin=xat(istat)
       ymin=yat(istat)
       zmin=zat(istat)
@@ -665,21 +665,21 @@ c     Find minimal containing box
       sizex=xmax-xmin
       sizey=ymax-ymin
       sizez=zmax-zmin
-c     Number of cells along each directions that fit into the box.
+!     Number of cells along each directions that fit into the box.
       ndx=int(sizex/exvcutg)+1
       ndy=int(sizey/exvcutg)+1
       ndz=int(sizez/exvcutg)+1
 
       nxy=ndx*ndy
       ncell=nxy*ndz
-c      print *,'Number of cells along x,y,z = ',ndx,',',ndy,',',ndz
+!      print *,'Number of cells along x,y,z = ',ndx,',',ndy,',',ndz
       if (ncell.ge.mxcell) then
          print *,'exvlun> required number of cells',ncell,
-     #        ' exceeded the limit ',mxcell
+     &        ' exceeded the limit ',mxcell
          print *,'recompile with a higher mxcell.'
          stop
       endif
-c     Expand box to contain an integral number of cells along each direction
+!     Expand box to contain an integral number of cells along each direction
       shiftx=(dble(ndx)*exvcutg-sizex)/2.0
       shifty=(dble(ndy)*exvcutg-sizey)/2.0
       shiftz=(dble(ndz)*exvcutg-sizez)/2.0
@@ -690,14 +690,14 @@ c     Expand box to contain an integral number of cells along each direction
       ymax=ymax+shifty
       zmax=zmax+shiftz
 
-c     Set occupied cells to zero. Note that the maximum number of occupied
-c     cells is the number of atoms in the system.
+!     Set occupied cells to zero. Note that the maximum number of occupied
+!     cells is the number of atoms in the system.
       nocccl=0
       do i=1,mxat
          locccl(i)=0
       enddo
 
-c     Put atoms in cells
+!     Put atoms in cells
       do j=istat,indat
          mx=min(int(max((xat(j)-xmin)/exvcutg,0.0d0)),ndx-1)
          my=min(int(max((yat(j)-ymin)/exvcutg,0.0d0)),ndy-1)
@@ -709,37 +709,37 @@ c     Put atoms in cells
             stop
          else 
             if (incell(icellj).eq.0) then 
-c           previously unoccupied cell
+!           previously unoccupied cell
                nocccl=nocccl+1
                locccl(nocccl)=icellj
             endif
             incell(icellj)=incell(icellj)+1
          endif
       enddo
-c      print *,'finished assigning cells. nocccl = ',nocccl
-c     Cummulative occupancy of i'th cell
+!      print *,'finished assigning cells. nocccl = ',nocccl
+!     Cummulative occupancy of i'th cell
       do i=1,ncell
          incell(i+1)=incell(i+1)+incell(i)
       enddo
-c      print *,'finished making cumulative cell sums'
-c     Sorting atoms by their cell index
+!      print *,'finished making cumulative cell sums'
+!     Sorting atoms by their cell index
       do i=istat,indat
          j=icell(i)
          jj=incell(j)
          isort(jj)=i
          incell(j)=jj-1
       enddo
-c      print *,'sorted atoms by cell index'
+!      print *,'sorted atoms by cell index'
       etmp=0.0
       do icl=1,nocccl
-c     loop through occupied cells
+!     loop through occupied cells
          lcell=locccl(icl)
          ix=mod(lcell-1,ndx)
          iy=(mod(lcell-1,nxy)-ix)/ndx
          iz=(lcell-1-ix-ndx*iy)/nxy
-c         print *,'icl=',icl,'absolute index of cell = ',lcell
-c         print *,'iz,iy,ix = ',iz,iy,ix
-c     find all atoms in current cell and all its forward-going neighbours
+!         print *,'icl=',icl,'absolute index of cell = ',lcell
+!         print *,'iz,iy,ix = ',iz,iy,ix
+!     find all atoms in current cell and all its forward-going neighbours
          nex=min(ix+1,ndx-1)
          ney=min(iy+1,ndy-1)
          nez=min(iz+1,ndz-1)
@@ -750,10 +750,10 @@ c     find all atoms in current cell and all its forward-going neighbours
                do jz=iz,nez
                   jcl=jx+ndx*jy+nxy*jz+1
                   do ii=incell(jcl)+1,incell(jcl+1)
-c                    count the total number of neighbours
+!                    count the total number of neighbours
                      nngbr=nngbr+1
                      if (jx.eq.ix.and.jy.eq.iy.and.jz.eq.iz) then
-c                    count how many neighbours are from the same cell
+!                    count how many neighbours are from the same cell
                         nsame=nsame+1
                      endif
                      ngbr(nngbr)=isort(ii)
@@ -761,9 +761,9 @@ c                    count how many neighbours are from the same cell
                enddo
             enddo
          enddo
-c     A few more cells need to be searched, so that we cover 13 of the 26
-c     neighbouring cells. 
-c        1
+!     A few more cells need to be searched, so that we cover 13 of the 26
+!     neighbouring cells. 
+!        1
          jx=ix+1
          jy=iy
          jz=iz-1
@@ -772,7 +772,7 @@ c        1
             nngbr=nngbr+1
             ngbr(nngbr)=isort(ii)
          enddo
-c        2
+!        2
          jx=ix
          jy=iy-1
          jz=iz+1
@@ -781,7 +781,7 @@ c        2
             nngbr=nngbr+1
             ngbr(nngbr)=isort(ii)
          enddo
-c        3
+!        3
          jx=ix-1
          jy=iy+1
          jz=iz
@@ -790,7 +790,7 @@ c        3
             nngbr=nngbr+1
             ngbr(nngbr)=isort(ii)
          enddo
-c        4
+!        4
          jx=ix+1
          jy=iy+1
          jz=iz-1
@@ -799,7 +799,7 @@ c        4
             nngbr=nngbr+1
             ngbr(nngbr)=isort(ii)
          enddo
-c        5
+!        5
          jx=ix+1
          jy=iy-1
          jz=iz+1
@@ -808,7 +808,7 @@ c        5
             nngbr=nngbr+1
             ngbr(nngbr)=isort(ii)
          enddo
-c        6
+!        6
          jx=ix+1
          jy=iy-1
          jz=iz-1
@@ -818,13 +818,13 @@ c        6
             ngbr(nngbr)=isort(ii)
          enddo
 
-c         print *,'atoms in same cell ',nsame
-c         print *,'atoms in neighbouring cells ',nngbr
+!         print *,'atoms in same cell ',nsame
+!         print *,'atoms in neighbouring cells ',nngbr
          do i1=1,nsame
-c        Over all atoms from the original cell
+!        Over all atoms from the original cell
             iat1=ngbr(i1)
             do i2=i1,nngbr
-c           Over all atoms in the original+neighbouring cells
+!           Over all atoms in the original+neighbouring cells
                iat2=ngbr(i2)
                xij=xat(iat1)-xat(iat2)
                yij=yat(iat1)-yat(iat2)
@@ -833,36 +833,36 @@ c           Over all atoms in the original+neighbouring cells
 
                if (r2.le.exvcutg2) then 
                   if (abs(iat2-iat1).gt.mxconr.or.
-     #                 matcon(iat2-iat1,iat1).eq.1) then
+     &                 matcon(iat2-iat1,iat1).eq.1) then
                      iatt1=ityat(iat1)
                      iatt2=ityat(iat2)
                      r6=sig2exv(iatt1,iatt2)/r2
                      r6=r6*r6*r6
                      etmp1=r6*r6+asaexv(iatt1,iatt2)
-     #                    +bsaexv(iatt1,iatt2)*r2
+     &                    +bsaexv(iatt1,iatt2)*r2
                      etmp=etmp+etmp1
-c                     if (etmp1.ge.2000) then
-c                        print *,'contribution ',iat1,iat2,etmp1
-c                        call outpdb(1,'EXAMPLES/clash.pdb')
-c                        stop
-c                     endif
+!                     if (etmp1.ge.2000) then
+!                        print *,'contribution ',iat1,iat2,etmp1
+!                        call outpdb(1,'EXAMPLES/clash.pdb')
+!                        stop
+!                     endif
                   endif
                endif
             enddo
          enddo
       enddo
-c      irs=1
-c      do iat=iatrs1(irs),iatrs2(irs)
-c         do j=-mxconr,mxconr
-c            print *,iat,j,':',matcon(j,iat)
-c         enddo
-c      enddo
-c      irs=irsml2(1)
-c      do iat=iatrs1(irs),iatrs2(irs)
-c         do j=-mxconr,mxconr
-c            print *,iat,j,':',matcon(j,iat)
-c         enddo
-c      enddo
+!      irs=1
+!      do iat=iatrs1(irs),iatrs2(irs)
+!         do j=-mxconr,mxconr
+!            print *,iat,j,':',matcon(j,iat)
+!         enddo
+!      enddo
+!      irs=irsml2(1)
+!      do iat=iatrs1(irs),iatrs2(irs)
+!         do j=-mxconr,mxconr
+!            print *,iat,j,':',matcon(j,iat)
+!         enddo
+!      enddo
 
       eyvw=exvk*etmp
       exvlun=eyvw
@@ -870,7 +870,7 @@ c      enddo
       end
 
       real*8 function exvbrfc()
-c     Brute force excluded volume evaluation
+!     Brute force excluded volume evaluation
       include 'INCL.H'
       include 'incl_lund.h'
 
@@ -886,13 +886,13 @@ c     Brute force excluded volume evaluation
 
             if (r2.le.exvcutg2) then 
                if (abs(iat2-iat1).gt.mxconr.or.
-     #                 matcon(iat2-iat1,iat1).eq.1) then
+     &                 matcon(iat2-iat1,iat1).eq.1) then
                   iatt1=ityat(iat1)
                   iatt2=ityat(iat2)
                   r6=sig2exv(iatt1,iatt2)/r2
                   r6=r6*r6*r6
                   etmp1=r6*r6+asaexv(iatt1,iatt2)
-     #                 +bsaexv(iatt1,iatt2)*r2
+     &                 +bsaexv(iatt1,iatt2)*r2
                   etmp=etmp+etmp1
                   if (iat1.eq.43.and.iat2.eq.785) then
                      print *,'contribution ',iat1,iat2,etmp1
@@ -902,12 +902,12 @@ c     Brute force excluded volume evaluation
                      print *,'asa = ',asaexv(iatt1,iatt2)
                      print *,'bsa = ',bsaexv(iatt1,iatt2)
 
-c     call outpdb(1,'EXAMPLES/clash.pdb')
-c     stop
+!     call outpdb(1,'EXAMPLES/clash.pdb')
+!     stop
                   endif
                else 
-c                  print *,'atoms ', iat1,' and ',iat2,' were close',
-c     #                 'but matcon is ',matcon(iat2-iat1,iat1)
+!                  print *,'atoms ', iat1,' and ',iat2,' were close',
+!     #                 'but matcon is ',matcon(iat2-iat1,iat1)
                endif
             endif
          enddo

@@ -1,31 +1,31 @@
-c **************************************************************
-c
-c This file contains the subroutines:  bldmol, fnd3ba,eyring,
-c                                      setsys,setgbl
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines:  bldmol, fnd3ba,eyring,
+!                                      setsys,setgbl
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine bldmol(nml)
 
-c .................................................
-c PURPOSE: calculate coordinates for molecule 'nml'
-c
-c OUTPUT:  xat,yat,zat,xbaat,ybaat,zbaat,xtoat,ytoat,
-c          ztoat (via 'eyring')
-c
-c          1st backbone atom of 1st residue of 'nml': 
-c
-c          - it's position: from 'gbpr(1-3,nml)'
-c          - it's axes: from 'setgbl' according to
-c            global angles 'gbpr(4-5,nml)'
-c
-c CALLS: eyring, fnd3ba,setgbl,setsys
-c .................................................
+! .................................................
+! PURPOSE: calculate coordinates for molecule 'nml'
+!
+! OUTPUT:  xat,yat,zat,xbaat,ybaat,zbaat,xtoat,ytoat,
+!          ztoat (via 'eyring')
+!
+!          1st backbone atom of 1st residue of 'nml': 
+!
+!          - it's position: from 'gbpr(1-3,nml)'
+!          - it's axes: from 'setgbl' according to
+!            global angles 'gbpr(4-5,nml)'
+!
+! CALLS: eyring, fnd3ba,setgbl,setsys
+! .................................................
 
       include 'INCL.H'
 
@@ -33,12 +33,12 @@ c .................................................
 
 
       call fnd3ba(nml,i1,i2,i3)
-c ------------------------------ first 3 bb atoms of 'nml'
+! ------------------------------ first 3 bb atoms of 'nml'
       ixrfpt(1,nml)=i1
       ixrfpt(2,nml)=i2
       ixrfpt(3,nml)=i3
 
-c ------------------------------ position of 1st bb atom
+! ------------------------------ position of 1st bb atom
       xat(i1) = gbpr(1,nml)
       yat(i1) = gbpr(2,nml)
       zat(i1) = gbpr(3,nml)
@@ -85,15 +85,15 @@ c ------------------------------ position of 1st bb atom
 
       return
       end
-c ***********************************
+! ***********************************
       subroutine fnd3ba(nml,i1,i2,i3)
  
-c .................................................
-c PURPOSE: return indices 'i1,i2,i3' of
-c          first 3 backbone atoms in molecule 'nml'
-c
-c CALLS:   fndbrn
-c .................................................
+! .................................................
+! PURPOSE: return indices 'i1,i2,i3' of
+!          first 3 backbone atoms in molecule 'nml'
+!
+! CALLS:   fndbrn
+! .................................................
  
       include 'INCL.H'
 
@@ -103,15 +103,15 @@ c .................................................
 
       irs=irsml1(nml)
 
-c --------------------------- 1st bb atom
+! --------------------------- 1st bb atom
       i1=iatrs1(irs)
 
       call fndbrn(nml,irs,i1,i,ix,i2,bb)
 
-c --------------------------- 2nd bb atom
+! --------------------------- 2nd bb atom
       i2=i+1
 
-c ------------------------ check for ring
+! ------------------------ check for ring
 
       ibd(1)=iowat(i1)
       ibd(2)=ibdat(1,i1)
@@ -125,8 +125,8 @@ c ------------------------ check for ring
 
           if (ix.ne.0) then
             write (*,'(2a,i3)') 
-     #         ' fnd3ba> Can handle only simple ring at 1st',
-     #         ' atom of molecule #',nml
+     &         ' fnd3ba> Can handle only simple ring at 1st',
+     &         ' atom of molecule #',nml
             stop
           endif
 
@@ -134,7 +134,7 @@ c ------------------------ check for ring
         endif
       enddo
 
-c --------------------------- 3rd bb atom
+! --------------------------- 3rd bb atom
 
       ix=ixatrs(irs)
 
@@ -157,24 +157,24 @@ c --------------------------- 3rd bb atom
       endif
 
       write (*,'(4a,i4,a,i4)') 
-     #   ' fnd3ba> Cannot find backbone atom following ',nmat(i2),
-     #   ' of residue ',seq(irs),irs,' in molecule #',nml
+     &   ' fnd3ba> Cannot find backbone atom following ',nmat(i2),
+     &   ' of residue ',seq(irs),irs,' in molecule #',nml
       stop
 
       end
-c ***************************
+! ***************************
       subroutine eyring(i,ia)
 
-c .........................................................
-c PURPOSE:  calculate cartesian coordinates of atom 'i'
-c           using EYRING's algorithm
-c INPUT:    i - index of atom to be constructed
-c               for 'i': blat,csbaat,snbaat,cstoat,sntoat
-c           ia- index of atom from which 'i' is to be built
-c OUTPUT:   for 'i': xat,yat,zat,xbaat,ybaat,zbaat,xtoat,ytoat,ztoat
-c
-c CALLS: none
-c .........................................................
+! .........................................................
+! PURPOSE:  calculate cartesian coordinates of atom 'i'
+!           using EYRING's algorithm
+! INPUT:    i - index of atom to be constructed
+!               for 'i': blat,csbaat,snbaat,cstoat,sntoat
+!           ia- index of atom from which 'i' is to be built
+! OUTPUT:   for 'i': xat,yat,zat,xbaat,ybaat,zbaat,xtoat,ytoat,ztoat
+!
+! CALLS: none
+! .........................................................
 
       include 'INCL.H'
 
@@ -227,24 +227,24 @@ c .........................................................
 
       return
       end
-c ***********************************************************
+! ***********************************************************
       subroutine setsys(i1,i2,i3, x1,x2,x3,y1,y2,y3,z1,z2,z3)
 
-c ..........................................................
-c  PURPOSE:  calculate axes X,Y,Z of right-handed orthogonal
-c            system given by three atom positions R1, R2, R3
-c
-c            X = (R2-R1)/ |( )|
-c            Z = {X x (R2-R3)} / |{ }|
-c            Y = Z x X
-c
-c  INPUT:    i1, i2, i3 - indices of three atoms
-c  OUTPUT:   x1,x2,x3 |
-c            y1,y2,y3 | -direction cosines of X,Y,Z
-c            z1,z2,z3 |
-c
-c  CALLS:    none
-c ...................................................
+! ..........................................................
+!  PURPOSE:  calculate axes X,Y,Z of right-handed orthogonal
+!            system given by three atom positions R1, R2, R3
+!
+!            X = (R2-R1)/ |( )|
+!            Z = {X x (R2-R3)} / |{ }|
+!            Y = Z x X
+!
+!  INPUT:    i1, i2, i3 - indices of three atoms
+!  OUTPUT:   x1,x2,x3 |
+!            y1,y2,y3 | -direction cosines of X,Y,Z
+!            z1,z2,z3 |
+!
+!  CALLS:    none
+! ...................................................
 
 
       include 'INCL.H'
@@ -282,29 +282,29 @@ c ...................................................
       return
       end
 
-c *****************************************
+! *****************************************
       subroutine setgbl(nml,i1,i2,i3,xg,zg)
 
-c ...................................................
-c
-c PURPOSE: 1. Obtain global axes (J,K,L)
-c             related to x(1 0 0),y(0 1 0),z(0 0 1)
-c             by 3 rotations (gbl. parameters #4-#6):
-c
-c             - round z by angle alpha 
-c	      - round x' by a. beta 
-c	      - round y" by a. gamma
-c
-c          2. Return x-axis (xg) & z-axis (zg)
-c             for atom #1 in order to orientate J
-c             along the bond from backbone atom #1
-c             to bb.a. #2 and L according to the
-c             cross product [ bond(#1->#2) x
-c             bond(#2->#3) ] when using Eyring's
-c             algorithm to get the coordinates
-c
-c CALLS:   none
-c ..............................................
+! ...................................................
+!
+! PURPOSE: 1. Obtain global axes (J,K,L)
+!             related to x(1 0 0),y(0 1 0),z(0 0 1)
+!             by 3 rotations (gbl. parameters #4-#6):
+!
+!             - round z by angle alpha 
+!	      - round x' by a. beta 
+!	      - round y" by a. gamma
+!
+!          2. Return x-axis (xg) & z-axis (zg)
+!             for atom #1 in order to orientate J
+!             along the bond from backbone atom #1
+!             to bb.a. #2 and L according to the
+!             cross product [ bond(#1->#2) x
+!             bond(#2->#3) ] when using Eyring's
+!             algorithm to get the coordinates
+!
+! CALLS:   none
+! ..............................................
 
       include 'INCL.H'
       
@@ -318,7 +318,7 @@ c ..............................................
       cg = cos(gbpr(6,nml))  ! gamma
       sg = sin(gbpr(6,nml))
 
-c ----------------------------- J
+! ----------------------------- J
       x1 =  ca*cg - sa*sb*sg
       x2 =  sa*cg + ca*sb*sg
       x3 = -cb*sg
@@ -327,7 +327,7 @@ c ----------------------------- J
       ag(1,1) = x1/d
       ag(2,1) = x2/d
       ag(3,1) = x3/d
-c ----------------------------- K
+! ----------------------------- K
       y1 = -sa*cb
       y2 =  ca*cb
       y3 =  sb
@@ -336,7 +336,7 @@ c ----------------------------- K
       ag(1,2) = y1/d
       ag(2,2) = y2/d
       ag(3,2) = y3/d
-c ----------------------------- L
+! ----------------------------- L
       z1 =  ca*sg + sa*sb*cg
       z2 =  sa*sg - ca*sb*cg
       z3 =  cb*cg
@@ -346,7 +346,7 @@ c ----------------------------- L
       ag(2,3) = z2/d
       ag(3,3) = z3/d
 
-c ------------------------------------ X1
+! ------------------------------------ X1
       ct2 = cstoat(i2)
       st2 = sntoat(i2)
       sa2 = snbaat(i2)
@@ -359,7 +359,7 @@ c ------------------------------------ X1
       x1 = x1/dx
       x2 = x2/dx
       x3 = x3/dx
-c ------------------------------------- Z1
+! ------------------------------------- Z1
       st3 = sntoat(i3)
       ct3 = cstoat(i3)
 
@@ -371,11 +371,11 @@ c ------------------------------------- Z1
       z1 = z1/dz
       z2 = z2/dz
       z3 = z3/dz
-c ------------------------------------- Y1
+! ------------------------------------- Y1
       y1 = z2 * x3 - z3 * x2
       y3 = z1 * x2 - z2 * x1  ! do not need y2
 
-c ----------------------------- into global system
+! ----------------------------- into global system
 
       xg(1) = ag(1,1)*x1 + ag(1,2)*y1 + ag(1,3)*z1
       xg(2) = ag(2,1)*x1 + ag(2,2)*y1 + ag(2,3)*z1

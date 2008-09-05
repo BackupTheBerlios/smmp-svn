@@ -1,24 +1,24 @@
-c **************************************************************
-c
-c This file contains the subroutines: dihedr,valang
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: dihedr,valang
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       real*8 function dihedr(i1,i2,i3,i4)
 
-c .............................................
-c  PURPOSE: return dihedral angle (i1,i2,i3,i4)
-c           [in rad.]
-c
-c  INPUT:   i1,i2,i3,i4 - indices of four atoms
-c
-c  CALLS:   none
-c .............................................
+! .............................................
+!  PURPOSE: return dihedral angle (i1,i2,i3,i4)
+!           [in rad.]
+!
+!  INPUT:   i1,i2,i3,i4 - indices of four atoms
+!
+!  CALLS:   none
+! .............................................
 
       include 'INCL.H'
 
@@ -48,14 +48,14 @@ c .............................................
         a=min(a,one)
         dihedr=acos(a)
         if (ux1*(uy2*z2-uz2*y2)+uy1*(uz2*x2-ux2*z2)+
-     #      uz1*(ux2*y2-uy2*x2).lt.zero) dihedr =-dihedr
+     &      uz1*(ux2*y2-uy2*x2).lt.zero) dihedr =-dihedr
         return
       else
         write (*,'(a,4i5)')' dihedr> Error in coordinates of atoms #: '
-     #                     ,i1,i2,i3,i4
+     &                     ,i1,i2,i3,i4
 
         write (*,*) 'stored coordinates are xvals :',
-     #       xat(i1),xat(i2),xat(i3),xat(i4) 
+     &       xat(i1),xat(i2),xat(i3),xat(i4) 
         write (*,*) 'yvals:', yat(i1),yat(i2),yat(i3),yat(i4) 
         write (*,*) 'zvals:', zat(i1),zat(i2),zat(i3),zat(i4) 
         call outvar(0,'crash.var')        
@@ -63,17 +63,17 @@ c .............................................
       endif
 
       end
-c ************************************
+! ************************************
       real*8 function valang(i1,i2,i3)
 
-c .........................................
-c  PURPOSE: return valence angle (i1,i2,i3)
-c           [in rad.] with 'i2' as vertex
-c
-c  INPUT:   i1,i2,i3 - indices of 3 atoms
-c
-c  CALLS:   none
-c .............................................
+! .........................................
+!  PURPOSE: return valence angle (i1,i2,i3)
+!           [in rad.] with 'i2' as vertex
+!
+!  INPUT:   i1,i2,i3 - indices of 3 atoms
+!
+!  CALLS:   none
+! .............................................
 
       include 'INCL.H'
       h1=xat(i2)
@@ -100,9 +100,9 @@ c .............................................
 
       else
         write (*,'(a,3i5)')' valang> Error in coordinates of atoms #: '
-     #                     ,i1,i2,i3
+     &                     ,i1,i2,i3
         write (*,*) 'stored coordinates are xvals :',
-     #       xat(i1),xat(i2),xat(i3) 
+     &       xat(i1),xat(i2),xat(i3) 
         write (*,*) 'yvals:', yat(i1),yat(i2),yat(i3) 
         write (*,*) 'zvals:', zat(i1),zat(i2),zat(i3) 
         call outvar(0,'crash.var') 

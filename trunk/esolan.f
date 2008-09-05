@@ -47,12 +47,12 @@
       parameter (ks2=mxat+mxat)
       
       dimension neib(0:mxat),vertex(ks0,4),ax(ks0,2),
-     1          pol(mxat),neibp(0:mxat),as(mxat),ayx(ks0,2),
-     2          ayx1(ks0),probe(ks0),dd(mxat),ddat(mxat,4),ivrx(ks0)
+     &          pol(mxat),neibp(0:mxat),as(mxat),ayx(ks0,2),
+     &          ayx1(ks0),probe(ks0),dd(mxat),ddat(mxat,4),ivrx(ks0)
        
       dimension grad(mxat,mxat,3),dadx(4,3),gp(4),dalp(4),dbet(4),
-     1   daalp(4),dabet(4),vrx(ks0,4),dv(4),dx(4),dy(4),dz(4),dt(4),
-     2   di(4),dii(4,3),ss(mxat),dta(4),dtb(4),di1(4),di2(4),gs(3)
+     &   daalp(4),dabet(4),vrx(ks0,4),dv(4),dx(4),dy(4),dz(4),dt(4),
+     &   di(4),dii(4,3),ss(mxat),dta(4),dtb(4),di1(4),di2(4),gs(3)
       dimension xold(-1:mxat),yold(-1:mxat),zold(-1:mxat)
       integer ta2(0:mxat),ta3(0:mxat),fullarc(0:mxat),al(0:ks2)
       real*8 neibor(mxat,4)

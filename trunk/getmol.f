@@ -1,40 +1,40 @@
-c **************************
-c **************************************************************
-c
-c This file contains the subroutines: getmol,redres
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************
+! **************************************************************
+!
+! This file contains the subroutines: getmol,redres
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine getmol(nml)
 
-c ...................................................................
-c PURPOSE:  assemble data for molecule 'nml' according to
-c           its sequence using residue library 'reslib'
-c
-c ! Molecules must be assembled in sequential order (1 -> ntlml)
-c            (or number of atoms & variables must remain the same)
-c
-c INPUT:    irsml1(nml),irsml2(nml),seq(irsml1()...irsml2())
-c           nml>1: irsml1(nml-1),iatrs2(irsml2(nml-1))
-c                  ivrrs1(irsml2(nml-1)),nvrrs(irsml2(nml-1))
-c
-c OUTPUT:   molecule  - ivrml1,nvrml
-c           residues  - iatrs1,ixatrs,iatrs2,ivrrs1,nvrrs
-c           atoms     - nmat,ityat,cgat,blat,baat,csbaat,snbaat,
-c                       toat,cstoat,sntoat
-c           bonds     - nbdat,iowat,iyowat,ibdat(1-mxbd,),iybdat(1-mxbd,)
-c                       ! 1st atom of 'nml': iowat indicates 1st bond
-c                          to a FOLLOWING atom (not previous) !
-c           variables - ityvr,iclvr,iatvr,nmvr
-c                                    
-c CALLS:    iopfil,redres,iendst
-c ...................................................................
+! ...................................................................
+! PURPOSE:  assemble data for molecule 'nml' according to
+!           its sequence using residue library 'reslib'
+!
+! ! Molecules must be assembled in sequential order (1 -> ntlml)
+!            (or number of atoms & variables must remain the same)
+!
+! INPUT:    irsml1(nml),irsml2(nml),seq(irsml1()...irsml2())
+!           nml>1: irsml1(nml-1),iatrs2(irsml2(nml-1))
+!                  ivrrs1(irsml2(nml-1)),nvrrs(irsml2(nml-1))
+!
+! OUTPUT:   molecule  - ivrml1,nvrml
+!           residues  - iatrs1,ixatrs,iatrs2,ivrrs1,nvrrs
+!           atoms     - nmat,ityat,cgat,blat,baat,csbaat,snbaat,
+!                       toat,cstoat,sntoat
+!           bonds     - nbdat,iowat,iyowat,ibdat(1-mxbd,),iybdat(1-mxbd,)
+!                       ! 1st atom of 'nml': iowat indicates 1st bond
+!                          to a FOLLOWING atom (not previous) !
+!           variables - ityvr,iclvr,iatvr,nmvr
+!                                    
+! CALLS:    iopfil,redres,iendst
+! ...................................................................
 
       include 'INCL.H'
 
@@ -42,8 +42,8 @@ c ...................................................................
 
       if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
         write (*,'(a,/,a,i3,2a)') 
-     #    ' getmol> ERROR opening library of residues:',
-     #    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
+     &    ' getmol> ERROR opening library of residues:',
+     &    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
         stop
       endif
 
@@ -67,12 +67,12 @@ c ...................................................................
 
         if (res(:3).eq.'nme'.and.nrs.ne.ilars) then
           write (*,'(3a)') ' getmol> residue >',res,
-     #                     '< allowed at C-terminus only !'
+     &                     '< allowed at C-terminus only !'
           close(lunlib)
           stop
         elseif (res(:3).eq.'ace'.and.nrs.ne.ifirs) then
           write (*,'(3a)') ' getmol> residue >',res,
-     #                     '< allowed at N-terminus only !'
+     &                     '< allowed at N-terminus only !'
           close(lunlib)
           stop
         endif
@@ -92,7 +92,7 @@ c ...................................................................
 
         rewind lunlib
 
-c ___________________________________________________________ Atoms
+! ___________________________________________________________ Atoms
         do i=1,nat
           n=i+ntlat
           nmat(n)=nmath(i)
@@ -107,7 +107,7 @@ c ___________________________________________________________ Atoms
           toat(n)=to
           cstoat(n)=cos(to)
           sntoat(n)=sin(to)
-c ______________________________ bonds to previous & following atoms
+! ______________________________ bonds to previous & following atoms
           iow=iowath(i)
           if (iow.eq.0) then          ! 1st atom of residue
             if (nrs.eq.ifirs) then  ! 1st atom of 'nml'
@@ -128,18 +128,18 @@ c ______________________________ bonds to previous & following atoms
               iowat(n)=nh
               iyowat(n)=1         !!! only single bonds assumed !!!
 
-c ___________________________ correct atom to 'next' res.
+! ___________________________ correct atom to 'next' res.
               nbd=nbdat(nh)
               if (nbd.eq.mxbd) then
                 write(*,'(a,i2,a,i4,2a,i4,a)') 
-     #           ' getmol> need ',(mxbd+2),
-     #           'th bond to connect residues ',
-     #           nrs-1,seq(nrs-1),' and ',nrs,seq(nrs)
+     &           ' getmol> need ',(mxbd+2),
+     &           'th bond to connect residues ',
+     &           nrs-1,seq(nrs-1),' and ',nrs,seq(nrs)
                 close(lunlib)
                 stop
               else  !  correct atom to 'next' res.
-c _______________________________!! dihedrals for atoms bound to 'nh'
-c                                   are assumed to be phase angles !!
+! _______________________________!! dihedrals for atoms bound to 'nh'
+!                                   are assumed to be phase angles !!
                 do j=1,nbd
 
                   nj=ibdat(j,nh)
@@ -147,9 +147,9 @@ c                                   are assumed to be phase angles !!
 
                   if (t.eq.0.0) then
                     write (*,'(3a,/,2a)') 
-     #               ' getmol> DIHEDRAL for atom ',nmat(nj),
-     #               ' should be PHASE angle with respect to atom ',
-     #               nmat(n),' & therefore must be not 0.0 !!'
+     &               ' getmol> DIHEDRAL for atom ',nmat(nj),
+     &               ' should be PHASE angle with respect to atom ',
+     &               nmat(n),' & therefore must be not 0.0 !!'
                     close(lunlib)
                     stop
                   endif
@@ -196,7 +196,7 @@ c                                   are assumed to be phase angles !!
 
         enddo  ! ... atoms
 
-c ________________________________________________________ Variables
+! ________________________________________________________ Variables
         ivrrs1(nrs)=ntlvr+1
         mvr=0
 
@@ -205,10 +205,10 @@ c ________________________________________________________ Variables
           if (nrs.eq.ifirs) then
 
             iat=iatvrh(i)
-c ____________________________________ Exclude all variables for 1st atom
-c                                       & torsion for atoms bound to it
+! ____________________________________ Exclude all variables for 1st atom
+!                                       & torsion for atoms bound to it
             if ( iat.eq.1.or.
-     #        (iowath(iat).eq.1.and.ityvrh(i).eq.3)) goto 1
+     &        (iowath(iat).eq.1.and.ityvrh(i).eq.3)) goto 1
 
           endif
 
@@ -232,7 +232,7 @@ c                                       & torsion for atoms bound to it
 
       close(lunlib)
 
-c _______________________________ Variables
+! _______________________________ Variables
       if (nml.eq.1) then
         nvrml(nml)=ntlvr
       else
@@ -241,32 +241,32 @@ c _______________________________ Variables
 
       return
       end
-c **************************************
+! **************************************
       subroutine redres(res,nat,nxt,nvrr)
 
-c .......................................................
-c PURPOSE:  read atom data for residue 'res' from library
-c           (file 'lunlib' 'reslib' opened in routine calling
-c            this one)
-c
-c OUTPUT:   nat   - number of atoms in residue
-c           nxt   - atom which may bind to following residue
-c           nvrr  - number of variables in residue
-c           for atoms     - nmath,blath,baath(rad),toath(rad),
-c                           ityath,iyowath,iowath (INSIDE residue,
-c                                                  =0 if 1st atom)
-c           for variables - ityvrh (1=bl/2=ba/3=to),iclvrh,iatvrh,nmvrh
-c
-c LIBRARY:  residue-lines:
-c            '#', res, nat, nxt;  Format: a1,a4,2i4
-c           atom-lines:
-c           nmat,3{"fix" =' ', clvr,nmvr, blat/baat(deg)/toat(deg)},
-c             cgat, ityat, iowat,ibdat1,ibdat2,ibdat3;
-c           Format: a4, 3(1x,i2,a1,a3,f9.3), f7.4, i4,4i4
-c
-C CALLS: iendst,tolost
-c
-c .......................................................
+! .......................................................
+! PURPOSE:  read atom data for residue 'res' from library
+!           (file 'lunlib' 'reslib' opened in routine calling
+!            this one)
+!
+! OUTPUT:   nat   - number of atoms in residue
+!           nxt   - atom which may bind to following residue
+!           nvrr  - number of variables in residue
+!           for atoms     - nmath,blath,baath(rad),toath(rad),
+!                           ityath,iyowath,iowath (INSIDE residue,
+!                                                  =0 if 1st atom)
+!           for variables - ityvrh (1=bl/2=ba/3=to),iclvrh,iatvrh,nmvrh
+!
+! LIBRARY:  residue-lines:
+!            '#', res, nat, nxt;  Format: a1,a4,2i4
+!           atom-lines:
+!           nmat,3{"fix" =' ', clvr,nmvr, blat/baat(deg)/toat(deg)},
+!             cgat, ityat, iowat,ibdat1,ibdat2,ibdat3;
+!           Format: a4, 3(1x,i2,a1,a3,f9.3), f7.4, i4,4i4
+!
+! CALLS: iendst,tolost
+!
+! .......................................................
 
       include 'INCL.H'
 
@@ -284,7 +284,7 @@ c .......................................................
 
       call tolost(resl)  ! ensure lower case for residue name
 
-c ________________________________ find residue 'resl'
+! ________________________________ find residue 'resl'
     1 line=blnk
       nln=nln+1
 
@@ -292,7 +292,7 @@ c ________________________________ find residue 'resl'
       lg=iendst(line)
 
       if (lg.ge.13.and.line(1:1).eq.'#'.and.line(2:5).eq.resl) then
-c _____________________________________________ read atom data for 'resl'
+! _____________________________________________ read atom data for 'resl'
         read (line(6:13),'(2i4)',err=3) nat,nxt
 
         if (nat.gt.mxath) then
@@ -307,9 +307,9 @@ c _____________________________________________ read atom data for 'resl'
           nln=nln+1
 
           read (lunlib,'(a4,3(1x,i2,a1,a3,d9.3),d7.4,i4,4i4)',
-     #                 end=3,err=3)
-     #     nmath(i),icl(1),fix(1),nm(1),blath(i),icl(2),fix(2),nm(2),ba,
-     #     icl(3),fix(3),nm(3),to,cgath(i),ity,iow,(ibd(j),j=1,mxbd)
+     &                 end=3,err=3)
+     &     nmath(i),icl(1),fix(1),nm(1),blath(i),icl(2),fix(2),nm(2),ba,
+     &     icl(3),fix(3),nm(3),to,cgath(i),ity,iow,(ibd(j),j=1,mxbd)
 
           if (ity.le.0.or.ity.gt.mxtyat) goto 6
           ityath(i)=ity
@@ -325,18 +325,18 @@ c _____________________________________________ read atom data for 'resl'
           if (iexcp.eq.0.and.i.le.jow) then
             if (i.eq.jow) then
               write (*,'(5a)') ' redres> atom ',nmath(i),' of ',
-     #                          resl,' cannot preceed itself '
+     &                          resl,' cannot preceed itself '
             else
               write (*,'(5a,i4)') ' redres> atom ',nmath(i),' of ',
-     #                    resl,' should be placed AFTER atom #',jow
+     &                    resl,' should be placed AFTER atom #',jow
             endif
             goto 5
           endif
 
           iowath(i)=jow
           iyowath(i)=sign(1,iow)
-c ____________________________________ check order & find number of bonds
-c                                      (bonds closing ring must be last !)
+! ____________________________________ check order & find number of bonds
+!                                      (bonds closing ring must be last !)
           ib1=abs(ibd(1))
           ib2=abs(ibd(2))
           ib3=abs(ibd(3))
@@ -353,12 +353,12 @@ c                                      (bonds closing ring must be last !)
               nbdath(i)=1
             else
               if ( ib2.eq.jow.or.ib2.eq.ib1.or.
-     #            (ib2.gt.i.and.ib2.lt.ib1) ) goto 4
+     &            (ib2.gt.i.and.ib2.lt.ib1) ) goto 4
               if (ib3.eq.0) then
                 nbdath(i)=2
               else
                 if (ib3.eq.jow.or.ib3.eq.ib1.or.ib3.eq.ib2.or.
-     #              (ib3.gt.i.and.(ib3.lt.ib1.or.ib3.lt.ib2)) ) goto 4
+     &              (ib3.gt.i.and.(ib3.lt.ib1.or.ib3.lt.ib2)) ) goto 4
                 nbdath(i)=3
               endif
             endif
@@ -372,14 +372,14 @@ c                                      (bonds closing ring must be last !)
           baath(i)=ba*cdr  ! convert angles into 'radians'
           toath(i)=to*cdr
 
-c ______________________________ internal degrees of freedom
+! ______________________________ internal degrees of freedom
           do j=1,3
             if (fix(j).ne.blnk) then
               nvrr=nvrr+1
 
               if (nvrr.gt.mxvrh) then
                 write (*,'(a,i5)') ' redres> number of variables > ',
-     #                             mxvrh
+     &                             mxvrh
                 close(lunlib)
                 stop
               endif
@@ -387,9 +387,9 @@ c ______________________________ internal degrees of freedom
               ic=icl(j)
 
               if ( ic.le.0    
-     #         .or.(j.eq.3.and.ic.gt.mxtyto)           ! dihedral
-     #         .or.(j.eq.2.and.ic.gt.mxtyba)           ! bond angle
-     #         .or.(j.eq.1.and.ic.gt.mxtybl) ) goto 7  ! b. length
+     &         .or.(j.eq.3.and.ic.gt.mxtyto)           ! dihedral
+     &         .or.(j.eq.2.and.ic.gt.mxtyba)           ! bond angle
+     &         .or.(j.eq.1.and.ic.gt.mxtybl) ) goto 7  ! b. length
 
               ityvrh(nvrr)=j
               iclvrh(nvrr)=ic
@@ -406,32 +406,32 @@ c ______________________________ internal degrees of freedom
 
       goto 1
 
-c ____________________________________________________________ ERRORS
+! ____________________________________________________________ ERRORS
     2 write (*,'(4a)') ' redres> residue >',resl,'< NOT FOUND in ',
-     #reslib(1:iendst(reslib))
+     &reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
     3 write (*,'(a,i4,2a)') ' redres> ERROR reading line No. ',nln,
-     #' in ',reslib(1:iendst(reslib))
+     &' in ',reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
     4 write (*,'(4a)') ' redres> Incorrect order of bonds for atom ',
-     #                      nmath(i),' of ',resl
+     &                      nmath(i),' of ',resl
 
     5 write (*,'(8x,2a)') '... must correct ',
-     #                      reslib(1:iendst(reslib))
+     &                      reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
     6 write (*,'(a,i2,4a)') ' redres> unknown type :',ity,
-     #                   ': for atom ',nmath(i),' in residue ',resl
+     &                   ': for atom ',nmath(i),' in residue ',resl
       close(lunlib)
       stop
 
     7 write (*,'(a,i2,4a)') ' redres> unknown class :',ic,
-     #                   ': for variable ',nm(j),' in residue ',resl
+     &                   ': for variable ',nm(j),' in residue ',resl
       close(lunlib)
       stop
 

@@ -1,49 +1,49 @@
-c**************************************************************
-c
-c This file contains the subroutines: setmvs,fndbrn
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: setmvs,fndbrn
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine setmvs(nml)
 
-c ......................................................................
-c PURPOSE: 1. ORDER variables according to rules:
-c             variables with same base: 1st comes TORSION (can be only
-c               one with this base, since PHASE a. assumed to be FIXED),
-c               after this, for atoms branching from this base:
-c               for a b.angle & b.length with common primary moving
-c               atom=branch atom - b.angle comes 1st
-c
-c             iorvr(i), i=i_fivr_ml,i_lavr_ml -> indices of ordered var.
-c
-c          2. define NON-OVERLAPPING moving sets of atoms in molecule
-c             'nml' related to local variables
-c
-c             nmsml(i_ml) - number of moving sets per molecule
-c             imsvr1(i_vr),imsvr2() - indices of 1st/last m.s for var. 'i_vr'
-c                                     in 'latms1' & 'latms2'
-c             latms1(i_ms),latms2() - range of atoms of i-th m.s
-c
-c          3. define indices of next-following variables for each var.,
-c             which complete its physical moving set ('added' variables)
-c          
-c             nadml(i_ml) - number of 'added' var.s per molecule
-c             iadvr1(i_vr),iadvr2() - indices of 1st/last 'added' var. for
-c                                     var. 'i_vr' in 'ladvr'
-c             ladvr() - indices of 'added' variables
-c
-c          4. define index of corresponding variable for each atom
-c
-c ! routine must be called successively for molecules 1 -> ntlml
-c
-c CALLS: fndbrn, nursvr
-c ......................................................................
+! ......................................................................
+! PURPOSE: 1. ORDER variables according to rules:
+!             variables with same base: 1st comes TORSION (can be only
+!               one with this base, since PHASE a. assumed to be FIXED),
+!               after this, for atoms branching from this base:
+!               for a b.angle & b.length with common primary moving
+!               atom=branch atom - b.angle comes 1st
+!
+!             iorvr(i), i=i_fivr_ml,i_lavr_ml -> indices of ordered var.
+!
+!          2. define NON-OVERLAPPING moving sets of atoms in molecule
+!             'nml' related to local variables
+!
+!             nmsml(i_ml) - number of moving sets per molecule
+!             imsvr1(i_vr),imsvr2() - indices of 1st/last m.s for var. 'i_vr'
+!                                     in 'latms1' & 'latms2'
+!             latms1(i_ms),latms2() - range of atoms of i-th m.s
+!
+!          3. define indices of next-following variables for each var.,
+!             which complete its physical moving set ('added' variables)
+!          
+!             nadml(i_ml) - number of 'added' var.s per molecule
+!             iadvr1(i_vr),iadvr2() - indices of 1st/last 'added' var. for
+!                                     var. 'i_vr' in 'ladvr'
+!             ladvr() - indices of 'added' variables
+!
+!          4. define index of corresponding variable for each atom
+!
+! ! routine must be called successively for molecules 1 -> ntlml
+!
+! CALLS: fndbrn, nursvr
+! ......................................................................
 
       include 'INCL.H'
 
@@ -69,15 +69,15 @@ c ......................................................................
 
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' setmvs> No variables defined in molecule #',nml
+     &           ' setmvs> No variables defined in molecule #',nml
         nmsml(nml)=0
         nadml(nml)=0
         return
       endif
-c _________________ Take index of primary atom for each variable 
-c                   (i.e. index of atom moved by variable) to
-c                   sort variables, handling variables with same base:
-c                   modify indices to obtain appropriate order
+! _________________ Take index of primary atom for each variable 
+!                   (i.e. index of atom moved by variable) to
+!                   sort variables, handling variables with same base:
+!                   modify indices to obtain appropriate order
 
       ifirs=irsml1(nml)
       ilars=irsml2(nml)
@@ -107,10 +107,10 @@ c                   modify indices to obtain appropriate order
           iorvr(i)=i  ! (initialize for sorting)
         enddo  ! ... Variables
       enddo  ! ... Residues
-c ___________________________________ Sort variables in ascending order
-c                        (i.e. from start of molecule/base of branches)
-c array 'iorvr' gives indices of (1st,2nd, ... ,n-th) variables;
-c as can be found in arrays for variables (example: ityvr(iorvr())
+! ___________________________________ Sort variables in ascending order
+!                        (i.e. from start of molecule/base of branches)
+! array 'iorvr' gives indices of (1st,2nd, ... ,n-th) variables;
+! as can be found in arrays for variables (example: ityvr(iorvr())
       k=ilavr
       l=ifivr+ntlvr/2
       ii=ifivr-1
@@ -142,8 +142,8 @@ c as can be found in arrays for variables (example: ityvr(iorvr())
       enddo
       iorvr(i)=io
       goto 1
-c ______________________________ Find non-overlapping ranges of atoms (moving
-c                                sets) for each variable
+! ______________________________ Find non-overlapping ranges of atoms (moving
+!                                sets) for each variable
    2  nms=imsml1(nml)-1
 
       do io=ifivr,ilavr  ! _____ Loop over variables in 'ascendent' order
@@ -151,7 +151,7 @@ c                                sets) for each variable
         ir=nursvr(iv)     ! residue for variable 'iv'
         ia=iatvr(iv)      ! primary mov. atom
         ib=iowat(ia)      ! base
-c __________________________ First, determine complete mov. set for 'iv'
+! __________________________ First, determine complete mov. set for 'iv'
         it=ityvr(iv)
         if (it.eq.3) then       ! torsion
           i1=0
@@ -163,9 +163,9 @@ c __________________________ First, determine complete mov. set for 'iv'
               if (i1.ne.0) then  ! combine ranges
                 if (j.gt.(i2+1).or.k.lt.(i1-1)) then
                   write (*,'(3a,/,2a,i4,a,i3)') 
-     #             ' setmvs> Cannot combine disjunct ranges of atom',
-     #             ' indices for torsion ',nmvr(iv),' in residue ',
-     #             seq(ir),ir,' of molecule # ',nml
+     &             ' setmvs> Cannot combine disjunct ranges of atom',
+     &             ' indices for torsion ',nmvr(iv),' in residue ',
+     &             seq(ir),ir,' of molecule # ',nml
                   stop
                 else
                   if (j.lt.i1) i1=j
@@ -185,15 +185,15 @@ c __________________________ First, determine complete mov. set for 'iv'
 
         if ((nms+1).gt.mxms) then
           write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
-     #    ': Number of moving sets > ',mxms
+     &    ': Number of moving sets > ',mxms
           stop
         endif
 
         imsvr1(iv)=nms+1  ! index of 1st
         imsvr2(iv)=nms+1  !        & last m.s for var. 'iv'
 
-c ______________ Next, exclude overlaps between mov. set for 'iv' and the
-c                m.s. for 'previous' variables by reducing/splitting those
+! ______________ Next, exclude overlaps between mov. set for 'iv' and the
+!                m.s. for 'previous' variables by reducing/splitting those
 
         do jo=ifivr,io-1  ! prev. variables ...
           jv=iorvr(jo)
@@ -218,7 +218,7 @@ c                m.s. for 'previous' variables by reducing/splitting those
                   nms=nms+1
                   if (nms.gt.mxms) then
                     write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',
-     #               nml,': Number of moving sets > ',mxms
+     &               nml,': Number of moving sets > ',mxms
                      stop
                   endif
                   jns=jns+1
@@ -258,13 +258,13 @@ c                m.s. for 'previous' variables by reducing/splitting those
           imsvr2(jv)=j1s+jns-1
 
         enddo  ! prev. variables
-c _______________________________ Finally, add moving set for 'iv'
+! _______________________________ Finally, add moving set for 'iv'
         nms=nms+1
         latms1(nms)=i1
         latms2(nms)=i2
       enddo  ! variables
       nmsml(nml)=nms-imsml1(nml)+1
-c _____________________________ Determine index of moving set for each atom
+! _____________________________ Determine index of moving set for each atom
       do ia=ifiat,ilaat
         ixmsat(ia)=0
       enddo
@@ -273,9 +273,9 @@ c _____________________________ Determine index of moving set for each atom
           ixmsat(ia)=is
         enddo
       enddo
-c _____________________________ Determine indices of variables which moving
-c                               set sets have to be added (=are related) to
-c                               those of a given variable
+! _____________________________ Determine indices of variables which moving
+!                               set sets have to be added (=are related) to
+!                               those of a given variable
 
       i=iorvr(ifivr)  ! initialize index of CURRENT var.
       ii=imsvr1(i)    !    -"-     index of its 1st m.s
@@ -299,7 +299,7 @@ c                               those of a given variable
           ja=iatvr(j)        ! its prim.mv.at
           jb=iowat(ja)       ! its base
 
-c _______________ current var. is torsion & shares base with var. 'j'
+! _______________ current var. is torsion & shares base with var. 'j'
           if (it.eq.3.and.jb.eq.ib) then
             do k=n,nad  !  ? has this branch been registered before ?
               if (iatvr(ladvr(k)).eq.ja) goto 3
@@ -307,7 +307,7 @@ c _______________ current var. is torsion & shares base with var. 'j'
             nad=nad+1
             if (nad.gt.mxvr) then
               write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
-     #                         ': Number of added variables > ',mxvr
+     &                         ': Number of added variables > ',mxvr
               stop
             endif
             ladvr(nad)=j   ! save index of 'added' variable
@@ -322,7 +322,7 @@ c _______________ current var. is torsion & shares base with var. 'j'
                 nad=nad+1
                 if (nad.gt.mxvr) then
                   write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
-     #                         ': Number of added variables > ',mxvr
+     &                         ': Number of added variables > ',mxvr
                   stop
                 endif
                 ladvr(nad)=j
@@ -336,7 +336,7 @@ c _______________ current var. is torsion & shares base with var. 'j'
               nad=nad+1
               if (nad.gt.mxvr) then
                 write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
-     #                       ': Number of added variables > ',mxvr
+     &                       ': Number of added variables > ',mxvr
                 stop
               endif
               ladvr(nad)=j
@@ -350,65 +350,65 @@ c _______________ current var. is torsion & shares base with var. 'j'
       iadvr2(i)=nad
 
       nadml(nml)=nad-iadml1(nml)+1
-c _____________________________________ Summary
-c      do io=ilavr,ifivr,-1
-c        iv=iorvr(io)
-c        ib=iowat(iatvr(iv))
-c        i1s=imsvr1(iv)
-c        i2s=imsvr2(iv)
-c        if (i1s.le.i2s) then
-c          do i=i1s,i2s
-c            i1=latms1(i)
-c            i2=latms2(i)
-c            if (i.eq.i1s) then
-c              write (*,'(a,i3,7a,i4,3a,i4,a)') 'res # ',nursvr(iv),
-c     #        ' var: ',nmvr(iv),' base:',nmat(ib),'    atoms= ',
-c     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
-c            else
-c              write (*,'(39x,2a,i4,3a,i4,a)')
-c     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
-c            endif
-c          enddo
-c        else
-c          write (*,'(a,i3,5a)') 'res # ',nursvr(iv),
-c     #    ' var: ',nmvr(iv),' base:',nmat(ib),'  No atoms'
-c        endif
-c        i1a=iadvr1(iv)
-c        i2a=iadvr2(iv)
-c        if (i1a.le.i2a) then
-c          write (*,'(a,30(1x,a))') ' Depending variables:',
-c     #                    (nmvr(ladvr(i)),i=i1a,i2a)
-c        else
-c          write (*,'(a)') ' No dep. variables'
-c        endif
-c      enddo
-c _____________________________________ Summary - End
+! _____________________________________ Summary
+!      do io=ilavr,ifivr,-1
+!        iv=iorvr(io)
+!        ib=iowat(iatvr(iv))
+!        i1s=imsvr1(iv)
+!        i2s=imsvr2(iv)
+!        if (i1s.le.i2s) then
+!          do i=i1s,i2s
+!            i1=latms1(i)
+!            i2=latms2(i)
+!            if (i.eq.i1s) then
+!              write (*,'(a,i3,7a,i4,3a,i4,a)') 'res # ',nursvr(iv),
+!     #        ' var: ',nmvr(iv),' base:',nmat(ib),'    atoms= ',
+!     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
+!            else
+!              write (*,'(39x,2a,i4,3a,i4,a)')
+!     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
+!            endif
+!          enddo
+!        else
+!          write (*,'(a,i3,5a)') 'res # ',nursvr(iv),
+!     #    ' var: ',nmvr(iv),' base:',nmat(ib),'  No atoms'
+!        endif
+!        i1a=iadvr1(iv)
+!        i2a=iadvr2(iv)
+!        if (i1a.le.i2a) then
+!          write (*,'(a,30(1x,a))') ' Depending variables:',
+!     #                    (nmvr(ladvr(i)),i=i1a,i2a)
+!        else
+!          write (*,'(a)') ' No dep. variables'
+!        endif
+!      enddo
+! _____________________________________ Summary - End
  
       return
 
     6 write (*,'(a,i4,/,2(a,i5),a)') 
-     # ' setmvs> Error in atom numbering of molecule # ',nml,
-     # ': atom ranges for variables # ',iv,' and # ',jv,
-     # ' overlap only PARTLY'
+     & ' setmvs> Error in atom numbering of molecule # ',nml,
+     & ': atom ranges for variables # ',iv,' and # ',jv,
+     & ' overlap only PARTLY'
       stop
 
       end
-c *******************************************************
+! *******************************************************
       subroutine fndbrn(nml,nrs,ifirg,ilarg,irg1,irg2,bb)
 
-c .........................................................
-c PURPOSE: determine range [ifirg,ilarg] of atom indices
-c          for branch starting from atom 'ifirg' of residue
-c          'nrs' in molecule 'nml'
-c OUTPUT:  BB          - .t. if 'ifirg' is a backbone atom
-c          IRG1 & IRG2 - atom indices of ring-closing bond,
-c                        if 'ifirg' is INSIDE a ring, but NOT
-c                        its 1st atom ( in 'multiple' rings
-c                        only LAST closing bond is given !)
-c
-c CALLS: none
-c
-c .........................................................
+! .........................................................
+! PURPOSE: determine range [ifirg,ilarg] of atom indices
+!          for branch starting from atom 'ifirg' of residue
+!          'nrs' in molecule 'nml'
+! OUTPUT:  BB          - .t. if 'ifirg' is a backbone atom
+!          IRG1 & IRG2 - atom indices of ring-closing bond,
+!                        if 'ifirg' is INSIDE a ring, but NOT
+!                        its 1st atom ( in 'multiple' rings
+!                        only LAST closing bond is given !)
+!
+! CALLS: none
+!
+! .........................................................
 
       include 'INCL.H'
 

@@ -1,29 +1,29 @@
-c**************************************************************
-c
-c This file contains the subroutines: redseq
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: redseq
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine redseq
 
-c ............................................................
-c PURPOSE: read 'lunseq' 'seqfil', extract names of molecules,
-c          sequences
-c
-c Molecules are separated by lines containing char. '#',
-c           a name for the molecule may follow '#' on this line
-c Residue   names can be of 1-4 characters to be separated by ' '
-c
-c Returns: ntlml,nmml,irsml1,irsml2,seq
-c
-c CALLS:   ibegst,iendst,iopfil,tolost
-c ............................................................
+! ............................................................
+! PURPOSE: read 'lunseq' 'seqfil', extract names of molecules,
+!          sequences
+!
+! Molecules are separated by lines containing char. '#',
+!           a name for the molecule may follow '#' on this line
+! Residue   names can be of 1-4 characters to be separated by ' '
+!
+! Returns: ntlml,nmml,irsml1,irsml2,seq
+!
+! CALLS:   ibegst,iendst,iopfil,tolost
+! ............................................................
 
       include 'INCL.H'
 
@@ -32,12 +32,12 @@ c ............................................................
 
       if (iopfil(lunseq,seqfil,'old','formatted').le.izero) then
         write (*,'(a,/,a,i3,2a)') 
-     #    ' redseq> ERROR opening sequence file:',
-     #      ' LUN=',lunseq,' FILE=',seqfil(1:iendst(seqfil))
+     &    ' redseq> ERROR opening sequence file:',
+     &      ' LUN=',lunseq,' FILE=',seqfil(1:iendst(seqfil))
         stop
       endif
 
-c      ntlml=0
+!      ntlml=0
       if (ntlml.gt.0) then
         nrs = irsml2(ntlml)
       else
@@ -55,7 +55,7 @@ c      ntlml=0
 
         if (ic.gt.0) then  ! found '#'
 
-c ____________________________________ new molecule
+! ____________________________________ new molecule
 
           if (ntlml.gt.0) then   ! check previous molecule
 
@@ -63,14 +63,14 @@ c ____________________________________ new molecule
 
             if ((nrs-irsml1(ntlml)+1).eq.0) then
               write(*,'(2a)') ' redseq> IGNORE molecule: ',
-     #                        nmml(ntlml)(1:iendst(nmml(ntlml)))
+     &                        nmml(ntlml)(1:iendst(nmml(ntlml)))
               ntlml=ntlml-1
             endif
           endif
           ntlml=ntlml+1
           if (ntlml.gt.mxml) then
             write(*,'(a,i4,2a)')' redseq> NUMBER of molecules > '
-     #                          ,mxml,' in ',seqfil(1:iendst(seqfil))
+     &                          ,mxml,' in ',seqfil(1:iendst(seqfil))
             close(lunseq)
             stop
           endif
@@ -79,7 +79,7 @@ c ____________________________________ new molecule
           ic=ic+1
 
           if (ic.le.lg) then
-c ___________________________________ extract name of molecule
+! ___________________________________ extract name of molecule
 
             hlin=blnk
             hlin(1:)=line(ic:lg)
@@ -98,7 +98,7 @@ c ___________________________________ extract name of molecule
 
         else  ! no '#'
 
-c _________________________________________ sequence
+! _________________________________________ sequence
 
           ib=ibegst(line)
           if (ib.eq.0) goto 1   ! empty line
@@ -109,7 +109,7 @@ c _________________________________________ sequence
           endif
 
           ie=iendst(line)
-c ___________________________________ extract names of residues
+! ___________________________________ extract names of residues
     2     id=index(line(ib:ie),blnk)-1   ! find next separator
           if (id.gt.0) then
             ii=ib+id-1
@@ -120,8 +120,8 @@ c ___________________________________ extract names of residues
 
           if (id.gt.4) then
             write (*,'(4a)') ' redseq> INVALID residue NAME >',
-     #                       line(ib:ii),'< in ',
-     #      seqfil(1:iendst(seqfil))
+     &                       line(ib:ii),'< in ',
+     &      seqfil(1:iendst(seqfil))
             close(lunseq)
             stop
           else
@@ -129,7 +129,7 @@ c ___________________________________ extract names of residues
             nrs=nrs+1
             if (nrs.gt.mxrs) then
               write(*,'(a,i4,2a)') ' redseq> NUMBER of residues > '
-     #                       ,mxrs,' in ',seqfil(1:iendst(seqfil))
+     &                       ,mxrs,' in ',seqfil(1:iendst(seqfil))
               close(lunseq)
               stop
             endif
@@ -154,11 +154,11 @@ c ___________________________________ extract names of residues
       goto 1
 
     3 close(lunseq)
-c ___________________________________ output
+! ___________________________________ output
 
       if (nrs.eq.0) then
         write (*,'(2a)') ' redseq> no residues found in ',
-     #                   seqfil(1:iendst(seqfil))
+     &                   seqfil(1:iendst(seqfil))
         stop
       else
 
@@ -175,11 +175,11 @@ c ___________________________________ output
           if (i.eq.ntlml) then   ! Check last molecule
             if ((nrs-ifirs+1).eq.0) then
               write(*,'(2a)') ' redseq> IGNORE molecule '
-     #                        ,nmml(ntlml)(1:iendst(nmml(ntlml)))
+     &                        ,nmml(ntlml)(1:iendst(nmml(ntlml)))
               ntlml=ntlml-1
               if (ntlml.eq.0) then
                 write (*,'(2a)') ' redseq> no residues found in ',
-     #          seqfil(1:iendst(seqfil))
+     &          seqfil(1:iendst(seqfil))
                 stop
               endif
               return
@@ -187,19 +187,19 @@ c ___________________________________ output
             irsml2(i)=nrs
           endif
 
-cc          write (*,'(/,a,i4,2a)') ' redseq> ',irsml2(i)-irsml1(i)+1,
-cc     #           ' residue(s) in molecule: ',
-cc     #           nmml(i)(1:iendst(nmml(i)))
-cc          write (*,'(15(1x,a))') (seq(j),j=irsml1(i),irsml2(i))
+!          write (*,'(/,a,i4,2a)') ' redseq> ',irsml2(i)-irsml1(i)+1,
+!     &           ' residue(s) in molecule: ',
+!     &           nmml(i)(1:iendst(nmml(i)))
+!          write (*,'(15(1x,a))') (seq(j),j=irsml1(i),irsml2(i))
 
         enddo
 
       endif
       return
-c _______________________________________________ error
+! _______________________________________________ error
 
     4 write (*,'(a,i4,2a)') ' redseq> ERROR reading line No. ',nln,
-     #' in ',seqfil(1:iendst(seqfil))
+     & ' in ',seqfil(1:iendst(seqfil))
       close(lunseq)
       stop
 

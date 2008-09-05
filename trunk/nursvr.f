@@ -1,21 +1,21 @@
-c**************************************************************
-c
-c This file contains the subroutines: nursvr, nursat
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: nursvr, nursat
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
       integer*4 function nursvr(ivr)
 
-c ...........................................................
-c  PURPOSE: defines index of residue for given variable 'ivr'
-c
-c  CALLS: none
-c
-c ...........................................................
+! ...........................................................
+!  PURPOSE: defines index of residue for given variable 'ivr'
+!
+!  CALLS: none
+!
+! ...........................................................
       include 'INCL.H'
 
       do i=ntlml,1,-1
@@ -35,12 +35,12 @@ c ...........................................................
 
       end
 
-c **********************************
+! **********************************
       integer*4 function nursat(iat)
 
-c .......................................................
-c  PURPOSE: defines index of residue for given atom 'iat'
-c .......................................................
+! .......................................................
+!  PURPOSE: defines index of residue for given atom 'iat'
+! .......................................................
 
       include 'INCL.H'
 

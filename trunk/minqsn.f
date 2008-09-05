@@ -1,78 +1,78 @@
-c **************************************************************
-c
-c This file contains the subroutines: minqsn,mc11a,mc11e
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: minqsn,mc11a,mc11e
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine minqsn(n,mxn,x,f,g,scal,acur,h,d,w,xa,ga,xb,gb,maxfun,
-     #                  nfun)
+     &                  nfun)
 
-c .............................................................
-c  PURPOSE: Quasi-Newton minimizer
-c
-c           Unconstrained local minimization of function FUNC
-c           vs. N variables by quasi-Newton method using BFGS-
-c           formula to update hessian matrix; approximate line
-c           searches performed using cubic extra-/interpolation
-c           [see Gill P.E., Murray W., Wright M.H., Practical
-c            Optimization, Ch. 2.2.5.7, 4.3.2.1 ff.,4.4.2.2.,
-c            4.5.2.1]
-c
-c  INPUT:   X,F,G - variables, value of FUNC, gradient at START
-c           SCAL  - factors to reduce(increase) initial step &
-c                   its lower bound for line searches, diagonal
-c                   elements of initial hessian matrix
-c           MXN - maximal overall number of function calls
-c
-c  OUTPUT:  X,F,G - variables, value of FUNC, gradient at MINIMUM
-c           NFUN  - overall number of function calls used
-c  
-c  ARRAYS:  H - approximate hessian matrix in symmetric storage
-c               (dimension N(N+1)/2)
-c           W,D,XA,XB,GA,GB - dimension N
-c
-c  CALLS:   MOVE - external to calculate function for current X
-c                  and its gradients
-c           MC11E- solve system H*D=-G for search direction D, where
-c                  H is given in Cholesky-factorization
-c           MC11A- update H using BFGS formula, factorizise new H
-c                  according to Cholesky (modified to maintain its
-c                  positive definiteness)
-c
-c  PARAMETERS:
-c  
-c  EPS1 - checks reduction of FUNC during line search
-c         ( 0.0001 <= EPS1 < 0.5 )
-c  EPS2 - controls accuracy of line search (reduce to increase
-c         accuracy; EPS1 < EPS2 <= 0.9 )
-c  ACUR - fractional precision for determination of variables
-c         (should not be smaller than sqrt of machine accuracy)
-c  TINY - prevent division by zero during cubic extrapolation
-c .............................................................
+! .............................................................
+!  PURPOSE: Quasi-Newton minimizer
+!
+!           Unconstrained local minimization of function FUNC
+!           vs. N variables by quasi-Newton method using BFGS-
+!           formula to update hessian matrix; approximate line
+!           searches performed using cubic extra-/interpolation
+!           [see Gill P.E., Murray W., Wright M.H., Practical
+!            Optimization, Ch. 2.2.5.7, 4.3.2.1 ff.,4.4.2.2.,
+!            4.5.2.1]
+!
+!  INPUT:   X,F,G - variables, value of FUNC, gradient at START
+!           SCAL  - factors to reduce(increase) initial step &
+!                   its lower bound for line searches, diagonal
+!                   elements of initial hessian matrix
+!           MXN - maximal overall number of function calls
+!
+!  OUTPUT:  X,F,G - variables, value of FUNC, gradient at MINIMUM
+!           NFUN  - overall number of function calls used
+!  
+!  ARRAYS:  H - approximate hessian matrix in symmetric storage
+!               (dimension N(N+1)/2)
+!           W,D,XA,XB,GA,GB - dimension N
+!
+!  CALLS:   MOVE - external to calculate function for current X
+!                  and its gradients
+!           MC11E- solve system H*D=-G for search direction D, where
+!                  H is given in Cholesky-factorization
+!           MC11A- update H using BFGS formula, factorizise new H
+!                  according to Cholesky (modified to maintain its
+!                  positive definiteness)
+!
+!  PARAMETERS:
+!  
+!  EPS1 - checks reduction of FUNC during line search
+!         ( 0.0001 <= EPS1 < 0.5 )
+!  EPS2 - controls accuracy of line search (reduce to increase
+!         accuracy; EPS1 < EPS2 <= 0.9 )
+!  ACUR - fractional precision for determination of variables
+!         (should not be smaller than sqrt of machine accuracy)
+!  TINY - prevent division by zero during cubic extrapolation
+! .............................................................
 
       implicit real*8 (a-h,o-z)
       implicit integer*4 (i-n)
 
       parameter ( eps1=0.1d0,
-     #            eps2=0.7d0,
-     #            tiny=1.d-32,
+     &            eps2=0.7d0,
+     &            tiny=1.d-32,
 
-     #            zero=0.d0,
-     #            izero=0,
-     #            ione=1 )
+     &            zero=0.d0,
+     &            izero=0,
+     &            ione=1 )
 
       dimension x(mxn),g(mxn),scal(mxn),h(mxn*(mxn+1)/2),d(mxn),w(mxn),
-     #          xa(mxn),ga(mxn),xb(mxn),gb(mxn)
+     &          xa(mxn),ga(mxn),xb(mxn),gb(mxn)
 
       nfun=0
       itr=0
       dff=0.
-c _______________ hessian to a diagonal matrix depending on scale
+! _______________ hessian to a diagonal matrix depending on scale
       c=0.
       do i=1,n
         c=max(c,abs(g(i)*scal(i)))
@@ -101,7 +101,7 @@ c _______________ hessian to a diagonal matrix depending on scale
 
     2 itr=itr+1    ! Start New Line-search from A
 
-c ______________ search direction of the iteration
+! ______________ search direction of the iteration
       do i=1,n
         d(i)=-ga(i)
       enddo
@@ -125,7 +125,7 @@ c ______________ search direction of the iteration
       stepub=0.        ! initial upper and
       steplb=acur*c       ! lower bound on step
 
-c ________________________ initial step of the line search
+! ________________________ initial step of the line search
       if (dff.gt.0.) then
         step=min(1.d0,(dff+dff)/(-dga))
       else
@@ -133,7 +133,7 @@ c ________________________ initial step of the line search
       endif
 
     3 if (nfun.ge.maxfun) then
-cc        write (*,*) ' minfor> exceeded max. number of function calls'
+!c        write (*,*) ' minfor> exceeded max. number of function calls'
         return
       endif
 
@@ -158,7 +158,7 @@ cc        write (*,*) ' minfor> exceeded max. number of function calls'
           enddo
           if (gl2.ge.gl1) goto 4
         endif
-c ______________ store function value if it is smallest so far
+! ______________ store function value if it is smallest so far
         f=fb
         do i=1,n
           x(i)=xb(i)
@@ -181,7 +181,7 @@ c ______________ store function value if it is smallest so far
 
         stepub=stepub-step      ! new upper bound on step
 
-c _______________________________ next step by extrapolation
+! _______________________________ next step by extrapolation
         if (stepub.gt.0.) then
           step=.5*stepub
         else
@@ -243,11 +243,11 @@ c _______________________________ next step by extrapolation
 
       return
       end
-c ***********************************************
+! ***********************************************
       subroutine mc11a(a,n,mxn,z,sig,w,ir,mk,eps)
-c
-c CALLS: none
-c
+!
+! CALLS: none
+!
       implicit real*8 (a-h,o-z)
       implicit integer*4 (i-n)
 
@@ -367,11 +367,11 @@ c
 
       return
       end
-c ************************************
+! ************************************
       subroutine mc11e(a,n,mxn,z,w,ir)
-c
-c CALLS: none
-c
+!
+! CALLS: none
+!
       implicit real*8 (a-h,o-z)
       implicit integer*4 (i-n)
 

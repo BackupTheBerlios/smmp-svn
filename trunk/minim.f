@@ -1,41 +1,41 @@
-c **************************************************************
-c
-c This file contains the subroutines: minim,move
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: minim,move
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine minim(imin, maxit, eps)
 
-c ......................................................................
-c PURPOSE: Use minimizers
-c
-c          imin = 1:  use Quasi-Newton
-c          imin = 2:  use Conjugated Gradients
-c
-c          @param maxit maximum number of iterations 
-c          @param eps acceptance criterium
-cInstitute
-c CALLS: difang,energy,gradient, mincjg,minqsn, nursvr
-c ......................................................................
+! ......................................................................
+! PURPOSE: Use minimizers
+!
+!          imin = 1:  use Quasi-Newton
+!          imin = 2:  use Conjugated Gradients
+!
+!          @param maxit maximum number of iterations 
+!          @param eps acceptance criterium
+!Institute
+! CALLS: difang,energy,gradient, mincjg,minqsn, nursvr
+! ......................................................................
 
       include 'INCL.H'
-cf2py intent(in) imin
-cf2py intent(in) maxit
-cf2py intent(in) eps
+!f2py intent(in) imin
+!f2py intent(in) maxit
+!f2py intent(in) eps
       parameter (msvmx=mxvr*(mxvr+5)/(2*(2*mxvr+1)),   
-     #            msv  = 50 )                             
+     &            msv  = 50 )                             
 
       dimension w(mxvr*(mxvr+13)/2)
 
       dimension vlvrn(mxvr),vlvro(mxvr),gdvr(mxvr),scl(mxvr)
 
-c --------------------------- new
+! --------------------------- new
       dimension gbpro(6,mxml)
 
       mxop=maxit
@@ -46,7 +46,7 @@ c --------------------------- new
         stop
       endif
 
-c ----------------------- energy & gradient
+! ----------------------- energy & gradient
 
       call gradient()
 
@@ -55,22 +55,22 @@ c ----------------------- energy & gradient
       if (ireg.eq.0) then
 
         write (*,'(a,e12.5,/,3(a,e11.4),/,2(a,e11.4),/)') ' Total: ',
-     #    eysm,
-     #    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
-     #    '   Variables: ',eyvr,'  Solvatation: ',eysl
+     &    eysm,
+     &    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
+     &    '   Variables: ',eyvr,'  Solvatation: ',eysl
 
        else
 
 
         write (*,'(a,e12.5,/,3(a,e11.4),/,3(a,e11.4),/)') ' Total: ',
-     #    wtey*eysm + wtrg*eyrg,
-     #    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
-     #    '   Variables: ',eyvr,'  Solvatation: ',eysl,
-     #    ' Regularization: ',eyrg
+     &    wtey*eysm + wtrg*eyrg,
+     &    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
+     &    '   Variables: ',eyvr,'  Solvatation: ',eysl,
+     &    ' Regularization: ',eyrg
 
        endif
 
-c --------------------------------------- variables
+! --------------------------------------- variables
 
       ntlvr=ivrml1(ntlml)+nvrml(ntlml)-1
       nv=0
@@ -128,13 +128,13 @@ c --------------------------------------- variables
           enddo
         enddo
 
-c        if (abs(wtrg-1.d0).gt.1.d-4.and.abs(wtey-1.d0).gt.1.d-4) then
-c          gdey2 = max(acc,gdey2)
-c          gdrg2 = max(acc,gdrg2)
-c          wtrg = wtrg * sqrt(gdey2/gdrg2)
-c          write(*,*)  ' -->    Wt_energy = ',wtey,'  Wt_regul. = ',wtrg
-c          write(*,*)  '  '
-c        endif
+!        if (abs(wtrg-1.d0).gt.1.d-4.and.abs(wtey-1.d0).gt.1.d-4) then
+!          gdey2 = max(acc,gdey2)
+!          gdrg2 = max(acc,gdrg2)
+!          wtrg = wtrg * sqrt(gdey2/gdrg2)
+!          write(*,*)  ' -->    Wt_energy = ',wtey,'  Wt_regul. = ',wtrg
+!          write(*,*)  '  '
+!        endif
 
         esm=wtey*eysm+wtrg*eyrg
 
@@ -151,7 +151,7 @@ c        endif
         n6=n5+n
 
         call minqsn(n,mxvr,vlvrn,esm,gdvr,scl,acc,w,w(n1),w(n2),
-     #              w(n3),w(n4),w(n5),w(n6),mxop,nop)
+     &              w(n3),w(n4),w(n5),w(n6),mxop,nop)
 
       elseif (imin.eq.2) then ! Conjugated Gradients
 
@@ -162,7 +162,7 @@ c        endif
         n5=n4+n
 
         call mincjg(n,mxvr,vlvrn,esm,gdvr,acc,w,w(n1),w(n2),  ! no 'scl'
-     #              w(n3),w(n4),w(n5),mxop,nop)
+     &              w(n3),w(n4),w(n5),mxop,nop)
 
       endif
 
@@ -175,23 +175,23 @@ c        endif
 
 
       write (*,'(/,2a,/)') ' Final energies ',
-     # '__________________________________________________'
+     & '__________________________________________________'
 
       eysm = energy()
 
       if (ireg.eq.0) then
 
         write (*,'(a,e12.5,/,3(a,e11.4),/,2(a,e11.4))') ' Total: ',eysm,
-     #  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
-     #  '   Variables: ',eyvr,'  Solvatation: ',eysl
+     &  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
+     &  '   Variables: ',eyvr,'  Solvatation: ',eysl
 
       else
 
         write (*,'(a,e12.5,/,3(a,e11.4),/,3(a,e11.4))') ' Total: ',
-     #      wtey*eysm + wtrg*eyrg,
-     #  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
-     #  '   Variables: ',eyvr,'  Solvatation: ',eysl,
-     #  ' Regularization: ',eyrg
+     &      wtey*eysm + wtrg*eyrg,
+     &  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
+     &  '   Variables: ',eyvr,'  Solvatation: ',eysl,
+     &  ' Regularization: ',eyrg
 
       endif
 
@@ -206,7 +206,7 @@ c        endif
           if (abs(vr).gt.pi) vr=vr-sign(pi2,vr)
 
           write (*,'(1x,a,1x,i4,f8.1,a,f5.1,a)') nmvr(i),nursvr(i),
-     #        vr*crd,'    (',abs(difang(vr,vlvro(i)))*crd,')'
+     &        vr*crd,'    (',abs(difang(vr,vlvro(i)))*crd,')'
 
           vlvr(i) = vr
         endif
@@ -230,7 +230,7 @@ c        endif
       endif
 
       write (*,'(/,2a)') ' Gradient ',
-     # '______________________________________________________________'
+     & '______________________________________________________________'
 
       write (*,'(8(1x,f8.3))') (gdvr(i),i=1,nv)
 
@@ -243,17 +243,17 @@ c        endif
 
       return
       end
-c ********************************************
+! ********************************************
       subroutine move(nop,nvr1,esm,vlvrn,gdvr)
-c
-c CALLS: gradient
-c
+!
+! CALLS: gradient
+!
       include 'INCL.H'
 
       dimension vlvrn(mxvr),gdvr(mxvr)
 
 
-c ------------------------ compile & new variables
+! ------------------------ compile & new variables
 
       ntlvr=ivrml1(ntlml)+nvrml(ntlml)-1
       n=0
@@ -277,7 +277,7 @@ c ------------------------ compile & new variables
 
       endif
 
-c -------------------------- new minimz. gradient
+! -------------------------- new minimz. gradient
 
       call gradient()
 
@@ -308,7 +308,7 @@ c -------------------------- new minimz. gradient
         esm=eysm
 
         write (*,'(a,i5,a,2(e13.6,a))') ' Step ',nop,': energy ',esm
-     #                                 ,'  (',gdsmey,' )'
+     &                                 ,'  (',gdsmey,' )'
 
       else
 
@@ -327,7 +327,7 @@ c -------------------------- new minimz. gradient
         esm=wtey*eysm+wtrg*eyrg
 
         write (*,'(a,i5,a,3(e13.6,a))') ' Step ',nop,': energy ',esm
-     #                                 ,'  (',gdsmey,',',gdsmrg,' )'
+     &                                 ,'  (',gdsmey,',',gdsmrg,' )'
 
       endif
 

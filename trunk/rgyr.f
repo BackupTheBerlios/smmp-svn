@@ -1,32 +1,32 @@
-c**************************************************************
-c
-c This file contains the subroutines: rgyr
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+!**************************************************************
+!
+! This file contains the subroutines: rgyr
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
 
       subroutine rgyr(nml, rgy, ee)
 
-C CALCULATES THE RADIUS-OF-GYRATION AND THE END-TO-END DISTANCE
-C FOR A GIVEN PROTEIN CONFORMATION
-C If nml == 0, calculate the radius of gyration for all molecules
-C
-C     rgy  = radius-of-gyration
-C     ee   = end-to-end distance
-C
-C REQUIREMENTS: c_alfa has to be called BEFORE call of this subroutine
-C
-C CALLS: NONE
-C
+! CALCULATES THE RADIUS-OF-GYRATION AND THE END-TO-END DISTANCE
+! FOR A GIVEN PROTEIN CONFORMATION
+! If nml == 0, calculate the radius of gyration for all molecules
+!
+!     rgy  = radius-of-gyration
+!     ee   = end-to-end distance
+!
+! REQUIREMENTS: c_alfa has to be called BEFORE call of this subroutine
+!
+! CALLS: NONE
+!
       include 'INCL.H'
-cf2py intent(in) nml
-cf2py intent(out) rgy
-cf2py intent(out) ee
+!f2py intent(in) nml
+!f2py intent(out) rgy
+!f2py intent(out) ee
       integer typ
       if (nml.eq.0) then
         nml1 = 1
@@ -41,7 +41,7 @@ cf2py intent(out) ee
 
       if (nat.le.0) then
         write (*,'(a,i4)')
-     #     ' rgyr> No atoms found for molecule #',nml
+     &     ' rgyr> No atoms found for molecule #',nml
         return 
       endif
 
@@ -127,7 +127,7 @@ cf2py intent(out) ee
       i2=ind_alf(irsml2(nml2))  
 
       ee = sqrt((xat(i2)-xat(i1))**2+(yat(i2)-yat(i1))**2
-     #         +(zat(i2)-zat(i1))**2)
+     &         +(zat(i2)-zat(i1))**2)
 
       return
       end

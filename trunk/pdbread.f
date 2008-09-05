@@ -1,36 +1,36 @@
-c **************************************************************
-c
-c This file contains the subroutines: pdbread,pdbvars,atixpdb,getpar
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: pdbread,pdbvars,atixpdb,getpar
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine pdbread(pdbfil,ier)
 
-c ....................................................
-c PURPOSE: read protein atom coordinates from 'pdbfil'
-c          (no Hydrogens, only ATOM records)
-c
-c RETURNS: 0 = no errors / 1 = error
-c
-c CALLS: iopfil,iendst
-c ......................................................
+! ....................................................
+! PURPOSE: read protein atom coordinates from 'pdbfil'
+!          (no Hydrogens, only ATOM records)
+!
+! RETURNS: 0 = no errors / 1 = error
+!
+! CALLS: iopfil,iendst
+! ......................................................
 
       implicit real*8 (a-h,o-z)
       implicit integer*4 (i-n)
 
       include 'INCP.H'
 
-c -------------------------- input
+! -------------------------- input
       character*(*) pdbfil
-c -------------------------- local
+! -------------------------- local
       dimension cor(3)
       character atm*4,rsn*3,rsno*3,chn,chno,
-     #          rsid*5,rsido*5,line*132
+     &          rsid*5,rsido*5,line*132
 
       natp=0
       nchp=0
@@ -47,7 +47,7 @@ c -------------------------- local
         lunpdb = 99
       else
         write (*,'(a)') 
-     #    ' pdbread> empty file name to read pdb-structure'
+     &    ' pdbread> empty file name to read pdb-structure'
 
         return
       endif
@@ -56,8 +56,8 @@ c -------------------------- local
 
       if (io.le.0) then
         write (*,'(a,/,a)') 
-     #  ' pdbread> ERROR opening file to read pdb-structure: ',
-     #  pdbfil(1:iendst(pdbfil))
+     &  ' pdbread> ERROR opening file to read pdb-structure: ',
+     &  pdbfil(1:iendst(pdbfil))
 
         return
       endif
@@ -69,9 +69,9 @@ c -------------------------- local
 
       if ( line(17:17).ne.' ' )  then
         write (*,'(a,/,a,/,a,/,2a)') 
-     #  ' pdbread> found alternate atom location: ',
-     #  '                !',
-     #  line(:l),' in file: ',pdbfil(1:iendst(pdbfil))
+     &  ' pdbread> found alternate atom location: ',
+     &  '                !',
+     &  line(:l),' in file: ',pdbfil(1:iendst(pdbfil))
 
         close(lunpdb)
         return
@@ -85,8 +85,8 @@ c -------------------------- local
 
       if ((natp+1).gt.MXATP) then
         write (*,'(a,i5,a,/,a)') 
-     #  ' pdbread>  >MXATP (',MXATP,') ATOM lines in PDB file ',
-     #  pdbfil(1:iendst(pdbfil))
+     &  ' pdbread>  >MXATP (',MXATP,') ATOM lines in PDB file ',
+     &  pdbfil(1:iendst(pdbfil))
 
         close(lunpdb)
         return
@@ -96,8 +96,8 @@ c -------------------------- local
 
         if ((nchp+1).gt.MXCHP) then
           write (*,'(a,i3,a,/,a)') 
-     #    ' pdbread>  >MXCHP (',MXCHP,') chains in PDB file ',
-     #    pdbfil(1:iendst(pdbfil))
+     &    ' pdbread>  >MXCHP (',MXCHP,') chains in PDB file ',
+     &    pdbfil(1:iendst(pdbfil))
 
           close(lunpdb)
           return
@@ -105,8 +105,8 @@ c -------------------------- local
 
         if ((nrsp+1).gt.MXRSP) then
           write (*,'(a,i3,a,/,a)') 
-     #    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
-     #    pdbfil(1:iendst(pdbfil))
+     &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
+     &    pdbfil(1:iendst(pdbfil))
 
           close(lunpdb)
           return
@@ -140,8 +140,8 @@ c -------------------------- local
 
         if ((nrsp+1).gt.MXRSP) then
           write (*,'(a,i3,a,/,a)') 
-     #    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
-     #    pdbfil(1:iendst(pdbfil))
+     &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
+     &    pdbfil(1:iendst(pdbfil))
 
           close(lunpdb)
           return
@@ -171,9 +171,9 @@ c -------------------------- local
       goto 1
 
     2 write (*,'(a,/,a,/,2a)') 
-     #  ' pdbread> ERROR reading ATOM line ',
-     #  line(:l),
-     #  ' from file ',pdbfil(1:iendst(pdbfil))
+     &  ' pdbread> ERROR reading ATOM line ',
+     &  line(:l),
+     &  ' from file ',pdbfil(1:iendst(pdbfil))
 
       close(lunpdb)
       return
@@ -194,8 +194,8 @@ c -------------------------- local
       else
 
         write (*,'(a,/,a)') 
-     #  ' pdbread> NO atom coordinates selected from file ',
-     #  pdbfil(1:iendst(pdbfil))
+     &  ' pdbread> NO atom coordinates selected from file ',
+     &  pdbfil(1:iendst(pdbfil))
 
       endif
 
@@ -204,24 +204,24 @@ c -------------------------- local
    10 format(6x,i5,6x,a3,1x,a1,a5,3x,3d8.3)
 
       end
-c **************************************************************
+! **************************************************************
 
       subroutine pdbvars()
 
-c --------------------------------------------------------------------
-c PURPOSE: sequence,indices for selected atoms (data in INCP.H)
-c          & torsions from PDB to be used to build SMMP structure
-c
-c          ixatp(i,)
-c          = indices for SMMP atoms pointing to PDB atoms
-c            (=0, if atom not selected)
-c
-c --------------------------------- ref. point & axes
-c         ixrfpt(3,),rfpt(3,),xrfax(3,),yrfax(3,),zrfax(3,)
-c
-c CALLS:  tolost,getmol,bldmol,addend,atixpdb,setmvs,mklist,
-c         dihedr,fnd3ba,setsys,getpar,setvar,rmsdopt
-c --------------------------------------------------------------------
+! --------------------------------------------------------------------
+! PURPOSE: sequence,indices for selected atoms (data in INCP.H)
+!          & torsions from PDB to be used to build SMMP structure
+!
+!          ixatp(i,)
+!          = indices for SMMP atoms pointing to PDB atoms
+!            (=0, if atom not selected)
+!
+! --------------------------------- ref. point & axes
+!         ixrfpt(3,),rfpt(3,),xrfax(3,),yrfax(3,),zrfax(3,)
+!
+! CALLS:  tolost,getmol,bldmol,addend,atixpdb,setmvs,mklist,
+!         dihedr,fnd3ba,setsys,getpar,setvar,rmsdopt
+! --------------------------------------------------------------------
 
       include 'INCL.H'
       include 'INCP.H'
@@ -235,22 +235,22 @@ c --------------------------------------------------------------------
 
       do nc=1,nchp  ! PDB chains
 
-c =============================== SMMP molecule
+! =============================== SMMP molecule
         nml=nml+1
         if (nml.gt.mxml) then
           write(*,'(a,i4,2a)')' pdbvars> NUMBER of chains > '
-     #                          ,mxml,' in ',' ?'
+     &                          ,mxml,' in ',' ?'
           stop
         endif
         ntlml=nml
-c ----------------------------- 'nmml' = ChainID
+! ----------------------------- 'nmml' = ChainID
         nmml(nml)=chnp(nc)
 
-c ======================================== get sequence
+! ======================================== get sequence
 
         irb=nrs+1
         ire=nrs+nchrsp(nc)
-c ----------------------------- # of 1st & last residue
+! ----------------------------- # of 1st & last residue
         irsml1(nml)=irb
         irsml2(nml)=ire
 
@@ -260,7 +260,7 @@ c ----------------------------- # of 1st & last residue
 
           if (nrs.gt.mxrs) then
             write(*,'(a,i4,2a)') ' pdbvars> NUMBER of residues > '
-     #                       ,mxrs,' in ',' ?'
+     &                       ,mxrs,' in ',' ?'
             stop
           endif
 
@@ -270,12 +270,12 @@ c ----------------------------- # of 1st & last residue
           seq(nrs)=res
 
           if (.not.flex.and.irs.eq.irb.and.seq(nrs)(1:3).eq.'pro')
-     #      seq(nrs)='pron'  ! only ECEPP/3
+     &      seq(nrs)='pron'  ! only ECEPP/3
 
         enddo ! residues
 
-c ======================== get initial coords. for molecule 'nml'
-c                          with library values for deg. of freedom
+! ======================== get initial coords. for molecule 'nml'
+!                          with library values for deg. of freedom
 
         call getmol(nml)   ! assemble res. data from libraries
 
@@ -288,11 +288,11 @@ c                          with library values for deg. of freedom
 
         call atixpdb(nml)  ! get 'ixatp'
 
-c -------------------------- 'load' SMMP variable information
+! -------------------------- 'load' SMMP variable information
         call setmvs(nml)   ! moving sets
         call mklist(nml)   ! interaction lists
 
-c ================================= get variables for 'nml'
+! ================================= get variables for 'nml'
 
         ii=ivrml1(nml)
         do i=ii,ii+nvrml(nml)-1       ! SMMP torsions
@@ -355,21 +355,21 @@ c ================================= get variables for 'nml'
 
         nvr = ivrml1(ntlml)+nvrml(ntlml)-1
 
-c ================================= global parameters for 'nml'
+! ================================= global parameters for 'nml'
 
-c +++++++++++
+! +++++++++++
        inew=0
 
        if (inew.eq.1) then
-c ++++++++++++++++++++++++
+! ++++++++++++++++++++++++
 
         call setvar(nml,vlvr)
 
         nrs = irsml2(nml)-irsml1(nml)+1
         call rmsdopt(nml,1,nrs,ixatp,xatp,yatp,zatp,0,rm,av1,av2,rmsd)
 
-c ---------------------------- retrieve ref. coords.
-c                     & transform acc. to opt. rmsd
+! ---------------------------- retrieve ref. coords.
+!                     & transform acc. to opt. rmsd
         do i=1,3
           ii=ixrfpt(i,nml)
 
@@ -395,9 +395,9 @@ c                     & transform acc. to opt. rmsd
         call getpar(nml)
         call bldmol(nml)  ! finally build SMMP molecule
 
-c ++++++++++++++++
+! ++++++++++++++++
        else  ! old
-c ++++++++++++++++
+! ++++++++++++++++
 
         call fnd3ba(nml,i1,i2,i3)  ! three 1st bb atoms in SMMP (e.g. n,ca,c')
 
@@ -405,7 +405,7 @@ c ++++++++++++++++
         ixrfpt(2,nml)=i2
         ixrfpt(3,nml)=i3
 
-c -------------------------------- retrieve ref. coords.
+! -------------------------------- retrieve ref. coords.
         do i=1,3
           ii=ixrfpt(i,nml)
           ix=ixatp(ii)
@@ -415,7 +415,7 @@ c -------------------------------- retrieve ref. coords.
             zat(ii)=zatp(ix)
           else
             write(*,'(3a)') ' pdbvars> missing PDB atom ',nmat(ii),
-     #       ' is ref. point for SMMP - cannot proceed !'
+     &       ' is ref. point for SMMP - cannot proceed !'
           endif
         enddo
 
@@ -425,9 +425,9 @@ c -------------------------------- retrieve ref. coords.
         nrs = irsml2(nml)-irsml1(nml)+1
         call rmsdopt(nml,1,nrs,ixatp,xatp,yatp,zatp,0,rm,av1,av2,rmsd)
 
-c ++++++++++
+! ++++++++++
        endif
-c ++++++++++
+! ++++++++++
 
        write(*,*) ' '
        write(*,*) ' Initial RMSD ',rmsd
@@ -436,16 +436,16 @@ c ++++++++++
 
       return
       end
-c ***************************
+! ***************************
       subroutine atixpdb(nml)
 
-c --------------------------------------------------------------------
-c PURPOSE: get ixatp - pointer of each SMMP atom to corresponding atom
-c                      of reference structure loaded in 'INCP.H'
-c                      (=0 if no corr. atom in ref. str.)
-c
-c CALLS:   toupst
-c --------------------------------------------------------------------
+! --------------------------------------------------------------------
+! PURPOSE: get ixatp - pointer of each SMMP atom to corresponding atom
+!                      of reference structure loaded in 'INCP.H'
+!                      (=0 if no corr. atom in ref. str.)
+!
+! CALLS:   toupst
+! --------------------------------------------------------------------
 
       include 'INCL.H'
       include 'INCP.H'
@@ -476,8 +476,8 @@ c --------------------------------------------------------------------
               endif
             enddo
                
-c            write(*,'(8a)') ' pdbvars> ',atm,' not found in '
-c     #       ,chnp(nc),' ',rsidp(irs),' ',rsnmp(irs)
+!            write(*,'(8a)') ' pdbvars> ',atm,' not found in '
+!     #       ,chnp(nc),' ',rsidp(irs),' ',rsnmp(irs)
 
           endif
 
@@ -488,24 +488,24 @@ c     #       ,chnp(nc),' ',rsidp(irs),' ',rsnmp(irs)
 
       return
       end
-c **************************
+! **************************
       subroutine getpar(nml)
 
       include 'INCL.H'
 
       parameter (TOL = 1.d-12)
 
-c Obtain molecule-fixed system (J,K,L) for 1st 3 bb-atoms,
-c -> determine global parameters: shifts dX,dY,dZ
-c & angles alpha,beta,gamma [rad], put into 'gbpr'
-c 
-c CALLS: none
-c
+! Obtain molecule-fixed system (J,K,L) for 1st 3 bb-atoms,
+! -> determine global parameters: shifts dX,dY,dZ
+! & angles alpha,beta,gamma [rad], put into 'gbpr'
+! 
+! CALLS: none
+!
 
       i1=ixrfpt(1,nml)  ! from 'INCL.H'
       i2=ixrfpt(2,nml)
       i3=ixrfpt(3,nml)
-c -------------------------------------- Shifts
+! -------------------------------------- Shifts
       gbpr(1,nml) = xat(i1)
       gbpr(2,nml) = yat(i1)
       gbpr(3,nml) = zat(i1)
@@ -513,7 +513,7 @@ c -------------------------------------- Shifts
       do i = 4,6
         gbpr(i,nml) = 0.d0
       enddo
-c --------------------------------- J
+! --------------------------------- J
       h1=xat(i2)
       h2=yat(i2)
       h3=zat(i2)
@@ -527,7 +527,7 @@ c --------------------------------- J
       x1=x1/d
       x2=x2/d
       x3=x3/d
-c --------------------------------- L
+! --------------------------------- L
       h1=xat(i3)-h1
       h2=yat(i3)-h2
       h3=zat(i3)-h3
@@ -542,14 +542,14 @@ c --------------------------------- L
       z2=z2/d
       z3=z3/d
 
-c ---------------------------------- K
+! ---------------------------------- K
       y1=z2*x3-z3*x2
       y2=z3*x1-z1*x3
       y3=z1*x2-z2*x1
       
       if ( ( 1.d0 - abs(y3) ) .gt. TOL )  then       ! ============ |beta| < PI/2
 
-c ----------------------------------------------- Y'
+! ----------------------------------------------- Y'
         d = sqrt( y1 * y1 + y2 * y2 )
         yp1= y1 / d
         yp2= y2 / d

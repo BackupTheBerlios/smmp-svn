@@ -4,8 +4,8 @@
 !
 ! Copyright 2005       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
 !
 ! **************************************************************
  
@@ -69,11 +69,11 @@ c                      Jan H. Meinke, Sandipan Mohanty
 ! --------------------------------- global pars.
 
         if ( gbpr(1,iml).ne.zero
-     #   .or.gbpr(2,iml).ne.zero
-     #   .or.gbpr(3,iml).ne.zero
-     #   .or.gbpr(4,iml).ne.zero
-     #   .or.gbpr(5,iml).ne.zero
-     #   .or.gbpr(6,iml).ne.zero ) then
+     &   .or.gbpr(2,iml).ne.zero
+     &   .or.gbpr(3,iml).ne.zero
+     &   .or.gbpr(4,iml).ne.zero
+     &   .or.gbpr(5,iml).ne.zero
+     &   .or.gbpr(6,iml).ne.zero ) then
 
           do i = 1,3
             write(strg(i),'(f17.6)') gbpr(i,iml)
@@ -83,8 +83,8 @@ c                      Jan H. Meinke, Sandipan Mohanty
           enddo
 
           write(iout,'(1x,2a,1x,12a)')
-     #    '@ ',mlfd,(strg(i)(ibegst(strg(i)):),',',i=1,5),
-     #    strg(6)(ibegst(strg(6)):)
+     &    '@ ',mlfd,(strg(i)(ibegst(strg(i)):),',',i=1,5),
+     &    strg(6)(ibegst(strg(6)):)
 
         endif
 
@@ -96,7 +96,7 @@ c                      Jan H. Meinke, Sandipan Mohanty
           if (.not.fxvr(i)) then
 
             write(iout,'(3x,a,i3,1x,a,1x,a,1x,a,1x,f10.3)')
-     #        mlfd,(nursvr(i)-is),':',nmvr(i),':',vlvr(i)*crd
+     &        mlfd,(nursvr(i)-is),':',nmvr(i),':',vlvr(i)*crd
           else
 
             it=ityvr(i)
@@ -104,8 +104,8 @@ c                      Jan H. Meinke, Sandipan Mohanty
             if (it.eq.3) then
 
               write(iout,'(3x,a,i3,1x,a,1x,a,1x,a,1x,f10.3,1x,a)')
-     #          mlfd,(nursvr(i)-is),':',nmvr(i),':',vlvr(i)*crd
-     #          ,' &'
+     &          mlfd,(nursvr(i)-is),':',nmvr(i),':',vlvr(i)*crd
+     &          ,' &'
             endif
 
           endif

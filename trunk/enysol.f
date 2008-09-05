@@ -1,29 +1,29 @@
-c **************************************************************
-c
-c This file contains the subroutines: enysol,tessel
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: enysol,tessel
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       
       real*8 function enysol(nmol)
 
       include 'INCL.H'
-c --------------------------------------------------------------
-c
-c     Double Cubic Lattice algorithm for calculating the
-c     solvation energy of proteins using 
-c     solvent accessible area method.
-c
-c     if nmol == 0 do solvation energy over all residues.
-c CALLS: nursat
-c
-c -------------------------------------------------------------
-c TODO: Check the solvent energy for multiple molecules     
+! --------------------------------------------------------------
+!
+!     Double Cubic Lattice algorithm for calculating the
+!     solvation energy of proteins using 
+!     solvent accessible area method.
+!
+!     if nmol == 0 do solvation energy over all residues.
+! CALLS: nursat
+!
+! -------------------------------------------------------------
+! TODO: Check the solvent energy for multiple molecules     
       dimension numbox(mxat),inbox(mxbox+1),indsort(mxat),look(mxat)
       dimension xyz(mxinbox,3),radb(mxinbox),radb2(mxinbox)
       logical surfc(mxpoint)
@@ -94,23 +94,23 @@ c TODO: Check the solvent energy for multiple molecules
       avr_z=avr_z/dble(numat)
       diamax=2.d0*rmax
 
-c  The sizes of the big box
+!  The sizes of the big box
 
       sizex=xmax-xmin
       sizey=ymax-ymin
       sizez=zmax-zmin
 
-c  How many maximal diameters in each size ?
+!  How many maximal diameters in each size ?
 
       ndx=sizex/diamax + 1
       ndy=sizey/diamax + 1
       ndz=sizez/diamax + 1
 
-c We may need the number of quadratic boxes in (X,Y) plane
+! We may need the number of quadratic boxes in (X,Y) plane
 
       nqxy=ndx*ndy
 
-c   The number of cubic boxes of the size "diamax"
+!   The number of cubic boxes of the size "diamax"
 
       ncbox=nqxy*ndz
       if(ncbox.ge.mxbox) then
@@ -118,7 +118,7 @@ c   The number of cubic boxes of the size "diamax"
        stop
       end if
         
-c Let us shift the borders to home all boxes
+! Let us shift the borders to home all boxes
 
       shiftx=(dble(ndx)*diamax-sizex)/2.d0
       shifty=(dble(ndy)*diamax-sizey)/2.d0
@@ -130,7 +130,7 @@ c Let us shift the borders to home all boxes
       ymax=ymax+shifty
       zmax=zmax+shiftz
 
-c Finding the box of each atom
+! Finding the box of each atom
 
       do j=nlow,nup
         mx=min(int(max((xat(j)-xmin)/diamax,0.0d0)),ndx-1)
@@ -152,14 +152,14 @@ c Finding the box of each atom
         end if
       end do
 
-c  Summation over the boxes
+!  Summation over the boxes
 
       do i=1,ncbox
         inbox(i+1)=inbox(i+1)+inbox(i)
       end do
          
         
-c   Sorting the atoms by the their box numbers
+!   Sorting the atoms by the their box numbers
 
       do i=nlow,nup
          j=numbox(i)
@@ -168,7 +168,7 @@ c   Sorting the atoms by the their box numbers
          inbox(j)=jj-1
       end do   
          
-c Getting started
+! Getting started
 
       do iz=0,ndz-1 ! Over the boxes along Z-axis
        do iy=0,ndy-1 !Over the boxes along Y-axis
@@ -176,7 +176,7 @@ c Getting started
 
            ibox=ix+iy*ndx+iz*nqxy + 1
 
-c  Does this box contain atoms ?
+!  Does this box contain atoms ?
 
            lbn=inbox(ibox+1)-inbox(ibox)
 
@@ -188,7 +188,7 @@ c  Does this box contain atoms ?
              ney=min(iy+1,ndy-1)
              nez=min(iz+1,ndz-1)
                      
-c  Atoms in the boxes around
+!  Atoms in the boxes around
 
              jcnt=1
              do  jz=nsz,nez
@@ -220,7 +220,7 @@ c  Atoms in the boxes around
                      akrad=rvdw(jtk)/trad
                      dr=1.0d0+akrad
                      dr=dr*dr
-cc if contact
+!c if contact
                      if(dd.le.dr) then
                        nnei=nnei+1
                        xyz(nnei,1)=dx
@@ -231,12 +231,12 @@ cc if contact
                      end if
                    end if
                  end do
-cc
+!c
                   do il=1,npnt
                      surfc(il)=.false.
                   end do
 
-c  Check overlap
+!  Check overlap
 
                   lst=1
                   do  il=1,npnt
@@ -278,14 +278,14 @@ c  Check overlap
                  sdr=4.d0*pi*trad*trad/dble(npnt)
                  area   = sdr*dble(icount)
                  volume = sdr/3.0d0*(trad*dble(icount)
-     #                               +(xat(jbi)-avr_x)*dx
-     #                               +(yat(jbi)-avr_y)*dy
-     #                               +(zat(jbi)-avr_z)*dz)
+     &                               +(xat(jbi)-avr_x)*dx
+     &                               +(yat(jbi)-avr_y)*dy
+     &                               +(zat(jbi)-avr_z)*dz)
 
                  asa=asa+area
                  vdvol=vdvol+volume
                  eysl=eysl+area*sigma(jbi)
-c Separate hydrophilic (h) and hyrdophobic (p) contributions to eysl
+! Separate hydrophilic (h) and hyrdophobic (p) contributions to eysl
                  if (sigma(jbi).lt.0) then
                     eyslp = eyslp + area * sigma(jbi)
                     asap = asap + area
@@ -294,7 +294,7 @@ c Separate hydrophilic (h) and hyrdophobic (p) contributions to eysl
                     eyslh = eyslh + area * sigma(jbi)
                     asah = asah + area
                  endif
-c Measure how much a residue is solvent accessible:
+! Measure how much a residue is solvent accessible:
                  jres = nursat(jbi)
                  surfres(jres) = surfres(jres) + area
                end if
@@ -304,7 +304,7 @@ c Measure how much a residue is solvent accessible:
          end do
        end do
 
-c
+!
        if (isolscl) then
           nhx=0
           mhx=0
@@ -318,29 +318,27 @@ c
 
        return
        end
-c *********************
+! *********************
       subroutine tessel
       include 'INCL.H'
       character lin*80
 
-c    Skipping comment lines, which begin with '!'  
-
+!    Skipping comment lines, which begin with '!'  
       read(20,'(a)') lin
       do while(lin(1:1).eq.'!')
         read (20,'(a)') lin
       end do
 
-c   The first non-comment line is the number of the surface points
+!   The first non-comment line is the number of the surface points
 
       read(lin(1:5),'(i5)') npnt
-c        write(*,'(a,i5)') 'the number of points---->',npnt
+!       write(*,'(a,i5)') 'the number of points---->',npnt
 
-c    Read the surface points   
+!    Read the surface points   
 
       do i=1,npnt
          read(20,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
-         
-c        write(31,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
+!          write(31,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
       end do
  
       return

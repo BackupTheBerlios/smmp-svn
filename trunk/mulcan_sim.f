@@ -1,25 +1,25 @@
-c **************************************************************
-c
-c This file contains the subroutines: mulcan_sim,muca_weight2
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: mulcan_sim,muca_weight2
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine  mulcan_sim
-C
-C PURPOSE: PERFORM A MULTICANONICAL SIMULATION
-C REQUIRES AS INPUT THE MULTICANONICAL PARAMETER AS CALCULATED
-C BY THE SUBROUTINE mulcan_par
-C
-c CALLS: addang, contacts,energy,metropolis
-c
+!
+! PURPOSE: PERFORM A MULTICANONICAL SIMULATION
+! REQUIRES AS INPUT THE MULTICANONICAL PARAMETER AS CALCULATED
+! BY THE SUBROUTINE mulcan_par
+!
+! CALLS: addang, contacts,energy,metropolis
+!
       include 'INCL.H'
 
-c     external rand
+!     external rand
       external muca_weight2
 
       logical restart
@@ -28,29 +28,29 @@ c     external rand
       parameter(kmin=-12,kmax=20,ebin=1.0d0)
       parameter(nsweep=100000,nequi=100)
       Parameter(nsave=1000,nmes=10)
-C
-C     restart: .true. =  restart of simulation
-C              .false. = start of simulation with random configuration
-C     kmin,kmax: Range of multicanonical parameter
-C     ebin:      bin size for multicanonical parameter
-C     nequi: Number of sweeps for equilibrisation
-C     nsweep:  Number of sweeps for simulation run
-C     nsave:  Number of sweeps after which actual configuration is saved
-C             for re-starts
-C     nmes: Number of sweeps between measurments
-C
+!
+!     restart: .true. =  restart of simulation
+!              .false. = start of simulation with random configuration
+!     kmin,kmax: Range of multicanonical parameter
+!     ebin:      bin size for multicanonical parameter
+!     nequi: Number of sweeps for equilibrisation
+!     nsweep:  Number of sweeps for simulation run
+!     nsave:  Number of sweeps after which actual configuration is saved
+!             for re-starts
+!     nmes: Number of sweeps between measurments
+!
 
       dimension xhist(kmin:kmax),ihist(kmin:kmax)
       common/muca2/b(kmin:kmax),alpha(kmin:kmax)
 
  
-C FILE with last conformation (for re-starts)
+! FILE with last conformation (for re-starts)
       open(8,file='EXAMPLES/start.d')
-C File with contact map of reference configuration
+! File with contact map of reference configuration
       open(9,file='EXAMPLES/enkefa.ref')
-C File with multicanonical parameter
+! File with multicanonical parameter
       open(10,file='EXAMPLES/muca.d')
-C Result file: Time series of certain quantities
+! Result file: Time series of certain quantities
       open(11, file='EXAMPLES/time.d')
 
 
@@ -59,9 +59,9 @@ C Result file: Time series of certain quantities
       end do
 
       nresi=irsml2(1)-irsml1(1) + 1
-c     nresi:  Number of residues
+!     nresi:  Number of residues
 
-C READ  REFERENCE CONTACT MAP
+! READ  REFERENCE CONTACT MAP
       nci = 0
       do i=1,nresi
        read(9,*) (iref(i,j) , j=1,nresi)
@@ -73,11 +73,11 @@ C READ  REFERENCE CONTACT MAP
       end do
       write(*,*) 'Number of contacts in reference conformation:',nci
 
-C READ IN FIELDS WITH MULTICANONICAL PARAMETER
+! READ IN FIELDS WITH MULTICANONICAL PARAMETER
       Do j=kmin,kmax
        read(10,*) i,b(i),alpha(i)
       end do
-C
+!
 
       if(restart) then
        read(8,*) nswm, eol_old
@@ -89,7 +89,7 @@ C
        end do
        write(*,*) 'Last iteration, energy:',nswm,eol_old
       else
-c _________________________________ random start
+! _________________________________ random start
        do i=1,nvr
         iv=idvr(i)  ! provides index of non-fixed variable
         dv=axvr(iv)*(grnd()-0.5)
@@ -97,7 +97,7 @@ c _________________________________ random start
         vlvr(iv)=vr
        enddo
       end if
-c
+!
       eol = energy()
       write (*,'(e12.5,/)')  eol
       call contacts(nhy,nhx,dham)
@@ -108,11 +108,11 @@ c
        write(*,'(62I1)') (ijcont(i,j), j=1,nresi)
       end do
       write(*,*)
-C
+!
 
       
       if(.not.restart) then
-c =====================Equilibrization by  Metropolis
+! =====================Equilibrization by  Metropolis
        do nsw=1,nequi
         call metropolis(eol,acz,muca_weight2)
        end do
@@ -122,17 +122,17 @@ c =====================Equilibrization by  Metropolis
        nswm = 1
       end if
 
-C======================Simulation
+!======================Simulation
       acz = 0.0d0
-C LOOP OVER SWEEPS
+! LOOP OVER SWEEPS
       do nsw=nswm,nsweep
-C
-C METROPOLIS UPDATE
+!
+! METROPOLIS UPDATE
        call metropolis(eol,acz,muca_weight2)
        muold = min(kmax,max(kmin,int(eol/ebin+sign(0.5d0,eol))))
        ihist(muold) = ihist(muold) + 1
-C
-C  SAVE ACTUAL CONFORMATIONS FOR RE-STARTS:
+!
+!  SAVE ACTUAL CONFORMATIONS FOR RE-STARTS:
        if(mod(nsw,nsave).eq.0) then
         rewind 8
         write(8,*) nswm, eol
@@ -142,38 +142,38 @@ C  SAVE ACTUAL CONFORMATIONS FOR RE-STARTS:
          write(8,*) i,vlvr(iv)
         end do
        end if
-C Measurements after NMES sweeps
+! Measurements after NMES sweeps
        if(mod(nsw,nmes).eq.0) then
-C Take a histogram of energy
+! Take a histogram of energy
         do i=kmin,kmax
          xhist(i) = xhist(i) + ihist(i)
          ihist(i) = 0
         end do
-c Calculate contacts in actual configuartion and compare with reference
-C configuration
-c       call contacts(nhx,nhy,dham)
-C nhx : Number of contcats in actual conformation
-C nhy : Number of contacts which are identical in actual and reference 
-C       configuration
-C dham:  Hamming distance between actual and reference configuration      
-C
+! Calculate contacts in actual configuartion and compare with reference
+! configuration
+!       call contacts(nhx,nhy,dham)
+! nhx : Number of contcats in actual conformation
+! nhy : Number of contacts which are identical in actual and reference 
+!       configuration
+! dham:  Hamming distance between actual and reference configuration      
+!
         write(11,'(i7,f12.2,2i8,f12.4)')  nsw,eol,nhx,nhy,dham
        end if
       end do
-C END OF SIMULATION
+! END OF SIMULATION
 
-C FINAL OUTPUT:
+! FINAL OUTPUT:
       acz = acz/dble(nsw*nvr)
       write(*,*) 'last energy',eol
       write(*,*) 'aczeptance rate:',acz
 
-C WRITE DOWN (UN-REWEIGHTED) HISTOGRAM OF MULTICANONICAL SIMULATION
+! WRITE DOWN (UN-REWEIGHTED) HISTOGRAM OF MULTICANONICAL SIMULATION
       do i=kmin,kmax
        if(xhist(i).gt.0.0d0) then
         write(*,*) i,xhist(i)
        end if
       end do
-c =====================
+! =====================
       close(8)
       close(9)
       close(10)
@@ -182,7 +182,7 @@ c =====================
       return
       end
 
-c ************************************************************
+! ************************************************************
       real*8 function muca_weight2(x)
 
       implicit real*8 (a-h,o-z)

@@ -1,21 +1,21 @@
-c **************************************************************
-c
-c This file contains the subroutines: cnteny
-c
-c Copyright 2005       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: cnteny
+!
+! Copyright 2005       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       subroutine cnteny(nml)
 
-c ................................................................................
-c PURPOSE: Calculate atomic contact energy of molecule 'nml' with ECEPP parameters
-c
-c CALLS: nursat
-c ................................................................................
+! ................................................................................
+! PURPOSE: Calculate atomic contact energy of molecule 'nml' with ECEPP parameters
+!
+! CALLS: nursat
+! ................................................................................
 
       include 'INCL.H'
 
@@ -30,7 +30,7 @@ c ..............................................................................
 
       if (ntlvr.eq.0) then
         write (*,'(a,i4)')
-     #           ' cnteny> No variables defined in molecule #',nml
+     &           ' cnteny> No variables defined in molecule #',nml
         return
       endif
 
@@ -177,7 +177,7 @@ c ..............................................................................
           nbc=nbc+1
           ir=nursat(i)
           write(*,'(1x,i4,1x,a4,1x,a4,a2,e11.4)') ir,seq(ir),nmat(i),
-     #                                            ': ',ey
+     &                                            ': ',ey
         endif
       enddo
 
