@@ -1,44 +1,44 @@
-c **************************************************************
-c
-c This file contains the subroutines: esolan
-c
-c Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-c                      Shura Hayryan, Chin-Ku 
-c Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
-c                      Jan H. Meinke, Sandipan Mohanty
-c
-c **************************************************************
+! **************************************************************
+!
+! This file contains the subroutines: esolan
+!
+! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
+!                      Shura Hayryan, Chin-Ku 
+! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
+!                      Jan H. Meinke, Sandipan Mohanty
+!
+! **************************************************************
 
       real*8 function esolan(nmol)
 
-c -----------------------------------------------------------------
-c
-c Calculates the solvation energy of the protein with 
-c solavtion parameters model E=\sum\sigma_iA_i. 
-c The solvent accessible surface area per atom
-c and its gradients with respect to the Cartesian coordinates of 
-c the atoms are calculated using the projection method described in
-c
-c            J Comp Phys 26, 334-343, 2005
-c
-C USAGE: eysl=esolan(nmol)-Returns the value of the solvation energy
-c
-c INPUT: nmol - the order number of the protein chain.
-c      The atomic coordinates, radii and solvation parameters  
-c      are taken from the global arrays of SMMP
-c
-c OUTPUT: global array gradan(mxat,3) contains the gradients of 
-c         solvation energy per atom
-c         local array as(mxat) contains accessible surface area per atom
-c
-c Output file "solvation.dat' conatains detailed data.
-c
-c Correctness of this program was last time rechecked with GETAREA
-c
-c CALLS: none
-c
-c ----------------------------------------------------------------------
-c TODO Test the solvent energy for multiple molecules
+! -----------------------------------------------------------------
+!
+! Calculates the solvation energy of the protein with 
+! solavtion parameters model E=\sum\sigma_iA_i. 
+! The solvent accessible surface area per atom
+! and its gradients with respect to the Cartesian coordinates of 
+! the atoms are calculated using the projection method described in
+!
+!            J Comp Phys 26, 334-343, 2005
+!
+! USAGE: eysl=esolan(nmol)-Returns the value of the solvation energy
+!
+! INPUT: nmol - the order number of the protein chain.
+!      The atomic coordinates, radii and solvation parameters  
+!      are taken from the global arrays of SMMP
+!
+! OUTPUT: global array gradan(mxat,3) contains the gradients of 
+!         solvation energy per atom
+!         local array as(mxat) contains accessible surface area per atom
+!
+! Output file "solvation.dat' conatains detailed data.
+!
+! Correctness of this program was last time rechecked with GETAREA
+!
+! CALLS: none
+!
+! ----------------------------------------------------------------------
+! TODO Test the solvent energy for multiple molecules
 
       include 'INCL.H'
       
@@ -58,11 +58,15 @@ c TODO Test the solvent energy for multiple molecules
       real*8 neibor(mxat,4)
       
       
-c     open(3,file='solvation.dat')! Output file with solvation data
+!     open(3,file='solvation.dat')! Output file with solvation data
 
       energy=0.0d0 ! Total solvation energy
       sss=0.0d0 ! Total solvent accessible surface area
-      numat=iatrs2(irsml2(nmol))-iatrs1(irsml1(nmol))+1 ! Number of atoms
+      if (nmol.eq.0) then
+         numat=iatrs2(irsml2(ntlml))-iatrs1(irsml1(1))+1 ! Number of atoms
+      else 
+         numat=iatrs2(irsml2(nmol))-iatrs1(irsml1(nmol))+1 ! Number of atoms
+      endif
 
       do i=1,numat
         do j=1,3
@@ -86,23 +90,23 @@ c     open(3,file='solvation.dat')! Output file with solvation data
               enddo
              enddo
 
-c***************************
-c   Start the computations *
-c***************************
+!***************************
+!   Start the computations *
+!***************************
 
       do 1 i=1,numat ! Lop over atoms "i"           
-c ----------------------------------------------------
+! ----------------------------------------------------
          
        R=rvdw(i) 
        jj=0
         do j=1,numat !Find the neighbours of "i"
        if(i.ne.j) then
        ddp=(xold(j)-xold(i))**2+(yold(j)-yold(i))**2
-     #   +(zold(j)-zold(i))**2! Distance between atom i and j
+     &   +(zold(j)-zold(i))**2! Distance between atom i and j
        if(ddp.lt.1e-10) then
          write(*,*)'ERROR in data: centres of two atoms coincide!'
          write(*,*)i,j,xold(i),yold(i),zold(i),rvdw(i),
-     #                   xold(j),yold(j),zold(j),rvdw(j) 
+     &                   xold(j),yold(j),zold(j),rvdw(j) 
          stop 'Centres of atoms coincide!'
        endif
        ddp=dsqrt(ddp)
@@ -121,7 +125,7 @@ c ----------------------------------------------------
 
        if(neib(0).eq.0) goto 1 !Finish the atom i if it doesn't have neighbors
 
-c----
+!----
        R2=R*R                   ! R square
        R22=R2+R2             ! 2 * R square
        R42=R22+R22       ! 4 * R square
@@ -139,33 +143,33 @@ c----
            ddat(i,3)=0d0
            ddat(i,4)=0d0
            ddat(i,1)=R
-c
-c    Verification of the north point of ith sphere
-c
+!
+!    Verification of the north point of ith sphere
+!
        jjj=0
-c
-c      If jjj=0 then - no transformation
-c             else the transformation is necessary
-c
+!
+!      If jjj=0 then - no transformation
+!             else the transformation is necessary
+!
        k=neib(1)  ! The order number of the first neighbour
-c ddp - the square minimal distance of NP from the neighboring surfaces
+! ddp - the square minimal distance of NP from the neighboring surfaces
        ddp=dabs((ddat(k,2))**2+(ddat(k,3))**2+
-     #    (R-ddat(k,4))**2-pol(k))
+     &    (R-ddat(k,4))**2-pol(k))
 
        do j=2,neib(0)
         k=neib(j)
         ddp2=dabs((ddat(k,2))**2+(ddat(k,3))**2+
-     #      (R-ddat(k,4))**2-pol(k))
+     &      (R-ddat(k,4))**2-pol(k))
         if(ddp2.lt.ddp) ddp=ddp2
        enddo
-c
-c   Check whether the NP of ith sphere is too close to the intersection line
-c
+!
+!   Check whether the NP of ith sphere is too close to the intersection line
+!
        do while (ddp.lt.1.d-6)
         jjj=jjj+1
-c
-c       generate grndom numbers
-c
+!
+!       generate grndom numbers
+!
         uga=grnd() ! Random \gamma angle
         ufi=grnd() ! Random \pi angle 
         uga=pi*uga/2
@@ -181,15 +185,15 @@ c
         zz=R*cfcg
         k=neib(1)
         ddp=dabs((xx-ddat(k,2))**2+(yy-ddat(k,3))**2+
-     #     (zz-ddat(k,4))**2-pol(k))
+     &     (zz-ddat(k,4))**2-pol(k))
         do j=2,neib(0)
          k=neib(j)
          ddp2=dabs((xx-ddat(k,2))**2+(yy-ddat(k,3))**2+
-     #       (zz-ddat(k,4))**2-pol(k))
+     &       (zz-ddat(k,4))**2-pol(k))
          if(ddp2.lt.ddp) ddp=ddp2
         end do
       end do
-c       
+!       
       
        if(jjj.ne.0) then ! Rotation is necessary
          sfsg=sf*sg
@@ -205,23 +209,23 @@ c
          enddo
        endif
 
-c  iiiiiiiiiii
+!  iiiiiiiiiii
 
        pom=8.d0*pol(i)
 
-C In this loop the parameters a,b,c,d for the equation
-c      a*(t^2+s^2)+b*t+c*s+d=0 are calculated (see the reference article)
+! In this loop the parameters a,b,c,d for the equation
+!      a*(t^2+s^2)+b*t+c*s+d=0 are calculated (see the reference article)
       do jj=1,neib(0)
       j=neib(jj)
        neibor(j,1)=(ddat(j,2))**2+(ddat(j,3))**2+      
-     #            (ddat(j,4)-R)**2-pol(j)           ! a
+     &            (ddat(j,4)-R)**2-pol(j)           ! a
         neibor(j,2)=-pom*ddat(j,2)                  ! b
         neibor(j,3)=-pom*ddat(j,3)                  ! c
         neibor(j,4)=4d0*pol(i)*((ddat(j,2))**2+
-     #      (ddat(j,3))**2+(R+ddat(j,4))**2-pol(j)) ! d
+     &      (ddat(j,3))**2+(R+ddat(j,4))**2-pol(j)) ! d
        enddo
 
-c       end of the 1st cleaning
+!       end of the 1st cleaning
 
        iv=0
 
@@ -229,7 +233,7 @@ c       end of the 1st cleaning
        k=neib(0)
        do while(k.gt.1)               ! B
         k=k-1
-C Analyse mutual disposition of every pair of neighbours                                                      
+! Analyse mutual disposition of every pair of neighbours                                                      
         do 13 L=neib(0),k+1,-1        ! A
 
          if(neibor(neib(k),1).gt.0d0.and.neibor(neib(L),1).gt.0d0) then ! 03 a01
@@ -241,25 +245,25 @@ C Analyse mutual disposition of every pair of neighbours
           c2=neibor(neib(L),3)/neibor(neib(L),1)
           d2=neibor(neib(L),4)/neibor(neib(L),1)
           D=4d0*((b1-b2)*(b2*d1-b1*d2)+(c1-c2)*(c2*d1-c1*d2)-
-     #      (d1-d2)**2)+(b1*c2-b2*c1)**2
-C if D<0 then the circles neib(k) and neib(L) don't intersect
+     &      (d1-d2)**2)+(b1*c2-b2*c1)**2
+! if D<0 then the circles neib(k) and neib(L) don't intersect
           if(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.      ! a01 01
-     #     dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then ! 04
-C Circle neib(L) encloses circle neib(k) and the later is discarded
+     &     dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then ! 04
+! Circle neib(L) encloses circle neib(k) and the later is discarded
            neib(0)=neib(0)-1
            do j=k,neib(0)
             neib(j)=neib(j+1)
            enddo
            goto 12
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.      ! a01 02
-     #    -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-C The circle neib(k) encloses circle neib(L) and the later is discarded 
+     &    -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
+! The circle neib(k) encloses circle neib(L) and the later is discarded 
            neib(0)=neib(0)-1
            do j=L,neib(0)
             neib(j)=neib(j+1)
            enddo
           elseif(D.gt.0d0) then                        ! a01 03
-C The circles nieb(L) and neib(k) have two intersection points (IP)
+! The circles nieb(L) and neib(k) have two intersection points (IP)
            am=2d0*((b1-b2)**2+(c1-c2)**2)
            t=-2d0*(b1-b2)*(d1-d2)-(b2*c1-b1*c2)*(c1-c2)
            s=-2d0*(c1-c2)*(d1-d2)+(b2*c1-b1*c2)*(b1-b2)
@@ -279,7 +283,7 @@ C The circles nieb(L) and neib(k) have two intersection points (IP)
           endif                     ! 04
 
          elseif(neibor(neib(k),1).gt.0d0.and.      ! a03
-     #              neibor(neib(L),1).lt.0d0) then
+     &              neibor(neib(L),1).lt.0d0) then
           b1=neibor(neib(k),2)/neibor(neib(k),1)
           c1=neibor(neib(k),3)/neibor(neib(k),1)
           d1=neibor(neib(k),4)/neibor(neib(k),1)
@@ -287,23 +291,23 @@ C The circles nieb(L) and neib(k) have two intersection points (IP)
           c2=neibor(neib(L),3)/neibor(neib(L),1)
           d2=neibor(neib(L),4)/neibor(neib(L),1)
           D=4d0*((b1-b2)*(b2*d1-b1*d2)+(c1-c2)*(c2*d1-c1*d2)-
-     #        (d1-d2)**2)+(b1*c2-b2*c1)**2
-C if D<0 then neib(k) and neib(L) don't intersect
+     &        (d1-d2)**2)+(b1*c2-b2*c1)**2
+! if D<0 then neib(k) and neib(L) don't intersect
           if(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.  ! a03 01
-     #     -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then ! 06
-C Neighbours neib(k) and neib(L) cover fully the atom "i" and as(i)=0
+     &     -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then ! 06
+! Neighbours neib(k) and neib(L) cover fully the atom "i" and as(i)=0
            As(i)=0.d0
            goto 11
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).ge.  ! a03 02
-     #      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-C Don't exclude neib(k) 
+     &      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
+! Don't exclude neib(k) 
            neib(0)=neib(0)-1
            do j=k,neib(0)
             neib(j)=neib(j+1)
            enddo
            goto 12
           elseif(D.gt.0.d0) then                        ! a03 03
-C Circles neib(L) and neib(k) have two intersection points.
+! Circles neib(L) and neib(k) have two intersection points.
            am=2d0*((b1-b2)**2+(c1-c2)**2)
            t=-2d0*(b1-b2)*(d1-d2)-(b2*c1-b1*c2)*(c1-c2)
            s=-2d0*(c1-c2)*(d1-d2)+(b2*c1-b1*c2)*(b1-b2)
@@ -323,7 +327,7 @@ C Circles neib(L) and neib(k) have two intersection points.
           endif                                                         ! 06
 
          elseif(neibor(neib(k),1).lt.0d0.and.neibor(neib(L),1).gt.0d0)! a07
-     #           then
+     &           then
           b1=neibor(neib(k),2)/neibor(neib(k),1)
           c1=neibor(neib(k),3)/neibor(neib(k),1)
           d1=neibor(neib(k),4)/neibor(neib(k),1)
@@ -331,22 +335,22 @@ C Circles neib(L) and neib(k) have two intersection points.
           c2=neibor(neib(L),3)/neibor(neib(L),1)
           d2=neibor(neib(L),4)/neibor(neib(L),1)
           D=4d0*((b1-b2)*(b2*d1-b1*d2)+(c1-c2)*(c2*d1-c1*d2)-
-     #        (d1-d2)**2)+(b1*c2-b2*c1)**2
-C If D<0 then the circles neib(k) and neib(L) don't intersect
+     &        (d1-d2)**2)+(b1*c2-b2*c1)**2
+! If D<0 then the circles neib(k) and neib(L) don't intersect
           if(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.   ! a07 01
-     #     dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then    ! 10
-C atom "i" is covered fully by neib(k) and neib(L) and as(i)=0.
+     &     dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then    ! 10
+! atom "i" is covered fully by neib(k) and neib(L) and as(i)=0.
            As(i)=0.d0
            goto 12
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).ge.   ! a07 02
-     #      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-C discard the circle neib(L) 
+     &      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
+! discard the circle neib(L) 
            neib(0)=neib(0)-1
            do j=L,neib(0)
             neib(j)=neib(j+1)
            enddo
           elseif(D.gt.0d0) then                          ! a07 03
-C There are two IP's between neib(k) and neib(L).
+! There are two IP's between neib(k) and neib(L).
            am=2d0*((b1-b2)**2+(c1-c2)**2)
            t=-2d0*(b1-b2)*(d1-d2)-(b2*c1-b1*c2)*(c1-c2)
            s=-2d0*(c1-c2)*(d1-d2)+(b2*c1-b1*c2)*(b1-b2)
@@ -354,7 +358,7 @@ C There are two IP's between neib(k) and neib(L).
            pom=dsqrt(D)
            p1=(c1-c2)*pom
            p2=(b1-b2)*pom
-c-- Assign t and s coordinates and the order number of circles
+!-- Assign t and s coordinates and the order number of circles
            vertex(iv,1)=(t+p1)/am 
            vertex(iv,2)=(s-p2)/am
            vertex(iv,3)=neib(k)
@@ -364,11 +368,11 @@ c-- Assign t and s coordinates and the order number of circles
            vertex(iv,2)=(s+p2)/am
            vertex(iv,3)=neib(k)
            vertex(iv,4)=neib(L)
-c--  
+!--  
           endif                                                 ! 10
 
          elseif(neibor(neib(k),1).lt.0d0.and.neibor(neib(L),1).lt.0d0) ! a09
-     #           then
+     &           then
           b1=neibor(neib(k),2)/neibor(neib(k),1)
           c1=neibor(neib(k),3)/neibor(neib(k),1)
           d1=neibor(neib(k),4)/neibor(neib(k),1)
@@ -376,29 +380,29 @@ c--
           c2=neibor(neib(L),3)/neibor(neib(L),1)
           d2=neibor(neib(L),4)/neibor(neib(L),1)
           D=4d0*((b1-b2)*(b2*d1-b1*d2)+(c1-c2)*(c2*d1-c1*d2)-
-     #        (d1-d2)**2)+(b1*c2-b2*c1)**2
-C D<0 - no intersection poit between neib(k) and neib(L)
+     &        (d1-d2)**2)+(b1*c2-b2*c1)**2
+! D<0 - no intersection poit between neib(k) and neib(L)
           if(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.
-     #   dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then!12 ! a09 01
-C omit the circle neib(L)
+     &   dsqrt(b2*b2+c2*c2-4d0*d2)-dsqrt(b1*b1+c1*c1-4d0*d1)) then!12 ! a09 01
+! omit the circle neib(L)
            neib(0)=neib(0)-1
            do j=L,neib(0)
             neib(j)=neib(j+1)
            enddo
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le. ! a09 02
-     #     -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-C Omit the circle neib(k)
+     &     -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
+! Omit the circle neib(k)
            neib(0)=neib(0)-1
            do j=k,neib(0)
             neib(j)=neib(j+1)
            enddo
            goto 12
           elseif(D.le.0.d0) then                            ! a09 03
-C The whole surface of atom "i" is covered fully, and as(i)=0.
+! The whole surface of atom "i" is covered fully, and as(i)=0.
            As(i)=0.d0
            goto 11
           else                                             ! a09 04
-C Two intersection points
+! Two intersection points
            am=2.d0*((b1-b2)**2+(c1-c2)**2)
            t=-2.d0*(b1-b2)*(d1-d2)-(b2*c1-b1*c2)*(c1-c2)
            s=-2.d0*(c1-c2)*(d1-d2)+(b2*c1-b1*c2)*(b1-b2)
@@ -406,7 +410,7 @@ C Two intersection points
            pom=dsqrt(D)
            p1=(c1-c2)*pom
            p2=(b1-b2)*pom
-C Assign the t and s coordinates and order numbers of the circles
+! Assign the t and s coordinates and order numbers of the circles
            vertex(iv,1)=(t+p1)/am
            vertex(iv,2)=(s-p2)/am
            vertex(iv,3)=neib(k)
@@ -427,18 +431,18 @@ C Assign the t and s coordinates and order numbers of the circles
         ita3=0
         do j=1,neib(0)
         if(neibor(neib(j),1).eq.0.d0) then
-C Collect the lines (after rotation it is empty).
+! Collect the lines (after rotation it is empty).
          ita2=ita2+1
          ta2(ita2)=j
         endif
         if(neibor(neib(j),1).lt.0.d0) then
-C Collect the neighbours with inner part
+! Collect the neighbours with inner part
          ita3=ita3+1
          ta3(ita3)=j
         endif
        enddo
 
-c*** Consider to remove this part.
+!*** Consider to remove this part.
          if(ita2.gt.0.and.ita3.lt.1) then
            As(i)=R22p
            if(ita2.gt.1) then
@@ -471,7 +475,7 @@ c*** Consider to remove this part.
          elseif((nb.gt.0.and.neib(0).lt.1).or.ita3.gt.0) then
           As(i)=0d0
          endif
-c****** End of could-be-removed part
+!****** End of could-be-removed part
 
        neibp(0)=neib(0)
        ifu=0 ! Full arcs (without intersection points).
@@ -480,12 +484,12 @@ c****** End of could-be-removed part
         neibp(j)=neib(j)
        enddo
        do j=1,neib(0)
-C "iv" is the number of intersection point. 
+! "iv" is the number of intersection point. 
         do k=1,iv
        if(neibp(j).eq.vertex(k,3).or.neibp(j).eq.vertex(k,4)) goto 30
         enddo
          ifu=ifu+1
-C Arrays with the ordering numbers of full arcs.
+! Arrays with the ordering numbers of full arcs.
          fullarc(ifu)=neibp(j)
          al(ifu)=neibp(j)
         goto 31
@@ -499,7 +503,7 @@ C Arrays with the ordering numbers of full arcs.
        fullarc(0)=ifu ! Number of full arcs.
        al(0)=ifu
 
-C Loop over full arcs.
+! Loop over full arcs.
        do k=1,ifu
          a=neibor(fullarc(k),1)
          if(a.lt.0.d0) then 
@@ -511,9 +515,9 @@ C Loop over full arcs.
          c=neibor(fullarc(k),3)
          d=neibor(fullarc(k),4)
          if(a.ne.0d0) then !True if rotation has taken place.
-C Remove the part of the atomic surface covered cut by this full arc
+! Remove the part of the atomic surface covered cut by this full arc
           As(i)=As(i)-aia*R22p*(1d0+(-d/a-R42)*dabs(a)/dsqrt((R42*a-
-     #                 d)**2+R42*(b*b+c*c)))
+     &                 d)**2+R42*(b*b+c*c)))
           dadx(1,1)=2d0*ddat(fullarc(k),2)
           dadx(1,2)=2d0*ddat(fullarc(k),3)
           dadx(1,3)=2d0*(ddat(fullarc(k),4)-R)
@@ -532,18 +536,18 @@ C Remove the part of the atomic surface covered cut by this full arc
           gp(3)=-c*(d+R42*a)*div
           gp(4)=(b*b+c*c-2d0*a*d+(R42+R42)*a*a)*div
           grad(i,fullarc(k),1)=gp(1)*dadx(1,1)+gp(2)*dadx(2,1)+
-     #        gp(3)*dadx(3,1)+gp(4)*dadx(4,1)
+     &        gp(3)*dadx(3,1)+gp(4)*dadx(4,1)
           grad(i,fullarc(k),2)=gp(1)*dadx(1,2)+gp(2)*dadx(2,2)+
-     #        gp(3)*dadx(3,2)+gp(4)*dadx(4,2)
+     &        gp(3)*dadx(3,2)+gp(4)*dadx(4,2)
           grad(i,fullarc(k),3)=gp(1)*dadx(1,3)+gp(2)*dadx(2,3)+
-     #        gp(3)*dadx(3,3)+gp(4)*dadx(4,3)
+     &        gp(3)*dadx(3,3)+gp(4)*dadx(4,3)
 
          else
           As(i)=As(i)+R22p*d/dsqrt(R42*(b*b+c*c)+d*d)
          endif
        enddo
 
-c Loop over the circles with intersection points.
+! Loop over the circles with intersection points.
        do k=1,ine
          jk=neib(k) ! The order number of kth neighbour.
          a=neibor(jk,1) ! a>0 - outer part, a<0-inner part
@@ -601,8 +605,8 @@ c Loop over the circles with intersection points.
              xv=(d+R42*a)*vv1
              yv=(bcd+2d0*R42*ak)/daba*vv1
              zv=wv/a*vv1
-C Move the (t,s) origo into the centre of this circle.
-C Modify t and s coordinates of IP.
+! Move the (t,s) origo into the centre of this circle.
+! Modify t and s coordinates of IP.
           do j=1,nyx
            ayx(j,1)=ayx(j,1)+ba ! t
            ayx(j,2)=ayx(j,2)+ca ! s
@@ -611,11 +615,11 @@ C Modify t and s coordinates of IP.
           ct=-ba
           cs=-ca
           rr=0.5d0*wv/daba
-C Calculate the polar angle of IP.
+! Calculate the polar angle of IP.
           do j=1,nyx
            ayx1(j)=datan2(ayx(j,2),ayx(j,1))
           enddo
-C Sort the angles in ascending order.
+! Sort the angles in ascending order.
           do j=1,nyx-1
            a1=ayx1(j)
            jj=j
@@ -649,18 +653,18 @@ C Sort the angles in ascending order.
 
           do j=1,nyx
 
-c  
-c  Escape 'bad' intersections.
+!  
+!  Escape 'bad' intersections.
            if(dabs(ayx1(j+1)-ayx1(j)).lt.1d-8) goto 40
 
            prob=(ayx1(j)+ayx1(j+1))/2.d0
            ap1=ct+rr*dcos(prob) ! The middle point of the arc.
            ap2=cs+rr*dsin(prob)
-C Verify if the middle point belongs to a covered part. 
-C If yes then omit.
+! Verify if the middle point belongs to a covered part. 
+! If yes then omit.
            do ij=1,ial
           if(neibor(al(ij),1)*(ap1*ap1+ap2*ap2)+neibor(al(ij),2)*ap1+
-     #         neibor(al(ij),3)*ap2+neibor(al(ij),4).lt.0d0) goto 40
+     &         neibor(al(ij),3)*ap2+neibor(al(ij),4).lt.0d0) goto 40
            enddo
              alp=ayx1(j)
              bet=ayx1(j+1)
@@ -674,9 +678,9 @@ C If yes then omit.
              dsbetpalp=dsin(5d-1*(bet+alp))
              dcotbma=1.d0/dtan(5d-1*(bet-alp))
              uv=daba*(bcd+2d0*R42*ak)*dcbetmalp
-     #          -a*dsqrt(b2c2-4d0*a*d)*(b*dcbetpalp+c*dsbetpalp)
+     &          -a*dsqrt(b2c2-4d0*a*d)*(b*dcbetpalp+c*dsbetpalp)
              As(i)=As(i)+R2*(aia*(alp-bet)+(d+R42*a)*vv1*(pi-2d0*
-     #             datan(uv/(2d0*ak*vv*dsbetmalp))))
+     &             datan(uv/(2d0*ak*vv*dsbetmalp))))
              kk=vrx(j,4)
              LL=vrx(j+1,4)
              tt=yv*dcotbma-zv*(b*dcbetpalp+c*dsbetpalp)/dsbetmalp
@@ -695,32 +699,32 @@ C If yes then omit.
              am1=wv*aia*a1*(ab1*dsalp-ac1*dcalp)
              am2=wv*aia*a2*(ab2*dsbet-ac2*dcbet)
              dalp(1)=(b1*ab1+c1*ac1-2d0*d*a1*a1-a*
-     1               (b1*b1+c1*c1-4d0*a1*d1)-2d0*d*aia*a1*(ab1*
-     2               dcalp+ac1*dsalp)/wv+wv*aia*a1*
-     3               (b1*dcalp+c1*dsalp))/am1
+     &               (b1*b1+c1*c1-4d0*a1*d1)-2d0*d*aia*a1*(ab1*
+     &               dcalp+ac1*dsalp)/wv+wv*aia*a1*
+     &               (b1*dcalp+c1*dsalp))/am1
              dalp(2)=(-a1*ab1+b*a1*a1+b*aia*a1*(ab1*
-     1               dcalp+ac1*dsalp)/wv-wv*aia*a1*a1*dcalp)/am1
+     &               dcalp+ac1*dsalp)/wv-wv*aia*a1*a1*dcalp)/am1
              dalp(3)=(-a1*ac1+c*a1*a1+c*aia*a1*(ab1*
-     #               dcalp+ac1*dsalp)/wv-wv*aia*a1*a1*dsalp)/am1
+     &               dcalp+ac1*dsalp)/wv-wv*aia*a1*a1*dsalp)/am1
              dalp(4)=(-2d0*a*a1*a1-2d0*daba*a1*(ab1*
-     #               dcalp+ac1*dsalp)/wv)/am1
+     &               dcalp+ac1*dsalp)/wv)/am1
              dbet(1)=(b2*ab2+c2*ac2-2d0*d*a2*a2-a*
-     #               (b2*b2+c2*c2-4d0*a2*d2)-2d0*d*aia*a2*(ab2*
-     #               dcbet+ac2*dsbet)/wv+wv*aia*a2*
-     #               (b2*dcbet+c2*dsbet))/am2
+     &               (b2*b2+c2*c2-4d0*a2*d2)-2d0*d*aia*a2*(ab2*
+     &               dcbet+ac2*dsbet)/wv+wv*aia*a2*
+     &               (b2*dcbet+c2*dsbet))/am2
              dbet(2)=(-a2*ab2+b*a2*a2+b*aia*a2*(ab2*
-     #               dcbet+ac2*dsbet)/wv-wv*aia*a2*a2*dcbet)/am2
+     &               dcbet+ac2*dsbet)/wv-wv*aia*a2*a2*dcbet)/am2
              dbet(3)=(-a2*ac2+c*a2*a2+c*aia*a2*(ab2*
-     #               dcbet+ac2*dsbet)/wv-wv*aia*a2*a2*dsbet)/am2
+     &               dcbet+ac2*dsbet)/wv-wv*aia*a2*a2*dsbet)/am2
              dbet(4)=(-2d0*a*a2*a2-2d0*daba*a2*(ab2*
-     #               dcbet+ac2*dsbet)/wv)/am2
+     &               dcbet+ac2*dsbet)/wv)/am2
              daalp(1)=(-b*ab1-c*ac1+wv*wv*a1+2d0*ak*d1+
-     #              wv*aia*((ab1-b*a1)*dcalp+(ac1-c*a1)*dsalp))/am1
+     &              wv*aia*((ab1-b*a1)*dcalp+(ac1-c*a1)*dsalp))/am1
              daalp(2)=(a*ab1-ak*b1+wv*daba*a1*dcalp)/am1
              daalp(3)=(a*ac1-ak*c1+wv*daba*a1*dsalp)/am1
              daalp(4)=(2d0*ak*a1)/am1
              dabet(1)=(-b*ab2-c*ac2+wv*wv*a2+2d0*ak*d2+
-     #             wv*aia*((ab2-b*a2)*dcbet+(ac2-c*a2)*dsbet))/am2
+     &             wv*aia*((ab2-b*a2)*dcbet+(ac2-c*a2)*dsbet))/am2
              dabet(2)=(a*ab2-ak*b2+wv*daba*a2*dcbet)/am2
              dabet(3)=(a*ac2-ak*c2+wv*daba*a2*dsbet)/am2
              dabet(4)=(2d0*ak*a2)/am2
@@ -733,51 +737,51 @@ C If yes then omit.
              dx(3)=-(d+R42*a)*dv(3)*vv2      
              dx(4)=1d0*vv1-(d+R42*a)*dv(4)*vv2      
              dy(1)=(-2d0*d+4d0*R42*a)/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
-     #             R42*ak)*(aia*vv+daba*dv(1))/ak*vv2
+     &             R42*ak)*(aia*vv+daba*dv(1))/ak*vv2
                dy(2)=2d0*b/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
-     #             R42*ak)*aia*dv(2)/a*vv2
+     &             R42*ak)*aia*dv(2)/a*vv2
                dy(3)=2d0*c/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
-     #             R42*ak)*aia*dv(3)/a*vv2
+     &             R42*ak)*aia*dv(3)/a*vv2
                dy(4)=-2.d0*a/daba*vv1-(b*b+c*c-2.d0*a*d+2.d0*
-     #             R42*ak)*aia*dv(4)/a*vv2      
+     &             R42*ak)*aia*dv(4)/a*vv2      
              dz(1)=-2d0*d/wv/a*vv1-wv*(vv+a*dv(1))/ak*vv2
              dz(2)=b/wv/a*vv1-wv*dv(2)/a*vv2
              dz(3)=c/wv/a*vv1-wv*dv(3)/a*vv2
              dz(4)=-2d0/wv*vv1-wv*dv(4)/a*vv2
              dt(1)=dcotbma*dy(1)-5d-1*yv*
-     1               (dbet(1)-dalp(1))/dsbetmalp**2-((b*dcbetpalp+
-     2             c*dsbetpalp)/dsbetmalp)*dz(1)-
-     3             5d-1*zv*(((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp)*
-     4             (dalp(1)+dbet(1))-((b*dcbetpalp+c*dsbetpalp)*
-     5             dcbetmalp)*(dbet(1)-dalp(1)))/dsbetmalp**2
+     &               (dbet(1)-dalp(1))/dsbetmalp**2-((b*dcbetpalp+
+     &             c*dsbetpalp)/dsbetmalp)*dz(1)-
+     &             5d-1*zv*(((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp)*
+     &             (dalp(1)+dbet(1))-((b*dcbetpalp+c*dsbetpalp)*
+     &             dcbetmalp)*(dbet(1)-dalp(1)))/dsbetmalp**2
              dt(2)=dcotbma*dy(2)-5d-1*yv*
-     1             (dbet(2)-dalp(2))/dsbetmalp**2-(b*dcbetpalp+
-     2             c*dsbetpalp)/dsbetmalp*dz(2)-
-     3             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
-     4             (dalp(2)+dbet(2))-(b*dcbetpalp+c*dsbetpalp)*
-     5             dcbetmalp*(dbet(2)-dalp(2))+dcbetpalp
-     6             *2d0*dsbetmalp)/dsbetmalp**2
+     &             (dbet(2)-dalp(2))/dsbetmalp**2-(b*dcbetpalp+
+     &             c*dsbetpalp)/dsbetmalp*dz(2)-
+     &             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
+     &             (dalp(2)+dbet(2))-(b*dcbetpalp+c*dsbetpalp)*
+     &             dcbetmalp*(dbet(2)-dalp(2))+dcbetpalp
+     &             *2d0*dsbetmalp)/dsbetmalp**2
              dt(3)=dcotbma*dy(3)-5d-1*yv*
-     1             (dbet(3)-dalp(3))/dsbetmalp**2-(b*dcbetpalp+
-     2             c*dsbetpalp)/dsbetmalp*dz(3)-
-     3             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
-     4             (dalp(3)+dbet(3))-(b*dcbetpalp+c*dsbetpalp)*
-     5             dcbetmalp*(dbet(3)-dalp(3))+dsbetpalp*2d0*
-     6             dsbetmalp)/dsbetmalp**2
+     &             (dbet(3)-dalp(3))/dsbetmalp**2-(b*dcbetpalp+
+     &             c*dsbetpalp)/dsbetmalp*dz(3)-
+     &             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
+     &             (dalp(3)+dbet(3))-(b*dcbetpalp+c*dsbetpalp)*
+     &             dcbetmalp*(dbet(3)-dalp(3))+dsbetpalp*2d0*
+     &             dsbetmalp)/dsbetmalp**2
              dt(4)=dcotbma*dy(4)-5d-1*yv*
-     1             (dbet(4)-dalp(4))/dsbetmalp**2-(b*dcbetpalp+
-     2             c*dsbetpalp)/dsbetmalp*dz(4)-
-     3             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
-     4             (dalp(4)+dbet(4))-(b*dcbetpalp+c*dsbetpalp)*
-     5             dcbetmalp*(dbet(4)-dalp(4)))/dsbetmalp**2
+     &             (dbet(4)-dalp(4))/dsbetmalp**2-(b*dcbetpalp+
+     &             c*dsbetpalp)/dsbetmalp*dz(4)-
+     &             5d-1*zv*((-b*dsbetpalp+c*dcbetpalp)*dsbetmalp*
+     &             (dalp(4)+dbet(4))-(b*dcbetpalp+c*dsbetpalp)*
+     &             dcbetmalp*(dbet(4)-dalp(4)))/dsbetmalp**2
              di(1)=R2*(aia*(dalp(1)-dbet(1))+(pi-2d0*datan(5d-1*tt))*
-     #               dx(1)-4d0*xv*dt(1)/(4d0+tt**2))
+     &               dx(1)-4d0*xv*dt(1)/(4d0+tt**2))
              di(2)=R2*(aia*(dalp(2)-dbet(2))+(pi-2d0*datan(5d-1*tt))*
-     #               dx(2)-4d0*xv*dt(2)/(4d0+tt**2))
+     &               dx(2)-4d0*xv*dt(2)/(4d0+tt**2))
              di(3)=R2*(aia*(dalp(3)-dbet(3))+(pi-2d0*datan(5d-1*tt))*
-     #               dx(3)-4d0*xv*dt(3)/(4d0+tt**2))
+     &               dx(3)-4d0*xv*dt(3)/(4d0+tt**2))
              di(4)=R2*(aia*(dalp(4)-dbet(4))+(pi-2d0*datan(5d-1*tt))*
-     #               dx(4)-4d0*xv*dt(4)/(4d0+tt**2))
+     &               dx(4)-4d0*xv*dt(4)/(4d0+tt**2))
              dii(1,1)=2d0*ddat(jk,2)
              dii(1,2)=2d0*ddat(jk,3)
              dii(1,3)=2d0*(ddat(jk,4)-R)
@@ -793,19 +797,19 @@ C If yes then omit.
              
              do idi=1,3
               grad(i,jk,idi)=grad(i,jk,idi)+
-     #                   di(1)*dii(1,idi)+di(2)*dii(2,idi)+
-     #                   di(3)*dii(3,idi)+di(4)*dii(4,idi)
+     &                   di(1)*dii(1,idi)+di(2)*dii(2,idi)+
+     &                   di(3)*dii(3,idi)+di(4)*dii(4,idi)
 
              enddo             
              do idi=1,4
                dta(idi)=5d-1*daalp(idi)*(((yv-zv*((-b*dsbetpalp
-     1                  +c*dcbetpalp)*dsbetmalp+
-     2                (b*dcbetpalp+c*dsbetpalp)*
-     3                dcbetmalp))/dsbetmalp**2))
+     &                  +c*dcbetpalp)*dsbetmalp+
+     &                (b*dcbetpalp+c*dsbetpalp)*
+     &                dcbetmalp))/dsbetmalp**2))
                dtb(idi)=5d-1*dabet(idi)*(((-yv-zv*((-b*dsbetpalp
-     1                  +c*dcbetpalp)*dsbetmalp-
-     2                (b*dcbetpalp+c*dsbetpalp)*
-     3                dcbetmalp))/dsbetmalp**2))
+     &                  +c*dcbetpalp)*dsbetmalp-
+     &                (b*dcbetpalp+c*dsbetpalp)*
+     &                dcbetmalp))/dsbetmalp**2))
              di1(idi)=R2*(aia*daalp(idi)-4d0*xv*dta(idi)/(4d0+tt*tt))
             di2(idi)=R2*(-aia*dabet(idi)-4d0*xv*dtb(idi)/(4d0+tt*tt))
              enddo             
@@ -818,8 +822,8 @@ C If yes then omit.
              dii(4,3)=2d0*(ddat(kk,4)+R)*R42
              do idi=1,3
               grad(i,kk,idi)=grad(i,kk,idi)+
-     1                   di1(1)*dii(1,idi)+di1(2)*dii(2,idi)+
-     2                       di1(3)*dii(3,idi)+di1(4)*dii(4,idi)
+     &                   di1(1)*dii(1,idi)+di1(2)*dii(2,idi)+
+     &                       di1(3)*dii(3,idi)+di1(4)*dii(4,idi)
              enddo
 
              dii(1,1)=2d0*ddat(LL,2)
@@ -830,8 +834,8 @@ C If yes then omit.
              dii(4,3)=2d0*(ddat(LL,4)+R)*R42
              do idi=1,3
               grad(i,LL,idi)=grad(i,LL,idi)+
-     1                   di2(1)*dii(1,idi)+di2(2)*dii(2,idi)+
-     2                       di2(3)*dii(3,idi)+di2(4)*dii(4,idi)
+     &                   di2(1)*dii(1,idi)+di2(2)*dii(2,idi)+
+     &                       di2(3)*dii(3,idi)+di2(4)*dii(4,idi)
              enddo
 
 40           continue
@@ -842,14 +846,14 @@ C If yes then omit.
            ang=datan2(b,c)
            a1=dsin(ang)
            a2=dcos(ang)
-c Rotate the intersection points by the angle "ang".
-c After rotation the position of IP will be defined
-c by its first coordinate "ax(.,1)".
+! Rotate the intersection points by the angle "ang".
+! After rotation the position of IP will be defined
+! by its first coordinate "ax(.,1)".
            do j=1,nyx
             ax(j,1)=ayx(j,1)*a2-ayx(j,2)*a1
             ax(j,2)=ayx(j,1)*a1+ayx(j,2)*a2
            enddo
-C Sorting by acsending order.
+! Sorting by acsending order.
            do j=1,nyx-1
             a1=ax(j,1)
             jj=j
@@ -898,11 +902,11 @@ C Sorting by acsending order.
 
            p1=ayx(1,1)+c*probe(1)
            p2=ayx(1,2)-b*probe(1)
-C Verify if the middle point belongs to a covered part.
-C Omit, if yes.
+! Verify if the middle point belongs to a covered part.
+! Omit, if yes.
            do L=1,ial
             if(neibor(al(L),1)*(p1*p1+p2*p2)+neibor(al(L),2)*p1+
-     #         neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 20
+     &         neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 20
            enddo
            arg2=bc*ayx1(1)+caba
            As(i)=As(i)+R22*d*(datan(arg2/cc)+pi/2d0)/cc
@@ -913,7 +917,7 @@ C Omit, if yes.
             p2=ayx(1,2)-b*probe(j)
             do L=1,ial
              if(neibor(al(L),1)*(p1*p1+p2*p2)+neibor(al(L),2)*p1+
-     #          neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 21
+     &          neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 21
             enddo
             arg1=bc*ayx1(j-1)+caba
             arg2=bc*ayx1(j)+caba
@@ -924,7 +928,7 @@ C Omit, if yes.
            p2=ayx(1,2)-b*probe(nyx+1)
            do      L=1,ial
             if(neibor(al(L),1)*(p1*p1+p2*p2)+neibor(al(L),2)*p1+
-     1         neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 22
+     &         neibor(al(L),3)*p2+neibor(al(L),4).lt.0d0) goto 22
            enddo
            arg1=bc*ayx1(nyx)+caba
            As(i)=As(i)+R22*d*(pi/2d0-datan(arg1/cc))/cc
@@ -933,8 +937,8 @@ C Omit, if yes.
          enddo       
 11      continue
 
-c
-c         changed in 2004
+!
+!         changed in 2004
 
       do j=1,ine
       al(ifu+j)=neib(j)
@@ -951,8 +955,8 @@ c         changed in 2004
       enddo
 
       if(jjj.ne.0) then
-C Restore the original configuration if the molecule has been rotated.
-C This is necessary for calculation of gradients.
+! Restore the original configuration if the molecule has been rotated.
+! This is necessary for calculation of gradients.
           xx=grad(i,i,1)
           yy=grad(i,i,2)
           zz=grad(i,i,3)
@@ -987,9 +991,9 @@ C This is necessary for calculation of gradients.
 
 111   continue
 
-c     write(3,*)'   No   Area    sigma   Enrg    gradx   grady',     
-c    # '   gradz   Rad    Atom'
-c     write(3,*)
+!     write(3,*)'   No   Area    sigma   Enrg    gradx   grady',     
+!    & '   gradz   Rad    Atom'
+!     write(3,*)
 
       
       do i=1,numat
@@ -999,17 +1003,17 @@ c     write(3,*)
 
         if (nmat(i)(1:1).eq.'h') ratom=0.0
 
-c     write(3,700),i,As(i),sigma(i),
-c    #        enr,(gradan(i,k),k=1,3),ratom,nmat(i)
+!     write(3,700),i,As(i),sigma(i),
+!    &        enr,(gradan(i,k),k=1,3),ratom,nmat(i)
 
       enddo
 
-c     write(3,*)'Total Area: ',sss
-c     write(3,*)'Total solvation energy: ',energy
+!     write(3,*)'Total Area: ',sss
+!     write(3,*)'Total solvation energy: ',energy
 
       esolan=sss
 
-c     close(3)
+!     close(3)
       return
 
 100   format(20i4)

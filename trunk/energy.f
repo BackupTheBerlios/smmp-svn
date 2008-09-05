@@ -71,8 +71,10 @@
          if (itysol.gt.0) then
             esm=esm+enysol(0)
             teysl = teysl+eysl
-      elseif (itysol.lt.0) then
-      esm=esm+esolan(0)
+         else if (itysol.lt.0) then
+            eysl = esolan(0)
+            teysl = teysl + eysl
+            esm = esm + eysl
          else
             eysl=0.d0
          endif
@@ -142,7 +144,7 @@
          if (itysol.gt.0) then
             esm=esm+enysol(nml)
       elseif (itysol.lt.0) then
-      esm=esm+esolan(nml)
+            esm=esm+esolan(nml)
          else
             eysl=0.d0
          endif
