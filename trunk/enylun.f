@@ -346,11 +346,12 @@
       do iml=1,ntlml
          do iat1=iatrs1(irsml1(iml)),iatrs2(irsml2(iml))
             do iat2=iat1+1,iatrs2(irsml2(iml))
-               if ((iat2-iat1.le.mxconr).and.
-     &                 matcon(iat2-iat1,iat1).eq.2) then
-                  ilp=ilp+1
-                  lcp1(ilp)=iat1
-                  lcp2(ilp)=iat2
+               if (iat2-iat1.le.mxconr) then 
+                  if (matcon(iat2-iat1,iat1).eq.2) then
+                    ilp=ilp+1
+                    lcp1(ilp)=iat1
+                    lcp2(ilp)=iat2
+                  endif
                endif
             enddo
          enddo
@@ -367,7 +368,6 @@
 !            print *,lci,iat1,iat2,ityat(iat1),ityat(iat2)
          enddo
       enddo
-
       print *,'finished initializing Lund force field'
       end
 
@@ -633,6 +633,7 @@
       dimension isort(mxat),ngbr(mxat),locccl(mxat),incell(mxcell)
       dimension icell(mxat)
       integer :: jx1, jy1, jz1
+      logical doit
 
       if (nml.eq.0) then 
          istat=iatrs1(irsml1(1))
@@ -882,8 +883,13 @@ c     find all atoms in current cell and all its forward-going neighbours
                r2=(xij*xij+yij*yij+zij*zij)
 
                if (r2.le.exvcutg2) then 
-                  if (abs(iat2-iat1).gt.mxconr.or.
-     &                 matcon(iat2-iat1,iat1).eq.1) then
+                  doit=.false.
+                  if (abs(iat2-iat1).gt.mxconr ) then
+                    doit=.true.
+                  else if (matcon(iat2-iat1,iat1).eq.1) then
+                    doit=.true.
+                  endif
+                  if (doit) then
                      iatt1=ityat(iat1)
                      iatt2=ityat(iat2)
                      r6=sig2exv(iatt1,iatt2)/r2

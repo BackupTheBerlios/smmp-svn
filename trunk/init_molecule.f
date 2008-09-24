@@ -104,6 +104,16 @@
          
  2       write(*,*) ' '
          
+! If Lund force field is in use, keep omega angles fixed
+      if (ientyp.eq.2) then
+         do iv=1,nvrml(ntlml)
+            if (nmvr(iv).eq.'omg') then
+                print *, 'Fixed variable ',iv,nmvr(iv),vlvr(iv)
+                fxvr(iv)=.true.
+            endif
+         enddo
+      endif
+
 !     -------------------- get: nvr,idvr, vlvr, olvlvr
          nvr = 0
          do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
