@@ -55,6 +55,10 @@
 
       endif
 
+      if (ientyp .eq. 2) then 
+        reslib=libdir(1:ll)//'lib.lun'
+      endif
+
       call setpar()  ! Initialize force field parameters
 
 

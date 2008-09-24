@@ -9,6 +9,23 @@
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
+      subroutine set_local_constr(ires,frst,lst,root)
+      include 'INCL.H'
+      include 'incl_lund.h'
+          integer ires,frst,lst,root
+          do iat1=iCa(ires)+frst,iCa(ires)+lst
+             do iat2=iat1+1,iCa(ires)+lst
+                matcon(iat2-iat1,iat1)=0
+                matcon(iat1-iat2,iat2)=0
+             enddo
+          enddo
+          iat1=iCa(ires)+root
+          do iat2=iCa(ires)+root,iCa(ires)+lst
+                matcon(iat2-iat1,iat1)=0
+                matcon(iat1-iat2,iat2)=0
+          enddo
+      end subroutine set_local_constr
+
       subroutine init_lundff
       include 'INCL.H'
       include 'incl_lund.h'
@@ -18,37 +35,38 @@
       print *,'initializing Lund forcefield'
 !     Some parameters in the Lund force field.
 !     The correspondence between internal energy scale and kcal/mol
-      eunit=1.3315
+      eunit=1.3315d0
+!      eunit=1.0
 !     Bias
-      kbias=100.0*eunit
+      kbias=100.0d0*eunit
 !      print *,'Bias'
 !     Hydrogen bonds
-      epshb1=3.1*eunit
-      epshb2=2.0*eunit
-      sighb=2.0
-      cthb=4.5
+      epshb1=3.1d0*eunit
+      epshb2=2.0d0*eunit
+      sighb=2.0d0
+      cthb=4.5d0
       cthb2=cthb*cthb
-      powa=0.5
-      powb=0.5
-      blhb=-30.0*(((sighb/cthb)**10-(sighb/cthb)**12))/cthb2
+      powa=0.5d0
+      powb=0.5d0
+      blhb=-30.0d0*(((sighb/cthb)**10-(sighb/cthb)**12))/cthb2
       alhb=-(5*((sighb/cthb)**12)-6*((sighb/cthb)**10))-blhb*cthb2
       sighb2=sighb*sighb
-      cdon=1.0
-      cacc=(1.0/1.23)**powb
-      csacc=(1.0/1.25)**powb
+      cdon=1.0d0
+      cacc=(1.0d0/1.23d0)**powb
+      csacc=(1.0d0/1.25d0)**powb
 !      print *,'Hydrogen bonds'
 !     Hydrophobicity
 !      print *,'Hydrophobicity with nhptyp = ',nhptyp
 
-      hpstrg(1)=0.0*eunit
-      hpstrg(2)=0.1*eunit
-      hpstrg(3)=0.1*eunit
-      hpstrg(4)=0.1*eunit
-      hpstrg(5)=0.9*eunit
-      hpstrg(6)=2.8*eunit
-      hpstrg(7)=0.1*eunit
-      hpstrg(8)=2.8*eunit
-      hpstrg(9)=3.2*eunit
+      hpstrg(1)=0.0d0*eunit
+      hpstrg(2)=0.1d0*eunit
+      hpstrg(3)=0.1d0*eunit
+      hpstrg(4)=0.1d0*eunit
+      hpstrg(5)=0.9d0*eunit
+      hpstrg(6)=2.8d0*eunit
+      hpstrg(7)=0.1d0*eunit
+      hpstrg(8)=2.8d0*eunit
+      hpstrg(9)=3.2d0*eunit
 
       do i=1,mxrs
          do j=1,6
@@ -63,6 +81,7 @@
      &           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
      &           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
             prlvr=.true.        ! residue i is a proline variant
+            print *, 'proline variant ',mynm,i
          else 
             prlvr=.false.
          endif 
@@ -85,43 +104,43 @@
             ihpat(i,1)=iCa(i)+2
             ihpat(i,2)=iCa(i)+5
             ihpat(i,3)=iCa(i)+7
-            ihpat(i,3)=iCa(i)+11
+            ihpat(i,4)=iCa(i)+11
          else if (mynm.eq.'ile') then
             nhpat(i)=4
             ihpat(i,1)=iCa(i)+2
             ihpat(i,2)=iCa(i)+4
             ihpat(i,3)=iCa(i)+8
-            ihpat(i,3)=iCa(i)+11
+            ihpat(i,4)=iCa(i)+11
          else if (mynm.eq.'met') then
             nhpat(i)=4
             ihpat(i,1)=iCa(i)+2
             ihpat(i,2)=iCa(i)+5
             ihpat(i,3)=iCa(i)+8
-            ihpat(i,3)=iCa(i)+9
+            ihpat(i,4)=iCa(i)+9
          else if (mynm.eq.'phe') then
             nhpat(i)=6
             ihpat(i,1)=iCa(i)+5
             ihpat(i,2)=iCa(i)+6
             ihpat(i,3)=iCa(i)+8
-            ihpat(i,3)=iCa(i)+10
-            ihpat(i,3)=iCa(i)+12
-            ihpat(i,3)=iCa(i)+14
+            ihpat(i,4)=iCa(i)+10
+            ihpat(i,5)=iCa(i)+12
+            ihpat(i,6)=iCa(i)+14
          else if (mynm.eq.'tyr') then
             nhpat(i)=6
             ihpat(i,1)=iCa(i)+5
             ihpat(i,2)=iCa(i)+6
             ihpat(i,3)=iCa(i)+8
-            ihpat(i,3)=iCa(i)+10
-            ihpat(i,3)=iCa(i)+13
-            ihpat(i,3)=iCa(i)+15
+            ihpat(i,4)=iCa(i)+10
+            ihpat(i,5)=iCa(i)+13
+            ihpat(i,6)=iCa(i)+15
          else if (mynm.eq.'trp') then
             nhpat(i)=6
             ihpat(i,1)=iCa(i)+10
             ihpat(i,2)=iCa(i)+11
             ihpat(i,3)=iCa(i)+13
-            ihpat(i,3)=iCa(i)+15
-            ihpat(i,3)=iCa(i)+17
-            ihpat(i,3)=iCa(i)+19
+            ihpat(i,4)=iCa(i)+15
+            ihpat(i,5)=iCa(i)+17
+            ihpat(i,6)=iCa(i)+19
          endif
       enddo
 !      print *,'Hydrophobicity'
@@ -131,35 +150,35 @@
       exvcut=4.3
       exvcut2=exvcut*exvcut
 
-      sigsa(1)=1.0  ! hydrogen
-      sigsa(2)=1.0  ! hydrogen
-      sigsa(3)=1.0  ! hydrogen
-      sigsa(4)=1.0  ! hydrogen
-      sigsa(5)=1.0  ! hydrogen
-      sigsa(6)=1.0  ! hydrogen
-      sigsa(7)=1.75 ! carbon
-      sigsa(8)=1.75 ! carbon
-      sigsa(9)=1.75 ! carbon
-      sigsa(10)=1.42 ! oxygen
-      sigsa(11)=1.42 ! oxygen
-      sigsa(12)=1.42 ! oxygen
-      sigsa(13)=1.55 ! nitrogen
-      sigsa(14)=1.55 ! nitrogen
-      sigsa(15)=1.55 ! nitrogen
-      sigsa(16)=1.77 ! sulfur
-      sigsa(17)=1.0  ! hydrogen
-      sigsa(18)=1.75 ! carbon
+      sigsa(1)=1.0d0  ! hydrogen
+      sigsa(2)=1.0d0  ! hydrogen
+      sigsa(3)=1.0d0  ! hydrogen
+      sigsa(4)=1.0d0  ! hydrogen
+      sigsa(5)=1.0d0  ! hydrogen
+      sigsa(6)=1.0d0  ! hydrogen
+      sigsa(7)=1.75d0 ! carbon
+      sigsa(8)=1.75d0 ! carbon
+      sigsa(9)=1.75d0 ! carbon
+      sigsa(10)=1.42d0 ! oxygen
+      sigsa(11)=1.42d0 ! oxygen
+      sigsa(12)=1.42d0 ! oxygen
+      sigsa(13)=1.55d0 ! nitrogen
+      sigsa(14)=1.55d0 ! nitrogen
+      sigsa(15)=1.55d0 ! nitrogen
+      sigsa(16)=1.77d0 ! sulfur
+      sigsa(17)=1.0d0  ! hydrogen
+      sigsa(18)=1.75d0 ! carbon
 
       do i=1,mxtyat
          do j=1,mxtyat
             sig2lcp(i,j)=(sigsa(i)+sigsa(j))**2
-            asalcp(i,j)=-7*((sig2lcp(i,j)/exvcut2)**6.0)
-            bsalcp(i,j)=6*((sig2lcp(i,j)/exvcut2)**6.0)/exvcut2
+            asalcp(i,j)=-7*((sig2lcp(i,j)/exvcut2)**6.0d0)
+            bsalcp(i,j)=6*((sig2lcp(i,j)/exvcut2)**6.0d0)/exvcut2
          enddo
       enddo
 !      print *,'Local pair excluded volume constants'
 
-      exvlam=0.75
+      exvlam=0.75d0
       exvcutg=exvcut*exvlam
       exvcutg2=exvcutg*exvcutg
 
@@ -232,7 +251,10 @@
             matcon(iN(irsml1(iml))-iat1,iat1)=0
             matcon(iat1-iCa(irsml1(iml)),iCa(irsml1(iml)))=0
             matcon(iCa(irsml1(iml))-iat1,iat1)=0
-
+            do iat2=iat1,iCa(irsml1(iml))-1
+                matcon(iat2-iat1,iat1)=0
+                matcon(iat1-iat2,iat2)=0
+            enddo 
             matcon(iat1-iCa(irsml1(iml))-1,iCa(irsml1(iml))+1)=2
             matcon(iCa(irsml1(iml))+1-iat1,iat1)=2
             matcon(iat1-iCa(irsml1(iml))-2,iCa(irsml1(iml))+2)=2
@@ -258,75 +280,59 @@
             endif
             mynm=seq(irs)
             call tolost(mynm)
-            if ((mynm.eq.'pro').or.(mynm.eq.'cpro')
-     &              .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     &              .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+            if ((mynm.eq.'pro')) then
                prlvr=.true.     ! residue i is a proline variant
             else 
                prlvr=.false.
             endif 
-
-            if ((mynm.eq.'arg').or.(mynm.eq.'arg+')) then
-               do iat1=iatoff+iatrs1(irs)+13,iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               enddo
-            else if ((mynm.eq.'his').or.(mynm.eq.'hise')
-     &              .or.(mynm.eq.'hisd').or.(mynm.eq.'his+')) then
-               do iat1=iatoff+iatrs1(irs)+7,iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               enddo
+            if ((mynm.eq.'asn')) then 
+                call set_local_constr(irs,5,9,2)
+            else if ((mynm.eq.'gln')) then 
+                call set_local_constr(irs,8,12,5)
+            else if ((mynm.eq.'arg')) then
+                call set_local_constr(irs,11,19,8)
+            else if ((mynm.eq.'his')) then
+                call set_local_constr(irs,5,12,2)
             else if (mynm.eq.'phe') then 
-               do iat1=iatoff+iatrs1(irs)+7,iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               enddo
+                call set_local_constr(irs,5,15,2)
             else if (mynm.eq.'tyr') then
-               do iat1=iatoff+iatrs1(irs)+7,iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     if (iat2.ne.iatrs1(irs)+15) then
-                        matcon(iat2-iat1,iat1)=0
-                        matcon(iat1-iat2,iat2)=0
-                     endif
-                  enddo
-               enddo
+                call set_local_constr(irs,5,16,2)
+                iat1=iCa(irs)+12 ! H_h
+                iat2=iCa(irs)+13 ! C_e2
+                iat3=iCa(irs)+8  ! C_e1
+                matcon(iat2-iat1,iat1)=2
+                matcon(iat1-iat2,iat2)=2
+                matcon(iat3-iat1,iat1)=2
+                matcon(iat1-iat3,iat3)=2
             else if (mynm.eq.'trp') then
-               do iat1=iatoff+iatrs1(irs)+7,iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               enddo
+                call set_local_constr(irs,5,19,2)
             else if (prlvr) then
 !           Proline. Many more distances are fixed because of the fixed 
 !           phi angle
-               do iat1=iatoff+iatrs1(irs),iatrs2(irs)-2-iatmrg
-                  do iat2=iat1+1,iatrs2(irs)-2-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               enddo
-!           distances to the C' atom of the previous residue are also fixed
-               if (irs.ne.irsml1(iml)) then
-                  iat1=iowat(iatrs1(irs))
-                  do iat2=iatrs1(irs),iatrs2(irs)-1-iatmrg
-                     matcon(iat2-iat1,iat1)=0
-                     matcon(iat1-iat2,iat2)=0
-                  enddo
-               endif
+                call set_local_constr(irs,-3,11,-3)
+                matcon(iCa(irs-1)-iCa(irs)-8,iCa(irs)+8)=0
+                matcon(iCa(irs)+8-iCa(irs-1),iCa(irs-1))=0
             endif
          enddo
+
+!        Distances fixed because of the constant omega angle
+         do irs=irsml1(iml),irsml2(iml)-1
+            matcon(iCa(irs+1)-iC(irs)-1,iC(irs)+1)=0 ! O_i -- Ca_{i+1}
+            matcon(-iCa(irs+1)+iC(irs)+1,iCa(irs+1))=0 ! O_i -- Ca_{i+1}
+
+            matcon(iN(irs+1)-iC(irs),iC(irs)+1)=0    ! O_i -- H_{i+1}
+            matcon(-iN(irs+1)+iC(irs),iN(irs+1)+1)=0    ! O_i -- H_{i+1}
+
+            matcon(iCa(irs+1)-iCa(irs),iCa(irs))=0   ! Ca_i -- Ca_{i+1}
+            matcon(-iCa(irs+1)+iCa(irs),iCa(irs+1))=0   ! Ca_i -- Ca_{i+1}
+
+            matcon(iN(irs+1)+1-iCa(irs),iCa(irs))=0  ! Ca_i -- H_{i+1}
+            matcon(-iN(irs+1)-1+iCa(irs),iN(irs+1)+1)=0  ! Ca_i -- H_{i+1}
+         enddo
+
       enddo
 !     finished initializing matrix conmat
 !      print *,'Connections matrix'
-
 !     Local pair excluded volume
       do i=1,mxml
          ilpst(i)=1
@@ -353,12 +359,12 @@
          if (iml.lt.ntlml) then 
             ilpst(iml+1)=ilp+1
          endif
-!         print *,'molecule ',iml,' lc pair range ',ilpst(iml),ilpnd(iml)
-!         print *,'local pair list'
+         print *,'molecule ',iml,' lc pair range ',ilpst(iml),ilpnd(iml)
+!        print *,'local pair list'
          do lci=ilpst(iml),ilpnd(iml)
             iat1=lcp1(lci)
             iat2=lcp2(lci)
-!            print *,lci,iat1,iat2,matcon(iat2-iat1,iat1)
+!            print *,lci,iat1,iat2,ityat(iat1),ityat(iat2)
          enddo
       enddo
 
@@ -374,9 +380,7 @@
       if (mynm.eq.'ala') then
          ityp=1
       else if ((mynm.eq.'val').or.(mynm.eq.'leu').or.(mynm.eq.'ile')
-     &        .or.(mynm.eq.'met').or.(mynm.eq.'pro').or.(mynm.eq.'cpro')
-     &        .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
-     &        .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
+     &        .or.(mynm.eq.'met').or.(mynm.eq.'pro')) then
          ityp=2
       else if ((mynm.eq.'phe').or.(mynm.eq.'tyr').or.(mynm.eq.'trp')) 
      &        then
@@ -443,9 +447,14 @@
       r6=sighb2/r2
       r4=r6*r6
       r6=r6*r4
-      evlu=((ca*ca/r2)**(0.5*powa))*((cb*cb/r2)**(0.5*powb))
+      rdon2=(xat(d2)-xat(d1))**2+(yat(d2)-yat(d1))**2+
+     & (zat(d2)-zat(d1))**2
+      racc2=(xat(a2)-xat(a1))**2+(yat(a2)-yat(a1))**2+
+     & (zat(a2)-zat(a1))**2
+      evlu=((ca*ca/(r2*rdon2))**(0.5*powa))*
+     & ((cb*cb/(r2*racc2))**(0.5*powb))
       evlu=evlu*(r6*(5*r6-6*r4)+alhb+blhb*r2)
-!      print *,'found hbmm contribution ',evlu
+!      print *,'found hbmm contribution ',i,j,epshb1,evlu
       ehbmmrs=epshb1*evlu
       return
       end
@@ -494,9 +503,12 @@
 !     No terms for residue i, if it is a proline variant.
          if (.not.prlvr) then  
             do j=istres,indres
-               if ((j.eq.istres).or.(j.eq.indres)) shbm2=0.5
-               etmp=ehbmmrs(i,j)
-               eyhb=eyhb+shbm1*shbm2*etmp
+               if ((j.lt.(i-2)).or.(j.gt.(i+1))) then 
+                    shbm2=1.0
+                    if ((j.eq.istres).or.(j.eq.indres)) shbm2=0.5
+                    etmp=ehbmmrs(i,j)
+                    eyhb=eyhb+shbm1*shbm2*etmp
+                endif 
             enddo
          endif
 !     Hydrophobicity, only if residue i is hydrophobic to start with
@@ -511,6 +523,7 @@
                   etmp=ehp(i,j,ihpi,ihpj)
                   if (j.eq.(i+1)) etmp=0
                   if (j.eq.(i+2)) etmp=0.5*etmp
+!                  print *, 'hydrophobicity contribution ',etmp,i,j
                   eysl=eysl+etmp
                endif 
             enddo
@@ -540,8 +553,9 @@
             r6=sig2lcp(iatt1,iatt2)/r2 
             r6=r6*r6*r6
             etmp1=(r6*r6+asalcp(iatt1,iatt2)+bsalcp(iatt1,iatt2)*r2)
-            if (etmp1.ge.500) then
-               print *,'local pair contribution ',iat1,iat2,etmp1
+            if (etmp1.ge.0) then
+!               print *,'local pair contribution ',iat1,iat2,iatt1,
+!     & iatt2,sqrt(sig2lcp(iatt1,iatt2)),etmp1
             endif
             etmp=etmp+etmp1
          endif
@@ -591,17 +605,19 @@
             if (dtmp.le.r2min(ni+j)) r2min(ni+j)=dtmp
          enddo
       enddo
-      sum=0
+      ssum=0
       do i=1,ni+nj
          if (r2min(i).le.b2) then 
             if (r2min(i).lt.a2) then 
-               sum=sum+1
+               ssum=ssum+1
             else 
-               sum=sum+(b2-r2min(i))/(b2-a2)
+               ssum=ssum+(b2-r2min(i))/(b2-a2)
             endif
          endif
+!         hpstrgth=hpstrg((ihp1-1)*nhptyp+ihp2)
+!         print *, 'hp diagnosis ',ni,nj,ssum/(ni+nj),hpstrgth
       enddo
-      ehp=-hpstrg((ihp1-1)*nhptyp+ihp2)*sum/(ni+nj)
+      ehp=-hpstrg((ihp1-1)*nhptyp+ihp2)*ssum/(ni+nj)
       return
       end
 
@@ -616,6 +632,8 @@
 !     there was no other molecule.
       dimension isort(mxat),ngbr(mxat),locccl(mxat),incell(mxcell)
       dimension icell(mxat)
+      integer :: jx1, jy1, jz1
+
       if (nml.eq.0) then 
          istat=iatrs1(irsml1(1))
          indat=iatrs2(irsml2(ntlml))
@@ -735,25 +753,42 @@
 !     loop through occupied cells
          lcell=locccl(icl)
          ix=mod(lcell-1,ndx)
-         iy=(mod(lcell-1,nxy)-ix)/ndx
-         iz=(lcell-1-ix-ndx*iy)/nxy
-!         print *,'icl=',icl,'absolute index of cell = ',lcell
-!         print *,'iz,iy,ix = ',iz,iy,ix
-!     find all atoms in current cell and all its forward-going neighbours
-         nex=min(ix+1,ndx-1)
-         ney=min(iy+1,ndy-1)
-         nez=min(iz+1,ndz-1)
+         iz = (lcell - 1) / nxy
+         iy = ((lcell - 1) - iz * nxy) / ndx 
+
+c         print *,'icl=',icl,'absolute index of cell = ',lcell
+c         print *,'iz,iy,ix = ',iz,iy,ix
+c     find all atoms in current cell and all its forward-going neighbours
+         nex=ix+1
+         ney=iy+1
+         nez=iz+1
          nsame=0
          nngbr=0
          do jx=ix,nex
+            if (jx.ge.ndx) then 
+               jx1=0
+            else 
+               jx1=jx
+            endif
             do jy=iy,ney
+               if (jy.ge.ndy) then 
+                  jy1=0
+               else 
+                  jy1=jy
+               endif 
                do jz=iz,nez
-                  jcl=jx+ndx*jy+nxy*jz+1
+                  if (jz.ge.ndz) then 
+                     jz1=0
+                  else 
+                     jz1=jz
+                  endif
+                  jcl=jx1 + ndx*jy1 + nxy*jz1 + 1
+!                  write(*,*)'jcl,jx1,jy1,jz1:', jcl,jx1,jy1,jz1
                   do ii=incell(jcl)+1,incell(jcl+1)
-!                    count the total number of neighbours
+!     count the total number of neighbours
                      nngbr=nngbr+1
                      if (jx.eq.ix.and.jy.eq.iy.and.jz.eq.iz) then
-!                    count how many neighbours are from the same cell
+!     count how many neighbours are from the same cell
                         nsame=nsame+1
                      endif
                      ngbr(nngbr)=isort(ii)
@@ -765,8 +800,10 @@
 !     neighbouring cells. 
 !        1
          jx=ix+1
+         if (jx.ge.ndx) jx=0 
          jy=iy
          jz=iz-1
+         if (jz.lt.0) jz=ndz-1
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
             nngbr=nngbr+1
@@ -775,7 +812,9 @@
 !        2
          jx=ix
          jy=iy-1
+         if (jy.lt.0) jy =ndy-1
          jz=iz+1
+         if (jz.ge.ndz) jz=0
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
             nngbr=nngbr+1
@@ -783,7 +822,9 @@
          enddo
 !        3
          jx=ix-1
+         if (jx.lt.0)jx =ndx-1
          jy=iy+1
+         if (jy.ge.ndy) jy=0
          jz=iz
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
@@ -792,8 +833,11 @@
          enddo
 !        4
          jx=ix+1
+         if (jx.ge.ndx) jx=0
          jy=iy+1
+         if (jy.ge.ndy) jy=0
          jz=iz-1
+         if (jz.lt.0) jz=ndz-1
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
             nngbr=nngbr+1
@@ -801,8 +845,11 @@
          enddo
 !        5
          jx=ix+1
+         if (jx.ge.ndx) jx = 0
          jy=iy-1
+         if (jy.lt.0) jy=ndy-1
          jz=iz+1
+         if (jz.ge.ndz) jz=0
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
             nngbr=nngbr+1
@@ -810,8 +857,11 @@
          enddo
 !        6
          jx=ix+1
+         if (jx.ge.ndx) jx=0
          jy=iy-1
+         if (jy.lt.0) jy=ndy-1
          jz=iz-1
+         if (jz.lt.0) jz=ndy-1
          jcl=jx+ndx*jy+nxy*jz+1
          do ii=incell(jcl)+1,incell(jcl+1)
             nngbr=nngbr+1
@@ -894,17 +944,6 @@
                   etmp1=r6*r6+asaexv(iatt1,iatt2)
      &                 +bsaexv(iatt1,iatt2)*r2
                   etmp=etmp+etmp1
-                  if (iat1.eq.43.and.iat2.eq.785) then
-                     print *,'contribution ',iat1,iat2,etmp1
-                     print *,'r2 = ',r2
-                     print *,'atom types : ',iatt1,iatt2
-                     print *,'sig2exv = ',sig2exv(iatt1,iatt2)
-                     print *,'asa = ',asaexv(iatt1,iatt2)
-                     print *,'bsa = ',bsaexv(iatt1,iatt2)
-
-!     call outpdb(1,'EXAMPLES/clash.pdb')
-!     stop
-                  endif
                else 
 !                  print *,'atoms ', iat1,' and ',iat2,' were close',
 !     #                 'but matcon is ',matcon(iat2-iat1,iat1)
