@@ -104,38 +104,6 @@
          
  2       write(*,*) ' '
          
-! If Lund force field is in use, keep omega angles fixed
-      if (ientyp.eq.2) then
-         do iv=1,nvrml(ntlml)
-            if (nmvr(iv).eq.'omg') then
-                print *, 'Fixed variable ',iv,nmvr(iv),vlvr(iv)
-                fxvr(iv)=.true.
-            endif
-         enddo
-      endif
-
-!     -------------------- get: nvr,idvr, vlvr, olvlvr
-         nvr = 0
-         do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
-            
-            if (.not.fxvr(i)) then
-               nvr=nvr+1
-               idvr(nvr)=i      ! index of not fixed var.
-            endif
-            
-            it=ityvr(i)
-            
-            if (it.eq.3) then   ! torsion
-               vlvr(i)=toat(iatvr(i))
-            elseif (it.eq.2) then ! b.angle
-               vlvr(i)=baat(iatvr(i))
-            elseif (it.eq.1) then ! b.length
-               vlvr(i)=blat(iatvr(i))
-            endif
-
-            olvlvr(i) = vlvr(i) 
-         enddo
-         
          ireg = 0
          
       else                      ! =========================== from PDB
@@ -158,6 +126,40 @@
          
       endif
       
+! If Lund force field is in use, keep omega angles fixed
+      if (ientyp.eq.2) then
+         do iv=1,nvrml(ntlml)
+            if ((nmvr(iv)(1:2).eq.'om')) then
+                vlvr(iv)=pi
+                toat(iatvr(iv))=pi
+                fxvr(iv)=.true.
+                print *, 'Fixed variable ',iv,nmvr(iv),vlvr(iv)
+            endif
+         enddo
+      endif
+
+!     -------------------- get: nvr,idvr, vlvr, olvlvr
+         nvr = 0
+         do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
+
+            if (.not.fxvr(i)) then
+               nvr=nvr+1
+               idvr(nvr)=i      ! index of not fixed var.
+            endif
+
+            it=ityvr(i)
+
+            if (it.eq.3) then   ! torsion
+               vlvr(i)=toat(iatvr(i))
+            elseif (it.eq.2) then ! b.angle
+               vlvr(i)=baat(iatvr(i))
+            elseif (it.eq.1) then ! b.length
+               vlvr(i)=blat(iatvr(i))
+            endif
+
+            olvlvr(i) = vlvr(i)
+         enddo
+
 !     -------------------------- set var. amplitudes for simulations
       
       do i=1,ivrml1(ntlml)+nvrml(ntlml)-1
