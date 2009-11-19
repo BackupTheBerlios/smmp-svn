@@ -25,6 +25,13 @@
 
 !f2py integer, intent(out) :: ncn, nham2 
 !f2py double precistion, intent(out) :: dham
+      integer ncn
+
+      integer nham2
+
+      double precision dham
+
+      integer i, j, nham, ncode, nresi
 
       call c_cont(1,ncode)
 
@@ -72,6 +79,9 @@
 ! ......................................................
 
       include 'INCL.H'
+      integer nmol
+
+      integer ncode, ia, n_res
               
       do n_res=irsml1(nmol),irsml2(nmol) ! Over res. 
         do ia=iatrs1(n_res),iatrs2(n_res) ! Over the atoms of res. 
@@ -127,6 +137,11 @@
 !..............................................................
 
        include 'INCL.H'
+      integer nmol
+
+      double precision rcut, rij2
+
+      integer ncode, ic, ialf, jalf, nr_j, nr_i
 
        rcut=8.5   ! Domany
               

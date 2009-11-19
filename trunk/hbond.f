@@ -32,6 +32,16 @@
 
       include 'INCL.H'
 
+      integer nml
+
+      integer mhb
+
+      integer nursat
+      double precision atbase
+
+      integer ipr, i2s, i, i14, i1, i1s, i2, ia, ixhb, id, ifivr, ii, ih
+      integer ims, io, iv, ivw, ix, k, jj, j, n, na, nd, ntlvr, iat
+
 !f2py intent(out) mhb  
       parameter (atbase=mxat)      
       logical ishb
@@ -210,6 +220,10 @@
       logical ishb
       
       integer*4 mhb
+      integer iml, ires, jml, jat, jres
+
+      integer ia, iat, ih
+      
       mhb = 0
       do iml = 1, ntlml
         do jml = iml + 1, ntlml
@@ -236,7 +250,18 @@
       subroutine chhb(i,j)
 
       include 'INCL.H'
+      integer i
 
+      integer j
+
+      integer ih
+
+      integer ia, ib, id, ihb
+      
+      double precision valang
+      
+      double precision cdah, cdad, adab, adha, ahab, dah, dad
+            
       ihb = ihbty(ityat(i),ityat(j))
 
       if (ihb.gt.0) then
@@ -290,7 +315,17 @@
 ! ..........................................................
 
       include 'INCL.H'
+      double precision cdah, cang, cahb, cdad
+      integer i
 
+      integer j
+
+      integer ih
+
+      integer ia, ib, id, ihb
+ 
+      double precision valang
+ 
       parameter (cdad=3.9d0,
      &           cdah=2.5d0,
      &           cang=110.d0)
@@ -350,7 +385,15 @@
 ! ...........................................................
 
       include 'INCL.H'
+      integer i
 
+      integer j
+
+      integer ih
+
+      double precision cahb, cdah, cang, valang
+
+      integer ia, ihb, id
       parameter (cdah=2.5d0,
      &           cang=140.d0)
 

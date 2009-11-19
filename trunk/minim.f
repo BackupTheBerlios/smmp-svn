@@ -28,6 +28,21 @@
 !f2py intent(in) imin
 !f2py intent(in) maxit
 !f2py intent(in) eps
+      integer msvmx
+
+      integer imin
+
+      integer maxit
+      
+      integer nursvr
+      double precision energy, difang
+            
+      integer ngbvr, msv, i, j, mxop, n6, n3, n, n1, n2, n5, n4
+      integer ntlvr, nop, nv
+      
+      double precision eps, acc, esm, gdey2, gbpro, gdvr, gdrg2, scl
+      double precision vlvrn, w, vlvro, vr      
+      
       parameter (msvmx=mxvr*(mxvr+5)/(2*(2*mxvr+1)),   
      &            msv  = 50 )                             
 
@@ -249,7 +264,20 @@
 ! CALLS: gradient
 !
       include 'INCL.H'
+      integer ngbvr
 
+      integer nop
+
+      integer nvr1
+
+      double precision esm
+
+      double precision vlvrn
+
+      double precision gdvr, gdsmey, gdsmrg
+
+      integer i, ii, j, ntlvr, n
+      
       dimension vlvrn(mxvr),gdvr(mxvr)
 
 
