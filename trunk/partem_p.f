@@ -185,9 +185,9 @@
       end if
       
       BETA = pbe(inode(rep_id+1))
-      e_min = e_minp(inode(rep_id+1))
-      h_max = h_maxp(inode(rep_id+1))
-      write (*,*) "E_min=",e_min," for ", intem(rep_id + 1) 
+      e_min = e_minp(rep_id+1)
+      h_max = h_maxp(rep_id+1)
+      write (*,*) "E_min=",e_min," for ", rep_id + 1 
       eol=energy()
       if(.not.newsta.and.abs(yol(rep_id + 1) - eol).gt.0.1) then
          write(*,*) rep_id, ' Warning: yol(rep_id).ne.eol:'
@@ -249,14 +249,14 @@
                j=inode(i)
                e_min = eol
                filebase = "c_emin_0000.pdb"
-               call outpdb(0, fileNameMP(filebase, 8, 11, j))
+               call outpdb(0, fileNameMP(filebase, 8, 11, i))
                filebase = "c_emin_0000.var"
-               call outvar(0, fileNameMP(filebase, 8, 11, j))
+               call outvar(0, fileNameMP(filebase, 8, 11, i))
                filebase = "c_emin_0000.dat"
-               open(15, file=fileNameMP(filebase, 8, 11, j),
+               open(15, file=fileNameMP(filebase, 8, 11, i),
      &              status="unknown")
 !     write(15,'(i8,2i4,f6.2,2f8.2,5i8)') iold,i,j,pbe(i), 
-               write(15,*) iold,i,j,pbe(i), 
+               write(15,*) iold,j,i,beta, 
      &              eol, eyab, eysl, eyel, eyvw, eyhb, eyvr, eysmi,asa,
      &              vdvol, rgy, nhel, nbet, mhb, imhb, nctot,ncnat
                close(15)
@@ -268,14 +268,14 @@
                j = inode(i)
                h_max = mhb + imhb
                filebase = "c_hmax_0000.pdb"
-               call outpdb(0,fileNameMP(filebase,8,11,j))
+               call outpdb(0,fileNameMP(filebase,8,11,i))
                filebase = "c_hmax_0000.var"
-               call outvar(0,fileNameMP(filebase,8,11,j))
+               call outvar(0,fileNameMP(filebase,8,11,i))
                filebase = "c_hmax_0000.dat"
-               open(15, file=fileNameMP(filebase, 8, 11, j),
+               open(15, file=fileNameMP(filebase, 8, 11, i),
      &              status="unknown")
 !     write(15,'(i8,2i4,f6.2,2f8.2,5i8)') iold,i,j,pbe(i), 
-               write(15,*) iold,i,j,pbe(i), 
+               write(15,*) iold,j,i,beta, 
      &              eol, eyab, eysl, eyel, eyvw, eyhb, eyvr, eysmi,asa,
      &              vdvol, rgy, nhel, nbet, mhb, imhb, nctot,ncnat
                close(15)
@@ -359,10 +359,8 @@
 !  is not reset to 0 every cycle, acy(i) must be set to 0 here. Else, there 
 !  will be serious double counting and the values of acceptance printed 
 !  will be simply wrong.
-                  e_minpt(i)=e_minp(intem(i))
                end do
                do i=1, num_rep
-                  e_minp(i) = e_minpt(i)
                   j=intem(i)
                   acy(i)=acy(i)+acy1(j)
                   eavm(i)= eavm(i)+yol(j)
@@ -377,7 +375,7 @@
      &                 yol(j),eyslr(j), eyelp(j), eyvwp(j), eyhbp(j), 
      &                    eyvrp(j),eysmip(j), asap(j), vdvolp(j),
      &                    rgyrp(j),nhelp(j),nbetp(j),mhbp(j),
-     &                 imhbp(j), nctotp(j),ncnatp(j), e_minp(i), 
+     &                 imhbp(j), nctotp(j),ncnatp(j), e_minp(j), 
      &                 eyabp(j),rmsdp(j)
 !                      call flush(14)
                end do
@@ -481,10 +479,6 @@
      &           IERR)
             CALL MPI_BCAST(INODE,num_rep,MPI_INTEGER,0,MPI_COMM_WORLD,
      &           IERR)
-         CALL MPI_BCAST(E_MINP,num_rep,MPI_DOUBLE_PRECISION,0,
-     &           MPI_COMM_WORLD,IERR)
-            CALL MPI_BCAST(H_MAXP,num_rep,MPI_INTEGER,0,MPI_COMM_WORLD,
-     &           IERR)
 ! Synchronize random number generators for replica 0
             if (rep_id.eq.0) then
                CALL MPI_BCAST(randomCount,1,MPI_INTEGER,0,my_mpi_comm,
@@ -500,8 +494,6 @@
             endif
 
             BETA=PBE(INODE(rep_id+1))
-            e_min = e_minp(inode(rep_id+1))
-            h_max = h_maxp(inode(rep_id+1))
             if (INODE(rep_id + 1).eq.1) dir = 1
             if (INODE(rep_id + 1).eq.num_rep) dir = -1
 

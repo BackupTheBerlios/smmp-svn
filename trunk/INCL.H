@@ -6,6 +6,7 @@
       integer mxvr, mxms, mxvw, mx14, mxvrh, mxtyat, mxhbdo
       integer mxhbac, mxtybl, mxtyba, mxtyto, mxrt, mxvrrt, mxrtsu
       integer nrsty
+      integer MAXLOGLEVEL, LOGFILEUNIT
       double precision pi, pi2, pi4, crd, cdr, zero, one
       integer izero, ione
 
@@ -55,6 +56,7 @@
       integer myrank, no, my_mpi_comm
       integer workPerProcessor(0:mxml, 0:MAX_PROC)
       common/paral/myrank,no,my_mpi_comm,workPerProcessor
+      integer beta
       common /bet/beta
 !==   For solvent============================
       integer mxpoint, mxbox, mxinbox, mxtysol
