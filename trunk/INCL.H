@@ -1,6 +1,5 @@
-!      implicit none
-      implicit integer*4 (i-n)
-      implicit real*8 (a-h,o-z)
+      implicit none
+      
       character*255 version
 
       integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath

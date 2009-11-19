@@ -19,6 +19,12 @@
       include 'INCL.H'
       include 'INCP.H'
       include 'incl_lund.h'
+      
+      double precision eol, energy, grnd, dv, addang, enw, delta, dummy
+      double precision rd, ex, acz, eol1
+
+      integer nsw, iupstate, iupt, ivar, jv, iml, i, ncalls, nacalls
+
       external dummy
 !      common/bet/beta
       common/updstats/ncalls(5),nacalls(5)
@@ -177,6 +183,7 @@
       end
       
       subroutine accanalyze(iuptype,iupdstate)
+      integer ncalls, nacalls, iupdstate, iuptype
       common/updstats/ncalls(5),nacalls(5)
       ncalls(5)=ncalls(5)+1
       nacalls(5)=nacalls(5)+iupdstate
@@ -201,6 +208,7 @@
       integer function updtch2(iiii,bbbb)
       integer iiii
       double precision bbbb,curprob, grnd,up2bmax,up2bmin
+
       common/updtparam/up2bmax,up2bmin
       curprob=(bbbb-up2bmin)/(up2bmax-up2bmin)
       if (grnd().lt.curprob) then
@@ -210,6 +218,7 @@
       endif
       end
       block data updtchs
+      integer ncalls, nacalls
       double precision up2bmax, up2bmin
       common/updtparam/up2bmax,up2bmin
       data up2bmax,up2bmin/4.0d0,0.5d0/

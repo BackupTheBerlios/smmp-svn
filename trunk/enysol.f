@@ -3,30 +3,30 @@
 ! This file contains the subroutines: enysol,tessel
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
 ! **************************************************************
 
-      
+
       real*8 function enysol(nmol)
 
       include 'INCL.H'
 ! --------------------------------------------------------------
 !
 !     Double Cubic Lattice algorithm for calculating the
-!     solvation energy of proteins using 
+!     solvation energy of proteins using
 !     solvent accessible area method.
 !
 !     if nmol == 0 do solvation energy over all residues.
 ! CALLS: nursat
 !
 ! -------------------------------------------------------------
-! TODO: Check the solvent energy for multiple molecules     
+! TODO: Check the solvent energy for multiple molecules
 !     arguments
       integer nmol
-      
+
 !     functions
       integer nursat
 
@@ -40,13 +40,13 @@
       double precision rmax, shiftx, shifty, shiftz, sizey, sizez
       double precision sizes, trad, zmin, xmax, xmin, ymax, zmax
       double precision sdr, sdd, volume
-      
+
       dimension numbox(mxat),inbox(mxbox+1),indsort(mxat),look(mxat)
       dimension xyz(mxinbox,3),radb(mxinbox),radb2(mxinbox)
       logical surfc(mxpoint)
 
 !      common/ressurf/surfres(mxrs)
-      
+
       eyslh = 0.0
       eyslp = 0.0
       if (nmol.eq.0) then
@@ -60,14 +60,14 @@
       nup = iatrs2(nrshi)
       do i=nrslow,nrshi
        surfres(i) = 0.0d0
-      end do 
+      end do
 
       numat= nup - nlow + 1
 
       do i=1,mxbox+1
          inbox(i)=0
       end do
-     
+
       asa=0.0d0
       vdvol=0.0d0
       eysl=0.0d0
@@ -134,7 +134,7 @@
        print *,'enysol> bad ncbox',ncbox
        stop
       end if
-        
+
 ! Let us shift the borders to home all boxes
 
       shiftx=(dble(ndx)*diamax-sizex)/2.d0
@@ -174,8 +174,8 @@
       do i=1,ncbox
         inbox(i+1)=inbox(i+1)+inbox(i)
       end do
-         
-        
+
+
 !   Sorting the atoms by the their box numbers
 
       do i=nlow,nup
@@ -183,8 +183,8 @@
          jj=inbox(j)
          indsort(jj)=i
          inbox(j)=jj-1
-      end do   
-         
+      end do
+
 ! Getting started
 
       do iz=0,ndz-1 ! Over the boxes along Z-axis
@@ -204,7 +204,7 @@
              nex=min(ix+1,ndx-1)
              ney=min(iy+1,ndy-1)
              nez=min(iz+1,ndz-1)
-                     
+
 !  Atoms in the boxes around
 
              jcnt=1
@@ -220,8 +220,8 @@
                     end do
                end do
               end do
-             end do     
-                             
+             end do
+
              do  ia=inbox(ibox)+1,inbox(ibox+1)
                jbi=indsort(ia)
                trad=rvdw(jbi)
@@ -273,7 +273,7 @@
                       end if
                      end do
  99                  continue
-    
+
                      if(ik.gt.nnei)then
                        surfc(il)=.true.
                      end if
@@ -315,7 +315,7 @@
                  jres = nursat(jbi)
                  surfres(jres) = surfres(jres) + area
                end if
-             end do 
+             end do
            end if
           end do
          end do
@@ -340,7 +340,7 @@
       include 'INCL.H'
       character lin*80
       integer i
-!    Skipping comment lines, which begin with '!'  
+!    Skipping comment lines, which begin with '!'
       read(20,'(a)') lin
       do while(lin(1:1).eq.'!')
         read (20,'(a)') lin
@@ -351,14 +351,14 @@
       read(lin(1:5),'(i5)') npnt
 !       write(*,'(a,i5)') 'the number of points---->',npnt
 
-!    Read the surface points   
+!    Read the surface points
 
       do i=1,npnt
          read(20,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
 !          write(31,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
       end do
- 
+
       return
- 
+
       end
 

@@ -1,17 +1,17 @@
 !     **************************************************************
-!     
+!
 !     This file contains the   main (PARALLEL TEMPERING  JOBS ONLY,
 !     FOR SINGULAR PROCESSOR JOBS USE main)
-!     
+!
 !     This file contains also the subroutine: p_init_molecule
-!     
+!
 !     Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!     Shura Hayryan, Chin-Ku 
+!     Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
-!     
+!
 !     CALLS init_energy,p_init_molecule,partem_p
-!     
+!
 !     **************************************************************
       program pmain
 
@@ -20,6 +20,11 @@
       include 'incl_lund.h'
       include 'mpif.h'
 
+      double precision startwtime, group_world, error, endwtime
+
+      integer ierr, num_proc, iabin, nequi, nswp, nmes, nsave, ifrm, j
+      integer i, nml, nresi, my_pt_rank, ncalls, nacalls
+
       character*80 libdir
       character*80 in_fil,ou_fil,filebase, varfile
       character*80 fileNameMP
@@ -27,7 +32,7 @@
       character grpn*4,grpc*4
       logical newsta
 
-!c    Number of replicas 
+!c    Number of replicas
       integer num_replica
 !c    Number of processors per replica
       integer num_ppr
@@ -61,7 +66,7 @@
       call sgrnd(seed)          ! Initialize the random number generator
 
 !     =================================================== Energy setup
-      libdir='SMMP/'      
+      libdir='SMMP/'
 !     Directory for SMMP libraries
 
 !     The switch in the following line is now not used.
@@ -70,10 +75,10 @@
 !     Choose energy type with the following switch instead ...
       ientyp = 0
 !     0  => ECEPP2 or ECEPP3 depending on the value of sh2
-!     1  => FLEX 
+!     1  => FLEX
 !     2  => Lund force field
 !     3  => ECEPP with Abagyan corrections
-!     
+!
 
       sh2=.false.               ! .true. for ECEPP/2; .false. for ECEPP3
       epsd=.false.              ! .true. for  distance-dependent epsilon
@@ -105,30 +110,30 @@
       num_replica = 1      ! Number of independent replicas. The file
                             !   temperatures must have at least as many
                             !   entries
-      nequi=10              ! Number of MC sweeps before measurements 
-                            !   and replica exchanges are started 
+      nequi=10              ! Number of MC sweeps before measurements
+                            !   and replica exchanges are started
       nswp=500000           ! Number of sweeps
       nmes=10               ! Interval for measurements and replica exchange
       nsave=1000            ! Not used at the moment
-                    
-      switch = -1           ! How should the configuration be   
+
+      switch = -1           ! How should the configuration be
                             !   initialized?
-                            ! -1 stretched chain 
+                            ! -1 stretched chain
                             !  0 don't do anything
                             !  1 initialize each angle to a random value
-      
+
       ifrm=0
       ntlml = 0
 
-! Decide if and when to use BGS, and initialize Lund data structures 
+! Decide if and when to use BGS, and initialize Lund data structures
       bgsprob=0.6    ! Prob for BGS, given that it is possible
-! upchswitch= 0 => No BGS 1 => BGS with probability bgsprob 
-! 2 => temperature dependent choice 
+! upchswitch= 0 => No BGS 1 => BGS with probability bgsprob
+! 2 => temperature dependent choice
       upchswitch=1
       rndord=.true.
 !     =================================================================
 !     Distribute nodes to parallel tempering tasks
-!     I assume that the number of nodes available is an integer 
+!     I assume that the number of nodes available is an integer
 !     multiple n of the number of replicas. Each replica then gets n
 !     processors to do its energy calculation.
       num_ppr = num_proc / num_replica
@@ -138,14 +143,14 @@
 !     The current version doesn't require a separate variable j. I
 !     could just use i * num_ppr but this way it's more flexible.
       j = 0
-      do i = 1, num_replica 
-         ranks(i) = j 
+      do i = 1, num_replica
+         ranks(i) = j
          proc_range(1) = j
          proc_range(2) = j + num_ppr - 1
          proc_range(3) = 1
          call mpi_group_range_incl(group_world, 1, proc_range, group(i)
      &                              ,error)
-         write (*,*) "Assigning rank ", j, proc_range, 
+         write (*,*) "Assigning rank ", j, proc_range,
      &               "to group", group(i)
          call flush(6)
          j = j + num_ppr
@@ -166,7 +171,7 @@
       call flush(6)
       call mpi_group_incl(group_world, num_replica, ranks, group_partem,
      &                    error)
-      call mpi_comm_create(mpi_comm_world, group_partem, partem_comm, 
+      call mpi_comm_create(mpi_comm_world, group_partem, partem_comm,
      &                     error)
 
       if (partem_comm.ne.MPI_COMM_NULL) then
@@ -183,7 +188,7 @@
       if (newsta) then
          varfile = 'EXAMPLES/1bdd.var'
          call init_molecule(iabin, grpn, grpc,in_fil,varfile)
-      else 
+      else
          filebase = "conf_0000.var"
          call init_molecule(iabin, grpn, grpc,in_fil,
      &        fileNameMP(filebase, 6, 9, rep_id + 1))
@@ -219,7 +224,7 @@
       call flush(6)
       nml = 1
       call distributeWorkLoad(no, nml)
-      
+
       call partem_p(num_replica, nequi, nswp, nmes, nsave, newsta,
      &              switch, rep_id, partem_comm)
 !     ========================================  end of parallel tempering run

@@ -4,17 +4,21 @@
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
-! Corrections to ECEPP energy terms due to R. A. Abagyan et al. 
-! 
+! Corrections to ECEPP energy terms due to R. A. Abagyan et al.
+!
 ! Two terms are calculated: eyrccr and eyentr, representing respectively
-! c a term to slightly shift the backbone dihedral angle preferences in 
+! c a term to slightly shift the backbone dihedral angle preferences in
 ! the ECEPP potential slightly away from the helix region, and another
-! term to estimate the side-chain entropy from a given configuration. 
+! term to estimate the side-chain entropy from a given configuration.
 !
 !
 ! *********************************************************************
       real*8 function eyrccr(nml)
       include 'INCL.H'
+      double precision et, rsscl
+
+      integer nml, istres, indres, i, ipsi, in, ica, ic, mlvr, iphi
+
       dimension iN(mxrs),iCa(mxrs),iC(mxrs),mlvr(mxvr)
       dimension iphi(mxrs),ipsi(mxrs)
       common /lundds/iN,iCa,iC,mlvr,iphi,ipsi
@@ -33,9 +37,9 @@
          mynm=seq(i)
          call tolost(mynm)
          if ((mynm.eq.'val').or.(mynm.eq.'ile').or.
-     &           (mynm.eq.'thr')) then 
+     &           (mynm.eq.'thr')) then
             rsscl=1.0
-         else 
+         else
             rsscl=0.5
          endif
          et=et+rsscl*(1.0-sin(vlvr(ipsi(i))))
@@ -47,12 +51,16 @@
 !      print *,'***********'
       eyrccr=et
       return
-      end 
+      end
 
       subroutine init_abgn
       include 'INCL.H'
 !       dimension rsstrg(mxrs)
 !       common /abgncor/rsstrg
+      double precision xarea, estrg
+
+      integer i, istres, indres, imytyp, j
+
       dimension xarea(nrsty),estrg(nrsty)
       character mynm*4
 !      print *,'Initialization of Abagyan entropic term'
@@ -101,25 +109,29 @@
             if (rsnmcd(j).eq.mynm) imytyp=j
 !            print *,'comparing ',mynm,' with ',rsnmcd(j),imytyp
          enddo
-         if (imytyp.eq.0) then 
+         if (imytyp.eq.0) then
             print *, 'Unknown residue type ',seq(i)
             print *, 'Abagyan term strength set to 0'
             rsstrg(i)=0.0
-         else 
+         else
             rsstrg(i)=estrg(imytyp)/xarea(imytyp)
          endif
 !         print *,'residue ',i,seq(i),' type ',imytyp
-!         print *, 'strength for residue ',i,seq(i),' is ',rsstrg(i) 
+!         print *, 'strength for residue ',i,seq(i),' is ',rsstrg(i)
       enddo
       print *, 'initialized Abagyan corrections to ECEPP force field'
       end
-      
+
       real*8 function eyentr(nml)
       include 'INCL.H'
 !       dimension rsstrg(mxrs)
 !       common /abgncor/rsstrg
 !       common/ressurf/surfres(mxrs)
 !      common/bet/beta
+      double precision eentr, aars, strh
+
+      integer nml, istres, indres, i
+
       eentr=0
       if (nml.eq.0) then
          istres=irsml1(1)
@@ -135,7 +147,7 @@
          strh=rsstrg(i)
 !        The maximal burial entropies were estimated at temperature 300k
 !        The values in the array estrg are k_B * T (=300k) * Entropy
-!        Presently we need it at temperature 1/beta, so we need to 
+!        Presently we need it at temperature 1/beta, so we need to
 !        multiply the strengths in estrg with (1/beta)/(300 kelvin)
 !        300 kelvin is approximately 0.59576607 kcal/mol.
          eentr=eentr+aars*strh/(0.59576607*beta)
@@ -148,9 +160,13 @@
       eyentr=eentr
       return
       end
-      
-      real*8 function eyabgn(nml) 
+
+      real*8 function eyabgn(nml)
       include 'INCL.H'
+      double precision eyrccr, eyentr
+
+      integer nml
+
       eyabgn=eyrccr(nml)+eyentr(nml)
 !      print *,'Abagyan term = ',eyabgn
       return

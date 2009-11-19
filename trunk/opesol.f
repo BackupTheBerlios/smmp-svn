@@ -3,7 +3,7 @@
 ! This file contains the subroutines:  opesol,gdtsol
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -38,7 +38,7 @@
 
       integer ntlvr, nml, ix2, ifivr, ilavr, i, i1s, i1a, io, iv, it, ia
       integer ib, i2s, ims, i1, i2, i2a, iad, lad, ivw, j, i14
-      
+
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
      &          xfrat(mxat),yfrat(mxat),zfrat(mxat),
 
@@ -250,7 +250,7 @@
 ! .....................................................................
 
       include 'INCL.H'
-      
+
       double precision del, vlvrx, ovr, eynw, esolan, gda, gdn
 
       integer i, it, iv, nml

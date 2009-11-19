@@ -39,6 +39,9 @@
       include 'INCL.H'
 !f2py intent(in) nresi
       character*1 zim
+      double precision xphi, xpsi
+
+      integer j, nresi, i, iv, nres, nursvr
 
      
       do j=1,nresi

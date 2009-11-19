@@ -20,6 +20,10 @@
       include 'INCP.H'
 
 
+      double precision eny
+
+      integer i, nml, j
+
       eny = 0.d0
 
       do i=iatrs1(irsml1(nml)),iatrs2(irsml2(nml))

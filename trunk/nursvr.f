@@ -3,7 +3,7 @@
 ! This file contains the subroutines: nursvr, nursat
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -17,6 +17,8 @@
 !
 ! ...........................................................
       include 'INCL.H'
+
+      integer i, ifirs, ivr, j
 
       do i=ntlml,1,-1
         ifirs=irsml1(i)
@@ -43,6 +45,8 @@
 ! .......................................................
 
       include 'INCL.H'
+
+      integer i, ifirs, ilars, iat, j
 
       do i=1,ntlml
 

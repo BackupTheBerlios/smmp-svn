@@ -3,13 +3,13 @@
 ! This file contains the subroutines: enysol,tessel
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
 ! **************************************************************
 
-      
+
       real*8 function enysol(nmol)
 
       include 'INCL.H'
@@ -18,21 +18,34 @@
 ! --------------------------------------------------------------
 !
 !     Double Cubic Lattice algorithm for calculating the
-!     solvation energy of proteins using 
+!     solvation energy of proteins using
 !     solvent accessible area method.
 !
 !     if nmol == 0 do solvation energy over all residues.
 ! CALLS: nursat
 !
 ! -------------------------------------------------------------
-! TODO: Check the solvent energy for multiple molecules     
+! TODO: Check the solvent energy for multiple molecules
+      double precision startwtime, avr_x, avr_y, avr_z, xmin, ymin, zmin
+      double precision xmax, ymax, zmax, rmax, diamax, sizex, sizey
+      double precision sizez, shiftx, shifty, shiftz, boxpp, trad, dx
+      double precision dy, dz, dd, akrad, dr, xyz, radb, radb2, sdd, sdr
+      double precision area, volume, eyslsum, endwtime
+
+      integer nmol, nrslow, nrshi, nlow, nup, i, numat, inbox, j, ndx
+      integer ndy, ndz, nqxy, ncbox, mx, my, mz, nboxj, numbox, jj
+      integer indsort, iboxmin, iboxmax, ibox, iz, iy, ix, lbn, nsx, nsy
+      integer nsz, nex, ney, nez, jcnt, jz, jy, jx, jbox, ii, look, ia
+      integer jbi, nnei, ib, jtk, il, lst, ilk, ik, icount, jres, nursat
+      integer ierror, nhx, mhx, nbt, mbt
+
       dimension numbox(mxat),inbox(mxbox+1),indsort(mxat),look(mxat)
       dimension xyz(mxinbox,3),radb(mxinbox),radb2(mxinbox)
       logical surfc(mxpoint)
       integer root
 
 !       common/ressurf/surfres(mxrs)
-      real*8 tsurfres(mxrs) 
+      real*8 tsurfres(mxrs)
       startwtime = MPI_Wtime()
       root = 0
       enysolct = enysolct + 1
@@ -49,14 +62,14 @@
       nup = iatrs2(nrshi)
       do i=nrslow,nrshi
        surfres(i) = 0.0d0
-      end do 
+      end do
 
       numat= nup - nlow + 1
 
       do i=1,mxbox+1
          inbox(i)=0
       end do
-     
+
       asa=0.0d0
       vdvol=0.0d0
       eysl=0.0d0
@@ -123,7 +136,7 @@
        print *,'enysol> bad ncbox',ncbox
        stop
       end if
-        
+
 ! Let us shift the borders to home all boxes
 
       shiftx=(dble(ndx)*diamax-sizex)/2.d0
@@ -163,8 +176,8 @@
       do i=1,ncbox
         inbox(i+1)=inbox(i+1)+inbox(i)
       end do
-         
-        
+
+
 !   Sorting the atoms by the their box numbers
 
       do i=nlow,nup
@@ -172,8 +185,8 @@
          jj=inbox(j)
          indsort(jj)=i
          inbox(j)=jj-1
-      end do   
-         
+      end do
+
 !    Getting started
 !    We have to loop over ncbox boxes and have no processors available
       boxpp = 1.0 * ncbox / no
@@ -201,7 +214,7 @@
              nex=min(ix+1,ndx-1)
              ney=min(iy+1,ndy-1)
              nez=min(iz+1,ndz-1)
-                     
+
 !  Atoms in the boxes around
 
              jcnt=1
@@ -217,8 +230,8 @@
                     end do
                end do
               end do
-             end do     
-                             
+             end do
+
              do  ia=inbox(ibox)+1,inbox(ibox+1)
                jbi=indsort(ia)
                trad=rvdw(jbi)
@@ -270,7 +283,7 @@
                       end if
                      end do
  99                  continue
-    
+
                      if(ik.gt.nnei)then
                        surfc(il)=.true.
                      end if
@@ -312,19 +325,19 @@
                  jres = nursat(jbi)
                  surfres(jres) = surfres(jres) + area
                end if
-             end do 
+             end do
            end if
 !           end do
 !          end do
        end do
-      call MPI_ALLREDUCE(eysl, eyslsum, 1, MPI_DOUBLE_PRECISION, 
+      call MPI_ALLREDUCE(eysl, eyslsum, 1, MPI_DOUBLE_PRECISION,
      &      MPI_SUM,my_mpi_comm, ierror)
 !       write(*,*) 'enysol>', myrank, eysl, eyslsum
       tsurfres = surfres
-      call MPI_ALLREDUCE(tsurfres, surfres, mxrs, MPI_DOUBLE_PRECISION, 
+      call MPI_ALLREDUCE(tsurfres, surfres, mxrs, MPI_DOUBLE_PRECISION,
      &      MPI_SUM,my_mpi_comm, ierror)
       eysl = eyslsum
-      
+
       endwtime = MPI_Wtime()
       if (myrank.le.-1) then
          write (*,*) 'enysol>',myrank,enysolct,
@@ -348,9 +361,11 @@
 ! *********************
       subroutine tessel
       include 'INCL.H'
+      integer i
+
       character lin*80
 
-!    Skipping comment lines, which begin with '!'  
+!    Skipping comment lines, which begin with '!'
 
       read(20,'(a)') lin
       do while(lin(1:1).eq.'!')
@@ -362,15 +377,15 @@
       read(lin(1:5),'(i5)') npnt
 !        write(*,'(a,i5)') 'the number of points---->',npnt
 
-!    Read the surface points   
+!    Read the surface points
 
       do i=1,npnt
          read(20,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
-         
+
 !        write(31,'(3f20.10)') spoint(i,1),spoint(i,2),spoint(i,3)
       end do
- 
+
       return
- 
+
       end
 

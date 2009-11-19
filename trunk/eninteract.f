@@ -14,7 +14,12 @@
       real*8 function eninteract()
 
         include 'INCL.H'
-                
+
+      double precision cqi, xi, yi, zi, xj, yj, zj, xij, yij, zij, rij2
+      double precision rij4, rij6, rij, sr, ep
+
+      integer iml, jml, ires, jres, iat, ity, jat, jty
+
         eysmi=0.0
         eyeli=0.0
         eyvwi=0.0
@@ -41,7 +46,7 @@
                     xj=xat(jat)
                     yj=yat(jat)
                     zj=zat(jat)
-                    
+
                     xij=xat(jat)-xi
                     yij=yat(jat)-yi
                     zij=zat(jat)-zi
@@ -68,7 +73,7 @@
                       eyhbi=eyhbi+ahb(ity,jty)/(rij6*rij6)
      &                          -chb(ity,jty)/(rij6*rij4)
                     endif
-                  enddo 
+                  enddo
                 enddo
               enddo
             enddo
@@ -77,5 +82,5 @@
 
         eysmi = eyeli + eyvwi + eyhbi
         eninteract = eysmi
-        return 
-      end   
+        return
+      end

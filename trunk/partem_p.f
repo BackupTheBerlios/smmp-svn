@@ -42,10 +42,10 @@
       double precision rgy, ee, tmhb, dham, swp, wij, rd, e_final
 
       integer ifrrm, nmes, nswp, num_rep, i, j, nresi, iold, inode
-      integer intem, iv, jold, idum1, idum2, idum3, mpi_integer
-      integer mpi_comm_world, ierr, mpi_double_precision, nsw, nequi
+      integer intem, iv, jold, idum1, idum2, idum3
+      integer ierr, nsw, nequi
       integer nml, nhel, mhel, nbet, mbet, mhb, imhb, nctot, ncnat
-      integer mpi_comm_null, k1, k, nu, no1, in, jn
+      integer k1, k, nu, no1, in, jn
       
       dimension  eavm(MAX_PROC),sph(MAX_PROC),intem(MAX_PROC),
      &     inode(MAX_PROC), geavm(MAX_PROC), gsph(MAX_PROC)
@@ -224,7 +224,7 @@
             write (*,*) "Finished sweep", nsw
             call flush(6)
          endif
-         if(mod(iold,nmes).eq.0) then
+         if(mod(iold,nmes).eq.0.and.myrank.eq.0) then
             if ((rep_id + 1).eq.trackID.and.myrank.eq.0) then
                frame = iold /nmes
                filebase = "frame_00000.pdb"

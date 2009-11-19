@@ -20,8 +20,8 @@
 !
 ! ......................................................
 
-      implicit real*8 (a-h,o-z)
-
+      implicit none
+      double precision pi, pi2, d, a2, a1
       parameter (pi=3.141592653589793d0,
      &           pi2=2.d0*pi)
 
@@ -46,7 +46,8 @@
 !
 ! ......................................................
 
-      implicit real*8 (a-h,o-z)
+      implicit none
+      double precision pi, pi2, d, a1, a2
 
       parameter (pi=3.141592653589793d0,
      &           pi2=2.d0*pi)

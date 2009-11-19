@@ -3,17 +3,17 @@
 ! This file contains the subroutines: outvar
 !
 ! Copyright 2005       Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
 ! **************************************************************
- 
+
       subroutine outvar(nml,fileName)
-  
+
 !--------------------------------------------------------------------
-!       Output of variables of the current protein conformation 
-!- 
+!       Output of variables of the current protein conformation
+!-
 !       nml != 0       :     molecule index
 !       nml  = 0       :     all molecules
 !       fileName  = '' :     write to standard output
@@ -23,6 +23,8 @@
 !-------------------------------------------------------------------
 
       include 'INCL.H'
+
+      integer nml, ibegst, iout
 
       character*(*) fileName
 
@@ -48,6 +50,8 @@
       subroutine outvbs(nml, iout)
 
       include 'INCL.H'
+
+      integer nml, im1, im2, iml, i, iout, ibegst, ifivr, is, nursvr, it
 
       character mlfd*7,strg(6)*17
 

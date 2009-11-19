@@ -3,7 +3,7 @@
 ! This file contains the subroutines: opereg,gdtgbl,gdtreg
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -32,6 +32,15 @@
 
       include 'INCL.H'
       include 'INCP.H'
+
+      double precision xfvr, yfvr, zfvr, xfrvr, yfrvr, zfrvr, x1, y1, z1
+      double precision a, sa, ca, xk, yk, zk, xi, yi, zi, xji, yji, zji
+      double precision dx, dy, dz, x, y, z, xfat, yfat, zfat, xfrat
+      double precision yfrat, zfrat, xb, yb, zb, ex, ey, ez, xfiv, yfiv
+      double precision zfiv, xfriv, yfriv, zfriv
+
+      integer ntlvr, nml, ix2, ifivr, ilavr, i, ii, j, i1s, i1a, io, iv
+      integer it, ia, ib, i2s, ims, i1, i2, i2a, iad, lad, ivw, i14
 
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
      &          xfrat(mxat),yfrat(mxat),zfrat(mxat),
@@ -99,7 +108,7 @@
           zji = zatp(j) - zi
 
           eyrg = eyrg + xji**2 + yji**2 + zji**2  ! The regularization energy is just
-                                                  ! the sum over the atom distances 
+                                                  ! the sum over the atom distances
                                                   ! squared.
 
           dx = 2.d0 * xji   ! f = - dE/dR_i
@@ -302,6 +311,10 @@
 
       include 'INCL.H'
 
+      double precision del, pro, gdn, enyreg
+
+      integer ii, nml, i
+
       parameter (del=1.d-7)
 
 
@@ -338,6 +351,10 @@
 ! .................................................................
 
       include 'INCL.H'
+
+      double precision del, vlvrx, ovr, eynw, enyreg, gdn, gda
+
+      integer i, it, iv, nml
 
       parameter (del=1.d-6)
 

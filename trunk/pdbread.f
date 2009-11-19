@@ -3,7 +3,7 @@
 ! This file contains the subroutines: pdbread,pdbvars,atixpdb,getpar
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -20,10 +20,11 @@
 ! CALLS: iopfil,iendst
 ! ......................................................
 
-      implicit real*8 (a-h,o-z)
-      implicit integer*4 (i-n)
-
       include 'INCP.H'
+      
+      double precision cor
+
+      integer ier, l, iendst, lunpdb, io, iopfil, iat, i
 
 ! -------------------------- input
       character*(*) pdbfil
@@ -46,7 +47,7 @@
       if (l.gt.0) then
         lunpdb = 99
       else
-        write (*,'(a)') 
+        write (*,'(a)')
      &    ' pdbread> empty file name to read pdb-structure'
 
         return
@@ -55,7 +56,7 @@
       io=iopfil(lunpdb,pdbfil,'old','formatted')
 
       if (io.le.0) then
-        write (*,'(a,/,a)') 
+        write (*,'(a,/,a)')
      &  ' pdbread> ERROR opening file to read pdb-structure: ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -68,7 +69,7 @@
       if (l.lt.54.or.index(line(1:4),'ATOM').le.0) goto 1
 
       if ( line(17:17).ne.' ' )  then
-        write (*,'(a,/,a,/,a,/,2a)') 
+        write (*,'(a,/,a,/,a,/,2a)')
      &  ' pdbread> found alternate atom location: ',
      &  '                !',
      &  line(:l),' in file: ',pdbfil(1:iendst(pdbfil))
@@ -84,7 +85,7 @@
       read(line,10,err=2) iat,rsn,chn,rsid,(cor(i),i=1,3)
 
       if ((natp+1).gt.MXATP) then
-        write (*,'(a,i5,a,/,a)') 
+        write (*,'(a,i5,a,/,a)')
      &  ' pdbread>  >MXATP (',MXATP,') ATOM lines in PDB file ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -95,7 +96,7 @@
       if (chn.ne.chno) then      ! new chain
 
         if ((nchp+1).gt.MXCHP) then
-          write (*,'(a,i3,a,/,a)') 
+          write (*,'(a,i3,a,/,a)')
      &    ' pdbread>  >MXCHP (',MXCHP,') chains in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -104,7 +105,7 @@
         endif
 
         if ((nrsp+1).gt.MXRSP) then
-          write (*,'(a,i3,a,/,a)') 
+          write (*,'(a,i3,a,/,a)')
      &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -139,7 +140,7 @@
       elseif (rsid.ne.rsido.or.rsn.ne.rsno) then      ! new residue
 
         if ((nrsp+1).gt.MXRSP) then
-          write (*,'(a,i3,a,/,a)') 
+          write (*,'(a,i3,a,/,a)')
      &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -170,7 +171,7 @@
 
       goto 1
 
-    2 write (*,'(a,/,a,/,2a)') 
+    2 write (*,'(a,/,a,/,2a)')
      &  ' pdbread> ERROR reading ATOM line ',
      &  line(:l),
      &  ' from file ',pdbfil(1:iendst(pdbfil))
@@ -193,7 +194,7 @@
 
       else
 
-        write (*,'(a,/,a)') 
+        write (*,'(a,/,a)')
      &  ' pdbread> NO atom coordinates selected from file ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -225,6 +226,11 @@
 
       include 'INCL.H'
       include 'INCP.H'
+
+      double precision dihedr, rm, av1, av2, rmsd, h, x, y, z
+
+      integer nml, nrs, nc, irb, ire, irs, i, ii, it, i1, i2, i3, i4, j1
+      integer j2, j3, j4, inew, j, ix
 
       character res*3
       dimension rm(3,3),av1(3),av2(3),h(3)
@@ -450,6 +456,8 @@
       include 'INCL.H'
       include 'INCP.H'
 
+      integer irs, nml, i1, i2, iat, ix, i
+
       character*4 atm
 
 
@@ -475,7 +483,7 @@
                 goto 1
               endif
             enddo
-               
+
 !            write(*,'(8a)') ' pdbvars> ',atm,' not found in '
 !     #       ,chnp(nc),' ',rsidp(irs),' ',rsnmp(irs)
 
@@ -483,7 +491,7 @@
 
     1     ixatp(iat)=ix
 
-        enddo   ! SMMP atoms of 'irs' 
+        enddo   ! SMMP atoms of 'irs'
       enddo   ! residues
 
       return
@@ -493,12 +501,17 @@
 
       include 'INCL.H'
 
+      double precision tol, h1, h2, h3, x1, x2, x3, d, z1, z2, z3, y1
+      double precision y2, y3, yp1, yp2
+
+      integer i1, nml, i2, i3, i
+
       parameter (TOL = 1.d-12)
 
 ! Obtain molecule-fixed system (J,K,L) for 1st 3 bb-atoms,
 ! -> determine global parameters: shifts dX,dY,dZ
 ! & angles alpha,beta,gamma [rad], put into 'gbpr'
-! 
+!
 ! CALLS: none
 !
 
@@ -546,7 +559,7 @@
       y1=z2*x3-z3*x2
       y2=z3*x1-z1*x3
       y3=z1*x2-z2*x1
-      
+
       if ( ( 1.d0 - abs(y3) ) .gt. TOL )  then       ! ============ |beta| < PI/2
 
 ! ----------------------------------------------- Y'

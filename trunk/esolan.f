@@ -3,7 +3,7 @@
 ! This file contains the subroutines: esolan
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -13,10 +13,10 @@
 
 ! -----------------------------------------------------------------
 !
-! Calculates the solvation energy of the protein with 
-! solavtion parameters model E=\sum\sigma_iA_i. 
+! Calculates the solvation energy of the protein with
+! solavtion parameters model E=\sum\sigma_iA_i.
 ! The solvent accessible surface area per atom
-! and its gradients with respect to the Cartesian coordinates of 
+! and its gradients with respect to the Cartesian coordinates of
 ! the atoms are calculated using the projection method described in
 !
 !            J Comp Phys 26, 334-343, 2005
@@ -24,10 +24,10 @@
 ! USAGE: eysl=esolan(nmol)-Returns the value of the solvation energy
 !
 ! INPUT: nmol - the order number of the protein chain.
-!      The atomic coordinates, radii and solvation parameters  
+!      The atomic coordinates, radii and solvation parameters
 !      are taken from the global arrays of SMMP
 !
-! OUTPUT: global array gradan(mxat,3) contains the gradients of 
+! OUTPUT: global array gradan(mxat,3) contains the gradients of
 !         solvation energy per atom
 !         local array as(mxat) contains accessible surface area per atom
 !
@@ -41,31 +41,31 @@
 ! TODO Test the solvent energy for multiple molecules
 
       include 'INCL.H'
-      
-      
+
+
       integer nmol, ks0, ks2
 Cf2py intent(in) nmol
-      
+
       parameter (ks0=mxat*(mxat+1))
       parameter (ks2=mxat+mxat)
 ! Functions
       real*8 grnd
 
       integer neib, neibp, ivrx, iv, ial, i, ij, j, iii, idi,ivr, ifu,
-     &          ita2, ita3, ine, kk, j2, jkk, jjj, jj, jk, k, l, ll, 
+     &          ita2, ita3, ine, kk, j2, jkk, jjj, jj, jk, k, l, ll,
      &          nb, numat, nyx
       real*8 vertex, ax, pol, as, ayx, ayx1, probe, dd, ddat, dadx, gp,
      &          dalp,dbet, daalp, dabet, vrx, dv, dx, dy, dz, dt, di,
-     &          dii, ss, dta, dtb, di1, di2, gs, xold, yold, zold, 
+     &          dii, ss, dta, dtb, di1, di2, gs, xold, yold, zold,
      &          energy, sss, a1, a, ab1, a2, aa, ac2, ac1, ab2, am2,
      &          am, aia, ak, alp, am1, ap1, amibe, amabe, amaal, amial,
      &          ang, D, ddp, cf, b2, arg2, arg1, ap2, b, b1, b2c2, ca,
      &          ba, bcd, bc, bet, c1, c, c2, cc, sfcg, caba, cg, cfsg,
      &          cfcg, daba, ct, cs, d1, d2, dbe, dal, dcotbma, dcbet,
-     &          dcalp, dcbetmalp, dcbetpalp, ddp2, div, dsbetmalp, 
-     &          dsalp, dsbet, yy, dsbetpalp, enr, p1, p2, r42, r22, 
+     &          dcalp, dcbetmalp, dcbetpalp, ddp2, div, dsbetmalp,
+     &          dsalp, dsbet, yy, dsbetpalp, enr, p1, p2, r42, r22,
      &          r22p, r2, pom, prob, r, r42p, ratom, rr, s, sfsg, sf,
-     &          sg, vv1, t, ufi, tt, uga, uv, vv, vv2, wv, xx, xv, yv, 
+     &          sg, vv1, t, ufi, tt, uga, uv, vv, vv2, wv, xx, xv, yv,
      &          zz, zv
       dimension neib(0:mxat),neibp(0:mxat),ivrx(ks0)
       dimension vertex(ks0,4),ax(ks0,2),
@@ -77,36 +77,36 @@ Cf2py intent(in) nmol
       dimension xold(-1:mxat),yold(-1:mxat),zold(-1:mxat)
       integer ta2(0:mxat),ta3(0:mxat),fullarc(0:mxat),al(0:ks2)
       real*8 neibor(mxat,4)
-      
+
       real*8, dimension(:, :, :), allocatable :: grad
-      
+
       allocate(grad(mxat, mxat, 3))
-      
-      
+
+
 !     open(3,file='solvation.dat')! Output file with solvation data
 
       energy=0.0d0 ! Total solvation energy
       sss=0.0d0 ! Total solvent accessible surface area
       if (nmol.eq.0) then
          numat=iatrs2(irsml2(ntlml))-iatrs1(irsml1(1))+1 ! Number of atoms
-      else 
+      else
          numat=iatrs2(irsml2(nmol))-iatrs1(irsml1(nmol))+1 ! Number of atoms
       endif
 
       do i=1,numat
         do j=1,3
-         gradan(i,j)=0.0d0 
+         gradan(i,j)=0.0d0
       end do
       end do
 
       do i=1,numat
          xold(i)=xat(i)! Redefine the coordinates just for safety
-         yold(i)=yat(i)! 
-         zold(i)=zat(i)! 
-      pol(i)=rvdw(i)*rvdw(i)!The water radius is already added in 'main' 
+         yold(i)=yat(i)!
+         zold(i)=zat(i)!
+      pol(i)=rvdw(i)*rvdw(i)!The water radius is already added in 'main'
       As(i)=pi4*pol(i)! Initially the whole surface of the atom is accessible.
       end do
-      
+
              do iii=1,numat
               do jjj=1,numat
                 grad(iii,jjj,1)=0.d0
@@ -119,10 +119,10 @@ Cf2py intent(in) nmol
 !   Start the computations *
 !***************************
 
-      do 1 i=1,numat ! Lop over atoms "i"           
+      do 1 i=1,numat ! Lop over atoms "i"
 ! ----------------------------------------------------
-         
-       R=rvdw(i) 
+
+       R=rvdw(i)
        jj=0
         do j=1,numat !Find the neighbours of "i"
        if(i.ne.j) then
@@ -131,7 +131,7 @@ Cf2py intent(in) nmol
        if(ddp.lt.1e-10) then
          write(*,*)'ERROR in data: centres of two atoms coincide!'
          write(*,*)i,j,xold(i),yold(i),zold(i),rvdw(i),
-     &                   xold(j),yold(j),zold(j),rvdw(j) 
+     &                   xold(j),yold(j),zold(j),rvdw(j)
          stop 'Centres of atoms coincide!'
        endif
        ddp=dsqrt(ddp)
@@ -145,7 +145,7 @@ Cf2py intent(in) nmol
        endif
          end if
          end do!Neighbours
-       
+
        neib(0)=jj   ! The number of neighbors of "i"
 
        if(neib(0).eq.0) goto 1 !Finish the atom i if it doesn't have neighbors
@@ -196,7 +196,7 @@ Cf2py intent(in) nmol
 !       generate grndom numbers
 !
         uga=grnd() ! Random \gamma angle
-        ufi=grnd() ! Random \pi angle 
+        ufi=grnd() ! Random \pi angle
         uga=pi*uga/2
         ufi=pi*ufi/2
          cf=dcos(ufi)
@@ -218,8 +218,8 @@ Cf2py intent(in) nmol
          if(ddp2.lt.ddp) ddp=ddp2
         end do
       end do
-!       
-      
+!
+
        if(jjj.ne.0) then ! Rotation is necessary
          sfsg=sf*sg
          sfcg=sf*cg
@@ -242,7 +242,7 @@ Cf2py intent(in) nmol
 !      a*(t^2+s^2)+b*t+c*s+d=0 are calculated (see the reference article)
       do jj=1,neib(0)
       j=neib(jj)
-       neibor(j,1)=(ddat(j,2))**2+(ddat(j,3))**2+      
+       neibor(j,1)=(ddat(j,2))**2+(ddat(j,3))**2+
      &            (ddat(j,4)-R)**2-pol(j)           ! a
         neibor(j,2)=-pom*ddat(j,2)                  ! b
         neibor(j,3)=-pom*ddat(j,3)                  ! c
@@ -258,7 +258,7 @@ Cf2py intent(in) nmol
        k=neib(0)
        do while(k.gt.1)               ! B
         k=k-1
-! Analyse mutual disposition of every pair of neighbours                                                      
+! Analyse mutual disposition of every pair of neighbours
         do 13 L=neib(0),k+1,-1        ! A
 
          if(neibor(neib(k),1).gt.0d0.and.neibor(neib(L),1).gt.0d0) then ! 03 a01
@@ -282,7 +282,7 @@ Cf2py intent(in) nmol
            goto 12
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).le.      ! a01 02
      &    -dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-! The circle neib(k) encloses circle neib(L) and the later is discarded 
+! The circle neib(k) encloses circle neib(L) and the later is discarded
            neib(0)=neib(0)-1
            do j=L,neib(0)
             neib(j)=neib(j+1)
@@ -325,7 +325,7 @@ Cf2py intent(in) nmol
            goto 11
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).ge.  ! a03 02
      &      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-! Don't exclude neib(k) 
+! Don't exclude neib(k)
            neib(0)=neib(0)-1
            do j=k,neib(0)
             neib(j)=neib(j+1)
@@ -369,7 +369,7 @@ Cf2py intent(in) nmol
            goto 12
           elseif(D.le.0d0.and.dsqrt((b1-b2)**2+(c1-c2)**2).ge.   ! a07 02
      &      dsqrt(b2*b2+c2*c2-4d0*d2)+dsqrt(b1*b1+c1*c1-4d0*d1)) then
-! discard the circle neib(L) 
+! discard the circle neib(L)
            neib(0)=neib(0)-1
            do j=L,neib(0)
             neib(j)=neib(j+1)
@@ -384,7 +384,7 @@ Cf2py intent(in) nmol
            p1=(c1-c2)*pom
            p2=(b1-b2)*pom
 !-- Assign t and s coordinates and the order number of circles
-           vertex(iv,1)=(t+p1)/am 
+           vertex(iv,1)=(t+p1)/am
            vertex(iv,2)=(s-p2)/am
            vertex(iv,3)=neib(k)
            vertex(iv,4)=neib(L)
@@ -393,7 +393,7 @@ Cf2py intent(in) nmol
            vertex(iv,2)=(s+p2)/am
            vertex(iv,3)=neib(k)
            vertex(iv,4)=neib(L)
-!--  
+!--
           endif                                                 ! 10
 
          elseif(neibor(neib(k),1).lt.0d0.and.neibor(neib(L),1).lt.0d0) ! a09
@@ -490,7 +490,7 @@ Cf2py intent(in) nmol
             dal=amaal-amial
             dbe=amabe-amibe
             if(dal.lt.pi) then
-             As(i)=R22*(pi-dal)  
+             As(i)=R22*(pi-dal)
             elseif(dbe.lt.pi) then
              As(i)=R22*(pi-dbe)
             else
@@ -509,7 +509,7 @@ Cf2py intent(in) nmol
         neibp(j)=neib(j)
        enddo
        do j=1,neib(0)
-! "iv" is the number of intersection point. 
+! "iv" is the number of intersection point.
         do k=1,iv
        if(neibp(j).eq.vertex(k,3).or.neibp(j).eq.vertex(k,4)) goto 30
         enddo
@@ -531,7 +531,7 @@ Cf2py intent(in) nmol
 ! Loop over full arcs.
        do k=1,ifu
          a=neibor(fullarc(k),1)
-         if(a.lt.0.d0) then 
+         if(a.lt.0.d0) then
           aia=-1.d0
          else
           aia=1.d0
@@ -578,7 +578,7 @@ Cf2py intent(in) nmol
          a=neibor(jk,1) ! a>0 - outer part, a<0-inner part
          ak=a*a
          daba=dabs(a)
-         if(a.lt.0d0) then 
+         if(a.lt.0d0) then
           aia=-1d0
           else
           aia=1d0
@@ -678,14 +678,14 @@ Cf2py intent(in) nmol
 
           do j=1,nyx
 
-!  
+!
 !  Escape 'bad' intersections.
            if(dabs(ayx1(j+1)-ayx1(j)).lt.1d-8) goto 40
 
            prob=(ayx1(j)+ayx1(j+1))/2.d0
            ap1=ct+rr*dcos(prob) ! The middle point of the arc.
            ap2=cs+rr*dsin(prob)
-! Verify if the middle point belongs to a covered part. 
+! Verify if the middle point belongs to a covered part.
 ! If yes then omit.
            do ij=1,ial
           if(neibor(al(ij),1)*(ap1*ap1+ap2*ap2)+neibor(al(ij),2)*ap1+
@@ -753,14 +753,14 @@ Cf2py intent(in) nmol
              dabet(2)=(a*ab2-ak*b2+wv*daba*a2*dcbet)/am2
              dabet(3)=(a*ac2-ak*c2+wv*daba*a2*dsbet)/am2
              dabet(4)=(2d0*ak*a2)/am2
-               dv(2)=R42*b*vv1      
-               dv(3)=R42*c*vv1      
-               dv(4)=(d-R42*a)*vv1      
-               dv(1)=-dv(4)*R42      
-               dx(1)=R42*vv1-(d+R42*a)*dv(1)*vv2      
-             dx(2)=-(d+R42*a)*dv(2)*vv2      
-             dx(3)=-(d+R42*a)*dv(3)*vv2      
-             dx(4)=1d0*vv1-(d+R42*a)*dv(4)*vv2      
+               dv(2)=R42*b*vv1
+               dv(3)=R42*c*vv1
+               dv(4)=(d-R42*a)*vv1
+               dv(1)=-dv(4)*R42
+               dx(1)=R42*vv1-(d+R42*a)*dv(1)*vv2
+             dx(2)=-(d+R42*a)*dv(2)*vv2
+             dx(3)=-(d+R42*a)*dv(3)*vv2
+             dx(4)=1d0*vv1-(d+R42*a)*dv(4)*vv2
              dy(1)=(-2d0*d+4d0*R42*a)/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
      &             R42*ak)*(aia*vv+daba*dv(1))/ak*vv2
                dy(2)=2d0*b/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
@@ -768,7 +768,7 @@ Cf2py intent(in) nmol
                dy(3)=2d0*c/daba*vv1-(b*b+c*c-2d0*a*d+2d0*
      &             R42*ak)*aia*dv(3)/a*vv2
                dy(4)=-2.d0*a/daba*vv1-(b*b+c*c-2.d0*a*d+2.d0*
-     &             R42*ak)*aia*dv(4)/a*vv2      
+     &             R42*ak)*aia*dv(4)/a*vv2
              dz(1)=-2d0*d/wv/a*vv1-wv*(vv+a*dv(1))/ak*vv2
              dz(2)=b/wv/a*vv1-wv*dv(2)/a*vv2
              dz(3)=c/wv/a*vv1-wv*dv(3)/a*vv2
@@ -819,13 +819,13 @@ Cf2py intent(in) nmol
              dii(4,1)=dii(1,1)*R42
              dii(4,2)=dii(1,2)*R42
              dii(4,3)=2d0*(ddat(jk,4)+R)*R42
-             
+
              do idi=1,3
               grad(i,jk,idi)=grad(i,jk,idi)+
      &                   di(1)*dii(1,idi)+di(2)*dii(2,idi)+
      &                   di(3)*dii(3,idi)+di(4)*dii(4,idi)
 
-             enddo             
+             enddo
              do idi=1,4
                dta(idi)=5d-1*daalp(idi)*(((yv-zv*((-b*dsbetpalp
      &                  +c*dcbetpalp)*dsbetmalp+
@@ -837,7 +837,7 @@ Cf2py intent(in) nmol
      &                dcbetmalp))/dsbetmalp**2))
              di1(idi)=R2*(aia*daalp(idi)-4d0*xv*dta(idi)/(4d0+tt*tt))
             di2(idi)=R2*(-aia*dabet(idi)-4d0*xv*dtb(idi)/(4d0+tt*tt))
-             enddo             
+             enddo
 
              dii(1,1)=2d0*ddat(kk,2)
              dii(1,2)=2d0*ddat(kk,3)
@@ -865,7 +865,7 @@ Cf2py intent(in) nmol
 
 40           continue
           enddo
-         
+
          else ! analyse the case with lines (not necessary after rotation).
 
            ang=datan2(b,c)
@@ -919,7 +919,7 @@ Cf2py intent(in) nmol
             probe(j+1)=(ayx1(j)+ayx1(j+1))/2d0
            enddo
            probe(nyx+1)=ayx1(nyx)+1d0
-           
+
 
            bc=b*b+c*c
            cc=dsqrt(R42*(bc)+d*d)
@@ -959,7 +959,7 @@ Cf2py intent(in) nmol
            As(i)=As(i)+R22*d*(pi/2d0-datan(arg1/cc))/cc
 22           continue
             endif
-         enddo       
+         enddo
 11      continue
 
 !
@@ -1016,11 +1016,11 @@ Cf2py intent(in) nmol
 
 111   continue
 
-!     write(3,*)'   No   Area    sigma   Enrg    gradx   grady',     
+!     write(3,*)'   No   Area    sigma   Enrg    gradx   grady',
 !    & '   gradz   Rad    Atom'
 !     write(3,*)
 
-      
+
       do i=1,numat
         enr=As(i)*sigma(i)
         energy=energy+enr
@@ -1037,7 +1037,7 @@ Cf2py intent(in) nmol
 !     write(3,*)'Total solvation energy: ',energy
 
       esolan=sss
-      
+
       deallocate(grad)
 !     close(3)
       return
@@ -1045,5 +1045,5 @@ Cf2py intent(in) nmol
 100   format(20i4)
 200   format(2i4,3f16.6)
 700   format(i5,7f8.3,5x,a4)
-         
+
       end

@@ -3,7 +3,7 @@
 ! This file contains the subroutines: mincjg
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -39,8 +39,13 @@
 !           = 4: two consecutive line searches failed to reduce F
 ! ....................................................................
 
-      implicit real*8 (a-h,o-z)
-      implicit integer*4 (i-n)
+      double precision amf, tol, eps, gsqrd, fmin, f, t, g, ga, d, xa, x
+      double precision gsq2, gnew, dfpr, stmin, fuit, gdit, gt, gdmi
+      double precision sbound, stepch, step, wo, sum, fch, acur, ddspln
+      double precision gspln, beta, gama, yt, dt, gamden, di
+
+      integer mxfcon, maxlin, mxn, ier, iter, iterfm, iterrs, nfun
+      integer nfopt, i, n, nfbeg, iretry, maxfun
 
       parameter (AMF = 10.d0,
      &           MXFCON = 2,
@@ -101,7 +106,7 @@
       stmin = 0.d0
 
     2 step = stmin + stepch
-      wo = 0.d0 
+      wo = 0.d0
 
       do i=1,n
         t = stepch * d(i)
@@ -181,7 +186,7 @@
       endif
 
       if ( fch .ne. 0.d0 )  ddspln = ddspln + (wo + wo) / stepch
- 
+
       if ( gdmi .eq. 0.d0 )  goto 6
 
       if ( nfun .le. (nfbeg + 1) )  goto 4

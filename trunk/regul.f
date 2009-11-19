@@ -3,13 +3,13 @@
 ! This file contains the subroutines: regul
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
 ! **************************************************************
 
-      
+
       subroutine regul(nml, iter, nsteps, acc)
 
 ! ----------------------------------------------------------
@@ -25,11 +25,15 @@
 
       include 'INCL.H'
       include 'INCP.H'
-      
+
 !f2py intent(in) nml
 !f2py intent(in) iter
 !f2py intent(in) nsteps
 !f2py intent(in) acc
+
+      double precision acc, rm, av1, av2, rmsd, dn
+
+      integer nsteps, nml, nrs, i, n, iter, it
 
       dimension rm(3,3),av1(3),av2(3)
       logical ishy(mxvr),fxvro(mxvr)
@@ -59,7 +63,7 @@
 ! --------------------------------------- fix vars. defined in PDB
 
 
-      do i = ivrml1(nml),nvrml(nml) 
+      do i = ivrml1(nml),nvrml(nml)
         fxvro(i) = fxvr(i)  ! save
         if (isrfvr(i)) fxvr(i) = .true.  ! fix vars. defined in ref.str.
       enddo  ! vars.
@@ -76,7 +80,7 @@
       write(*,*) ' '
       call cnteny(nml)
 
-      do i = ivrml1(nml),nvrml(nml) 
+      do i = ivrml1(nml),nvrml(nml)
         fxvr(i) = fxvro(i)  ! restore
       enddo  ! vars.
       ireg = 1
@@ -85,7 +89,7 @@
       wtrg = 1.d0
       wtey = 0.d0
 
-      n=iter            
+      n=iter
       dn=1.d0/dble(n)
 
       do it = 1,n

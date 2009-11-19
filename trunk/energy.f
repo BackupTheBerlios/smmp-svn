@@ -3,7 +3,7 @@
 ! This file contains the subroutines: energy, enyinternal
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -21,8 +21,13 @@
 ! -------------------------------------------------
 
       include 'INCL.H'
+      double precision esm, teysl, enyshe, enyflx, enylun, enyreg
+      double precision enysol, esolan, exvlun, eyabgn, eninteract
+
+      integer i
+
       double precision teysm, teyel, teyvw, teyhb, teyvr
-!      print *,'energy function with ientyp  = ',ientyp   
+!      print *,'energy function with ientyp  = ',ientyp
       esm = 0.d0
       teysm = 0.d0
       teyel = 0.d0
@@ -31,7 +36,7 @@
       teyvr = 0.d0
       teysl = 0.d0
 
-      do i = 1,ntlml  
+      do i = 1,ntlml
          eysm=0
          eyel=0
          eyvr=0
@@ -43,7 +48,7 @@
 
         if (ientyp.eq.0.or.ientyp.eq.3) then
           esm=esm+enyshe(i)
-        else if (ientyp.eq.1) then 
+        else if (ientyp.eq.1) then
           esm=esm+enyflx(i)
         else if (ientyp.eq.2) then
            esm=enylun(i)
@@ -56,17 +61,17 @@
         if (ientyp.eq.2) then
 !     The Lund term stores the hydrophobicity energy in eysl
            teysl = teysl + eysl
-        else 
+        else
 !     .. and the excluded volume term in eyvw, which is calculated once.
            teyvw = teyvw + eyvw
         endif
 
-        if (ireg.eq.1)  eyrg=enyreg(i)        
+        if (ireg.eq.1)  eyrg=enyreg(i)
 
       enddo
 
-      if (ientyp.ne.2) then 
-!     Don't touch eysl if using Lund potential, as enylun stores 
+      if (ientyp.ne.2) then
+!     Don't touch eysl if using Lund potential, as enylun stores
 !     its hydrophobicity term there.
          if (itysol.gt.0) then
             esm=esm+enysol(0)
@@ -78,18 +83,18 @@
          else
             eysl=0.d0
          endif
-      else 
+      else
 !     Add excluded volume term and save it in eyvw
          esm=esm+exvlun(0)
          teyvw = teyvw+eyvw
       endif
 
-! The Abagyan entropic corrections depend on the area exposed to the 
+! The Abagyan entropic corrections depend on the area exposed to the
 ! solvent for each residue. So, this term has to be evaluated after the
 ! solvent term.
       eyab=0.0
       if (ientyp.eq.3) then
-         do i = 1,ntlml  
+         do i = 1,ntlml
             eyab=eyab+eyabgn(i)
          enddo
       endif
@@ -102,7 +107,7 @@
       eyhb = teyhb
       eyvr = teyvr
       eysl = teysl
-      
+
       if (ientyp.ne.2) then
 !     This is temporary. eninteract() does not yet know how to calculate
 !     interactions using the Lund potential.
@@ -115,7 +120,7 @@
 
 !c Calculates the internal energy for a single molecule.
 !  All the partial energies are thus set to their values for molecule
-!  nml. 
+!  nml.
 !
 !  @param nml the ID of the molecule
 !  @return internal energy of a single molecule
@@ -124,11 +129,16 @@
       real*8 function enyinternal(nml)
 
 !f2py intent(in) nml
-      
+
       include 'INCL.H'
+      double precision esm, enyshe, enyflx, enylun, enyreg, enysol
+      double precision esolan, exvlun, eyabgn
+
+      integer nml, i
+
       esm = 0.d0
 
-      call setvar(nml,vlvr)  
+      call setvar(nml,vlvr)
 
       if (ientyp.eq.0.or.ientyp.eq.3) then
         esm=esm+enyshe(nml)
@@ -148,10 +158,10 @@
          else
             eysl=0.d0
          endif
-      else 
+      else
          esm=esm+exvlun(nml)
       endif
-! The Abagyan entropic corrections depend on the area exposed to the 
+! The Abagyan entropic corrections depend on the area exposed to the
 ! solvent for each residue. So, this term has to be evaluated after the
 ! solvent term.
       eyab=0.0

@@ -4,7 +4,7 @@
 !                                     jacobi,rmsinit
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -25,6 +25,10 @@
       include 'INCP.H'
 !
 ! Input
+      double precision xrf, yrf, zrf, rm, av1, av2, rssd
+
+      integer nml, ir1, ir2, ixat, isl
+
       dimension ixat(mxat),xrf(mxatp),yrf(mxatp),zrf(mxatp)
 ! Local
       dimension rm(3,3),av1(3),av2(3)
@@ -56,11 +60,16 @@
 ! CALLS:   fitmol [S.K.Kearsley, Acta Cryst. 1989, A45, 208-210]
 !
 !      NB  uncomment last lines in 'fitmol' to return coordinates
-!          in 'x2' after fitting the ref. str. onto SMMP structure 
+!          in 'x2' after fitting the ref. str. onto SMMP structure
 ! ----------------------------------------------------------------
 
       include 'INCL.H'
       include 'INCP.H'
+      
+      double precision x1, x2, xrf, yrf, zrf, rm, av1, av2, rmsd
+
+      integer nml, nr, na, n, im, ir, ia, ir1, ir2, ix, ixat, isl
+
 
 !-------------------------------------------------------- input
       dimension ixat(mxat),xrf(mxatp),yrf(mxatp),zrf(mxatp)
@@ -146,12 +155,17 @@
 ! CALLS: jacobi
 ! .......................................................
 !f2py intent(out) rmsd
-                    
+
       include 'INCL.H'
 !      implicit real*8 (a-h,o-z)
 !      implicit integer*4 (i-n)
- 
+
 ! ------------------------------------------- input/output
+      double precision dn, a1, a2, x1, x2, q, dm, dp, dxm, dym, dzm, dxp
+      double precision dyp, dzp, e, v, em, rmsd, rm
+
+      integer n, i, j, ndim4, im
+
       dimension x1(3,mxat),x2(3,mxat)
 ! -------------------------------------------------- local
       dimension e(4),q(4,4),v(4,4),dm(3),dp(3),a1(3),a2(3),rm(3,3)
@@ -269,8 +283,10 @@
 
 !f2py intent(out) d
 !f2py intent(out) v
+      integer nmax
+
       parameter (NMAX=500)
-      
+
       integer n,nrot,i,ip,iq,j
 
 
@@ -397,7 +413,7 @@
       subroutine rmsinit(nml,string)
 !
 !------------------------------------------------------------------------------
-! Reads in pdb-file 'string' into INCP.H and initalizes 
+! Reads in pdb-file 'string' into INCP.H and initalizes
 ! the files that 'rmdsopt' needs to calculate the rmsd
 ! of a configuration with the pdb-configuration
 !
@@ -408,8 +424,10 @@
       include 'INCL.H'
       include 'INCP.H'
 
+      integer i, nml, ier
+
       character string*(*)
- 
+
       if(string.eq.'smmp') then
 !
 ! Compare with a smmp-structure
@@ -427,7 +445,7 @@
 ! Reference structure is read in from pdb-file
 !
          call pdbread(string,ier)
-         if(ier.ne.0) stop 
+         if(ier.ne.0) stop
          call atixpdb(nml)
 !
       end if

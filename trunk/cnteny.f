@@ -3,7 +3,7 @@
 ! This file contains the subroutines: cnteny
 !
 ! Copyright 2005       Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -19,7 +19,14 @@
 
       include 'INCL.H'
 
-      parameter (coeycn=2.d0)  ! min. cont. energy to display 
+      double precision coeycn, coey, eyatcn, cqi, xi, yi, zi, xij, yij
+      double precision zij, rij2, rij4, rij6, rij, sr, ep, ey
+
+      integer ieyel, ntlvr, nml, iat1, nat, i, ifivr, i1s, io, iv, ia
+      integer it, ic, i2s, ims, i1, i2, ii, ity, ivw, j, jj, jty, i14
+      integer nbc, ir, nursat, idxat
+
+      parameter (coeycn=2.d0)  ! min. cont. energy to display
 
       dimension eyatcn(mxat),idxat(mxat)
 

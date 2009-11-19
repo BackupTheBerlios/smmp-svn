@@ -3,13 +3,13 @@
 ! This file contains the subroutines: partem_s
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
 !
 ! **************************************************************
-      
+
       subroutine partem_s(num_rep, nequi, nswp, nmes, nsave, newsta,
      &                     switch)
 !
@@ -19,6 +19,13 @@
 ! CALLS: addang,energy,metropolis,rgyr,setvar,
 !
       include 'INCL.H'
+      
+      double precision gasc, dv, grnd, vr, addang, energ, energy, acz
+      double precision ee, rgy, temp0, delta, ra
+
+      integer i, j, nml, k, nstart, iv, nsw, iswitch, k1, num_rep1, nu
+      integer in, jn
+
       external can_weight
 ! TODO Store global coordinates in pgbpr
       logical :: newsta
@@ -43,7 +50,7 @@
 !     pbe:    inverse temperatures for each replica
 !     ipoi:   Points to replica ipoi(k) which is currently
 !             at inverse temperature pbe(k)
-!     eol:    energy of each replica 
+!     eol:    energy of each replica
 !     acc:    accepatance rate of each replica
 !
 !     beta:   inverse temperature of single replica
@@ -54,7 +61,7 @@
       allocate(pgbpr(6, ntlml, num_rep))
       allocate(temp(num_rep), pbe(num_rep), eol(num_rep))
       allocate(acc(num_rep), ipoi(num_rep))
-      
+
       if (.not.(allocated(coor_G).and.allocated(temp)
      &          .and. allocated(pbe).and. allocated(eol)
      &          .and. allocated(acc).and. allocated(ipoi))) then
@@ -76,7 +83,7 @@
          acc(i) = 0.0
          ipoi(i) = 0
       end do
-        
+
 
 !     READ IN TEMPERATURES
       open(11, file='temperatures', status='old')
@@ -89,7 +96,7 @@
       close(11)
 
       open(13,file='time.d',status='unknown')
-      
+
       if(.not.newsta) then
 ! READ START Values
          open(15,file='par_R.in',form='unformatted')
@@ -121,9 +128,9 @@
                do j = 1, 6
                   pgbpr(j, nml, i) = gbpr(j, nml)
                end do
-            end do            
+            end do
          end do
-      
+
 !      Equilibrization for each replica (No replica exchange move)
          do k=1,num_rep
             beta=pbe(k)
@@ -140,7 +147,7 @@
             do nsw=1,nequi
                CALL METROPOLIS(energ,acz,can_weight)
             end do
-            write(*,*) 'Start energy after equilibration for replica:', 
+            write(*,*) 'Start energy after equilibration for replica:',
      &                 k, energ
             do i=1,nvr
                iv = idvr(i)
@@ -154,7 +161,7 @@
             eol(k) = energ
          end do
       end if
-            
+
 ! Now begins the simulation with Multiple Markov Chains
       iswitch = 1
       do nsw=nstart,nswp
@@ -175,7 +182,7 @@
                call setvar(i,vlvr)
             end do
             CALL METROPOLIS(energ,acz,can_weight)
-! 
+!
             if(mod(nsw,nmes).eq.0) then
 ! Measure and store here all quantities you want to analyse later
 ! ee: end-to-end distance
@@ -194,7 +201,7 @@
                   pgbpr(j, nml, k) = gbpr(j, nml)
                end do
             end do
-        
+
             eol(k) = energ
             acc(k) = acz
             acz = 0.0d0
@@ -213,7 +220,7 @@
          do i=nu,num_rep1,2     ! labels (inverse) temperatures
             j=i+1
             if(i.eq.num_rep) j=1
-            in=ipoi(i)      
+            in=ipoi(i)
             jn=ipoi(j)
             delta=-pbe(i)*eol(jn)-pbe(j)*eol(in)
      &         +pbe(i)*eol(in)+pbe(j)*eol(jn)

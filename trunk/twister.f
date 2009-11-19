@@ -46,7 +46,7 @@
 * Adapted to Cray T3E, Heinrich Stamerjohanns (stamer@uni-oldenburg.de)
 * May 03, 2000
 *
-* compile with: f90 -i32 -dp -o mt19937 mt19937.f 
+* compile with: f90 -i32 -dp -o mt19937 mt19937.f
 * Changes:
 *    Do not use UMASK as parameter due to restrictions of CF90
 *    instead use UMASK = -MAX_INT_32, UMASK = UMASK - 1
@@ -54,7 +54,7 @@
 *    compare y to 0.0 due to unknown bug in CF90
 *
 *    Now the T3E produces the same random number as a RS6000 running AIX
-*      
+*
 * from other programs sgrnd() must be called with integer*4
 *
 * All other programs do not need to be compiled with -i32 as long as
@@ -63,7 +63,11 @@
 ***********************************************************************
       subroutine sgrnd(seed)
 *
-      implicit integer(a-z)
+      integer seed, tmaskb, tmaskc, tshftu, tshfts, tshftt
+      integer tshftl, y
+
+      integer N, N1, mti, mt, m, mata, lmask, mag01
+      integer kk
 *
 * Period parameters
       parameter(N     =  624)
@@ -87,6 +91,7 @@
       end
 
       block data twbloks
+      integer n,n1,mt,mti
       parameter(N     =  624)
       parameter(N1    =  N+1)
       dimension mt(0:N-1)
@@ -98,7 +103,10 @@
 ************************************************************************
       double precision function grnd()
 *
-      implicit integer(a-z)
+      integer tmaskb, tmaskc, tshftu, tshfts, tshftt, tshftl, y
+
+      integer n, n1, mti, mt, m, mata, lmask, mag01, kk
+
 *
 * Period parameters
       parameter(N     =  624)

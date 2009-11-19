@@ -1,9 +1,9 @@
 ! *******************************************************************
 ! SMMP version of Anders Irback's force field, to be called the Lund
-! force field. This file contains the function enylun, which in turn 
-! calls all the terms in the energy function. The terms Bias (ebias), 
-! Hydrogen bonds (ehbmm and ehbms), Hydrophobicity (ehp) and the 
-! Excluded volume (eexvol and eloexv) are also implemented in this 
+! force field. This file contains the function enylun, which in turn
+! calls all the terms in the energy function. The terms Bias (ebias),
+! Hydrogen bonds (ehbmm and ehbms), Hydrophobicity (ehp) and the
+! Excluded volume (eexvol and eloexv) are also implemented in this
 ! file.
 !
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
@@ -12,6 +12,8 @@
       subroutine set_local_constr(ires,frst,lst,root)
       include 'INCL.H'
       include 'incl_lund.h'
+      integer iat1, iat2
+
           integer ires,frst,lst,root
           do iat1=iCa(ires)+frst,iCa(ires)+lst
              do iat2=iat1+1,iCa(ires)+lst
@@ -29,6 +31,11 @@
       subroutine init_lundff
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision eunit, csacc
+
+      integer i, j, iml, iat1, iat2, k, iat3, l, iat4, m, iat3p, irs
+      integer iatoff, iatmrg, ilp, lci
+
       character mynm*4
       logical prlvr
 
@@ -82,11 +89,11 @@
      &           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
             prlvr=.true.        ! residue i is a proline variant
             print *, 'proline variant ',mynm,i
-         else 
+         else
             prlvr=.false.
-         endif 
+         endif
 
-         if (mynm.eq.'ala') then 
+         if (mynm.eq.'ala') then
             nhpat(i)=1
             ihpat(i,1)=iCa(i)+2
          else if (mynm.eq.'val') then
@@ -192,13 +199,13 @@
 !      print *,'General excluded volume constants'
 
 !     Initialization of the connections matrix matcon(i,j). The index
-!     i runs from -mxconr to +mxconr, and j from 1 to mxat. 
+!     i runs from -mxconr to +mxconr, and j from 1 to mxat.
 !     matcon(i2-i1,i1) = 0, if the distance between atoms i1 and i2 is fixed
 !                      = 2, if atoms i1 and i2 are separated by 3 covalent
 !                           bonds and their distance can change
 !                      = 1, for all other pairs
-!     if abs(i2-i1) > mxconr, the atoms are assumed to be separated by 
-!     many bonds, and with no restriction on their distances. On a protein 
+!     if abs(i2-i1) > mxconr, the atoms are assumed to be separated by
+!     many bonds, and with no restriction on their distances. On a protein
 !     molecule made of natural amino acids, atoms with indices separated
 !     by more than 35 can not be connected by three covalent bonds.
 
@@ -227,7 +234,7 @@
                      endif
                      do m=1,nbdat(iat2)
                         iat3p=ibdat(m,iat2)
-                        if (iat3p.ne.iat3) then 
+                        if (iat3p.ne.iat3) then
                            matcon(iat4-iat3p,iat3p)=2 ! 3 covalent bonds
                            matcon(iat3p-iat4,iat4)=2 !
                         endif
@@ -254,7 +261,7 @@
             do iat2=iat1,iCa(irsml1(iml))-1
                 matcon(iat2-iat1,iat1)=0
                 matcon(iat1-iat2,iat2)=0
-            enddo 
+            enddo
             matcon(iat1-iCa(irsml1(iml))-1,iCa(irsml1(iml))+1)=2
             matcon(iCa(irsml1(iml))+1-iat1,iat1)=2
             matcon(iat1-iCa(irsml1(iml))-2,iCa(irsml1(iml))+2)=2
@@ -265,12 +272,12 @@
 
 !     Below: for certain residues, some atoms separated by 3 or more bonds
 !     do not change distance. So, the connection matrix term for such pairs
-!     should be zero. 
+!     should be zero.
 
          do irs=irsml1(iml),irsml2(iml)
             if (irs.eq.irsml1(iml)) then
                iatoff=1
-            else 
+            else
                iatoff=0
             endif
             if (irs.eq.irsml2(iml)) then
@@ -282,18 +289,18 @@
             call tolost(mynm)
             if ((mynm.eq.'pro')) then
                prlvr=.true.     ! residue i is a proline variant
-            else 
+            else
                prlvr=.false.
-            endif 
-            if ((mynm.eq.'asn')) then 
+            endif
+            if ((mynm.eq.'asn')) then
                 call set_local_constr(irs,5,9,2)
-            else if ((mynm.eq.'gln')) then 
+            else if ((mynm.eq.'gln')) then
                 call set_local_constr(irs,8,12,5)
             else if ((mynm.eq.'arg')) then
                 call set_local_constr(irs,11,19,8)
             else if ((mynm.eq.'his')) then
                 call set_local_constr(irs,5,12,2)
-            else if (mynm.eq.'phe') then 
+            else if (mynm.eq.'phe') then
                 call set_local_constr(irs,5,15,2)
             else if (mynm.eq.'tyr') then
                 call set_local_constr(irs,5,16,2)
@@ -307,7 +314,7 @@
             else if (mynm.eq.'trp') then
                 call set_local_constr(irs,5,19,2)
             else if (prlvr) then
-!           Proline. Many more distances are fixed because of the fixed 
+!           Proline. Many more distances are fixed because of the fixed
 !           phi angle
                 call set_local_constr(irs,-3,11,-3)
                 matcon(iCa(irs-1)-iCa(irs)-8,iCa(irs)+8)=0
@@ -346,18 +353,17 @@
       do iml=1,ntlml
          do iat1=iatrs1(irsml1(iml)),iatrs2(irsml2(iml))
             do iat2=iat1+1,iatrs2(irsml2(iml))
-               if (iat2-iat1.le.mxconr) then 
-                  if (matcon(iat2-iat1,iat1).eq.2) then
-                    ilp=ilp+1
-                    lcp1(ilp)=iat1
-                    lcp2(ilp)=iat2
-                  endif
+               if ((iat2-iat1.le.mxconr).and.
+     &                 matcon(iat2-iat1,iat1).eq.2) then
+                  ilp=ilp+1
+                  lcp1(ilp)=iat1
+                  lcp2(ilp)=iat2
                endif
             enddo
          enddo
 
          ilpnd(iml)=ilp
-         if (iml.lt.ntlml) then 
+         if (iml.lt.ntlml) then
             ilpst(iml+1)=ilp+1
          endif
          print *,'molecule ',iml,' lc pair range ',ilpst(iml),ilpnd(iml)
@@ -368,11 +374,14 @@
 !            print *,lci,iat1,iat2,ityat(iat1),ityat(iat2)
          enddo
       enddo
+
       print *,'finished initializing Lund force field'
       end
 
       integer function ihptype(iaa)
       include 'INCL.H'
+      integer iaa, ityp
+
       character mynm*4
       mynm=seq(iaa)
       ityp=-1
@@ -382,20 +391,24 @@
       else if ((mynm.eq.'val').or.(mynm.eq.'leu').or.(mynm.eq.'ile')
      &        .or.(mynm.eq.'met').or.(mynm.eq.'pro')) then
          ityp=2
-      else if ((mynm.eq.'phe').or.(mynm.eq.'tyr').or.(mynm.eq.'trp')) 
+      else if ((mynm.eq.'phe').or.(mynm.eq.'tyr').or.(mynm.eq.'trp'))
      &        then
          ityp=3
       endif
       ihptype=ityp
-      return 
+      return
       end
 
       real*8 function ebiasrs(irsd)
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision q1, q2, et, xij, yij, zij
+
+      integer i, iat1, irsd, j, iat2
+
       dimension q1(2),q2(2)
       data q1/-0.2,0.2/
-      data q2/0.42,-0.42/ 
+      data q2/0.42,-0.42/
 
       et=0.0
       do i=0,1
@@ -411,11 +424,15 @@
       ebiasrs=kbias*et
       return
       end
-!     Evaluates backbone backbone hydrogen bond strength for residues 
+!     Evaluates backbone backbone hydrogen bond strength for residues
 !     i and j, taking the donor from residue i and acceptor from residue j
       real*8 function ehbmmrs(i,j)
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision rdon2, racc2, evlu
+
+      integer i, j
+
       double precision r2,r4,r6,dx,dy,dz,ca,cb
       integer d1,d2,a1,a2
       d1=iN(i)
@@ -426,7 +443,7 @@
       dy=yat(a1)-yat(d2)
       dz=zat(a1)-zat(d2)
       r2=dx*dx+dy*dy+dz*dz
-      if (r2.gt.cthb2) then 
+      if (r2.gt.cthb2) then
 !         print *,'hbmm = 0 ',cthb2,r2,a1,a2,d1,d2
 !         print *,'a1,a2,d1,d2,r2 = ',a1,a2,d1,d2,r2,sighb2,cthb
          ehbmmrs=0
@@ -463,6 +480,12 @@
 !     for nml inside this function.
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision ebiasrs, shbm1, shbm2, etmp, ehbmmrs, ehp, etmp1
+      double precision xij, yij, zij, r2, r6
+
+      integer istres, nml, indres, i, j, ihpi, ihptype, ihpj, i1, i2
+      integer iat1, iat2, iatt1, iatt2
+
       character mynm*4
       logical prlvr
       eyhb=0.0   ! backbone-backbone and sidechain-backbone HB
@@ -484,9 +507,9 @@
      &           .or.(mynm.eq.'cpru').or.(mynm.eq.'prou')
      &           .or.(mynm.eq.'pron').or.(mynm.eq.'pro+')) then
             prlvr=.true.        ! residue i is a proline variant
-         else 
+         else
             prlvr=.false.
-         endif 
+         endif
 
 !     Bias, or local electrostatic term. Excluded from the list are
 !     residues at the ends of the chain, glycine and all proline variants
@@ -501,19 +524,19 @@
 !     Residue i contributes the donor, and j, the acceptor, so both i and
 !     j run over the whole set of amino acids.
 !     No terms for residue i, if it is a proline variant.
-         if (.not.prlvr) then  
+         if (.not.prlvr) then
             do j=istres,indres
-               if ((j.lt.(i-2)).or.(j.gt.(i+1))) then 
+               if ((j.lt.(i-2)).or.(j.gt.(i+1))) then
                     shbm2=1.0
                     if ((j.eq.istres).or.(j.eq.indres)) shbm2=0.5
                     etmp=ehbmmrs(i,j)
                     eyhb=eyhb+shbm1*shbm2*etmp
-                endif 
+                endif
             enddo
          endif
 !     Hydrophobicity, only if residue i is hydrophobic to start with
          ihpi=ihptype(i)
-         if (ihpi.ge.0) then 
+         if (ihpi.ge.0) then
 !        Unlike hydrogen bonds, the hydrophobicity potential is symmetric
 !        in i and j. So, the loop for j runs from i+1 to the end.
 
@@ -525,7 +548,7 @@
                   if (j.eq.(i+2)) etmp=0.5*etmp
 !                  print *, 'hydrophobicity contribution ',etmp,i,j
                   eysl=eysl+etmp
-               endif 
+               endif
             enddo
          endif
       enddo
@@ -534,7 +557,7 @@
 
 !     Local pair or third-neighbour excluded volume
 !     Numerically this is normally the term with largest positive
-!     contribution to the energy in an equilibrated stystem. 
+!     contribution to the energy in an equilibrated stystem.
 
       i1=ilpst(nml)
       i2=ilpnd(nml)
@@ -550,7 +573,7 @@
          zij=zat(iat1)-zat(iat2)
          r2=(xij*xij + yij*yij + zij*zij)
          if (r2.le.exvcut2) then
-            r6=sig2lcp(iatt1,iatt2)/r2 
+            r6=sig2lcp(iatt1,iatt2)/r2
             r6=r6*r6*r6
             etmp1=(r6*r6+asalcp(iatt1,iatt2)+bsalcp(iatt1,iatt2)*r2)
             if (etmp1.ge.0) then
@@ -559,7 +582,7 @@
             endif
             etmp=etmp+etmp1
          endif
-!         print *,'pair : ',iat1,iat2,' contribution ',etmp1 
+!         print *,'pair : ',iat1,iat2,' contribution ',etmp1
 !         print *,exvcut2,r2
       enddo
       eyvr=exvk*etmp
@@ -578,6 +601,10 @@
       real*8 function ehp(i1,i2,ihp1,ihp2)
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision b2, a2, r2min, xij, yij, zij, dtmp, ssum
+
+      integer ihp1, ihp2, ni, i1, nj, i2, i, k, j, l
+
       dimension r2min(12)
 
       b2=20.25
@@ -607,10 +634,10 @@
       enddo
       ssum=0
       do i=1,ni+nj
-         if (r2min(i).le.b2) then 
-            if (r2min(i).lt.a2) then 
+         if (r2min(i).le.b2) then
+            if (r2min(i).lt.a2) then
                ssum=ssum+1
-            else 
+            else
                ssum=ssum+(b2-r2min(i))/(b2-a2)
             endif
          endif
@@ -625,28 +652,36 @@
       include 'INCL.H'
       include 'incl_lund.h'
 !     For multi-chain systems it makes little sense to split the calculation
-!     of this term into an 'interaction part' and a contribution from 
+!     of this term into an 'interaction part' and a contribution from
 !     individual molecules. So, normally this should always be called with
 !     argument nml=0. Only for diagnostic reasons, you might want to find
-!     the contribution from one molecule in a multi-chain system assuming 
+!     the contribution from one molecule in a multi-chain system assuming
 !     there was no other molecule.
+      double precision xmin, ymin, zmin, xmax, ymax, zmax, sizex, sizey
+      double precision sizez, shiftx, shifty, shiftz, etmp, xij, yij
+      double precision zij, r2, r6, etmp1
+
+      integer nml, istat, indat, i, incell, ndx, ndy, ndz, nxy, ncell
+      integer nocccl, locccl, j, mx, my, mz, icellj, icell, jj, isort
+      integer icl, lcell, ix, iz, iy, nex, ney, nez, nsame, nngbr, jx
+      integer jy, jz, jcl, ii, ngbr, i1, iat1, i2, iat2, iatt1, iatt2
+
       dimension isort(mxat),ngbr(mxat),locccl(mxat),incell(mxcell)
       dimension icell(mxat)
       integer :: jx1, jy1, jz1
-      logical doit
 
-      if (nml.eq.0) then 
+      if (nml.eq.0) then
          istat=iatrs1(irsml1(1))
          indat=iatrs2(irsml2(ntlml))
-      else 
+      else
          istat=iatrs1(irsml1(nml))
          indat=iatrs2(irsml2(nml))
       endif
 
       eyvw=0.0
-!     The beginning part of this implementation is very similar to the 
-!     assignment of cells to the atoms during calculation of solvent 
-!     accessible surface area. So, much of that part is similar. But 
+!     The beginning part of this implementation is very similar to the
+!     assignment of cells to the atoms during calculation of solvent
+!     accessible surface area. So, much of that part is similar. But
 !     unlike the accessible surface calculations, this term is symmetric
 !     in any two participating atoms. So, the part after the assignment
 !     of cells differs even in the structure of the code.
@@ -723,11 +758,11 @@
          mz=min(int(max((zat(j)-zmin)/exvcutg,0.0d0)),ndz-1)
          icellj=mx+my*ndx+mz*nxy+1
          icell(j)=icellj
-         if (icellj.gt.mxcell) then 
+         if (icellj.gt.mxcell) then
             print *,'exvlun> bad cell index ',icellj,' for atom ',j
             stop
-         else 
-            if (incell(icellj).eq.0) then 
+         else
+            if (incell(icellj).eq.0) then
 !           previously unoccupied cell
                nocccl=nocccl+1
                locccl(nocccl)=icellj
@@ -755,7 +790,7 @@
          lcell=locccl(icl)
          ix=mod(lcell-1,ndx)
          iz = (lcell - 1) / nxy
-         iy = ((lcell - 1) - iz * nxy) / ndx 
+         iy = ((lcell - 1) - iz * nxy) / ndx
 
 c         print *,'icl=',icl,'absolute index of cell = ',lcell
 c         print *,'iz,iy,ix = ',iz,iy,ix
@@ -766,25 +801,25 @@ c     find all atoms in current cell and all its forward-going neighbours
          nsame=0
          nngbr=0
          do jx=ix,nex
-            if (jx.ge.ndx) then 
+            if (jx.ge.ndx) then
                jx1=0
-            else 
+            else
                jx1=jx
             endif
             do jy=iy,ney
-               if (jy.ge.ndy) then 
+               if (jy.ge.ndy) then
                   jy1=0
-               else 
+               else
                   jy1=jy
-               endif 
+               endif
                do jz=iz,nez
-                  if (jz.ge.ndz) then 
+                  if (jz.ge.ndz) then
                      jz1=0
-                  else 
+                  else
                      jz1=jz
                   endif
                   jcl=jx1 + ndx*jy1 + nxy*jz1 + 1
-!                  write(*,*)'jcl,jx1,jy1,jz1:', jcl,jx1,jy1,jz1
+!                  write (logString, *)'jcl,jx1,jy1,jz1:', jcl,jx1,jy1,jz1
                   do ii=incell(jcl)+1,incell(jcl+1)
 !     count the total number of neighbours
                      nngbr=nngbr+1
@@ -798,10 +833,10 @@ c     find all atoms in current cell and all its forward-going neighbours
             enddo
          enddo
 !     A few more cells need to be searched, so that we cover 13 of the 26
-!     neighbouring cells. 
+!     neighbouring cells.
 !        1
          jx=ix+1
-         if (jx.ge.ndx) jx=0 
+         if (jx.ge.ndx) jx=0
          jy=iy
          jz=iz-1
          if (jz.lt.0) jz=ndz-1
@@ -882,14 +917,9 @@ c     find all atoms in current cell and all its forward-going neighbours
                zij=zat(iat1)-zat(iat2)
                r2=(xij*xij+yij*yij+zij*zij)
 
-               if (r2.le.exvcutg2) then 
-                  doit=.false.
-                  if (abs(iat2-iat1).gt.mxconr ) then
-                    doit=.true.
-                  else if (matcon(iat2-iat1,iat1).eq.1) then
-                    doit=.true.
-                  endif
-                  if (doit) then
+               if (r2.le.exvcutg2) then
+                  if (abs(iat2-iat1).gt.mxconr.or.
+     &                 matcon(iat2-iat1,iat1).eq.1) then
                      iatt1=ityat(iat1)
                      iatt2=ityat(iat2)
                      r6=sig2exv(iatt1,iatt2)/r2
@@ -930,6 +960,10 @@ c     find all atoms in current cell and all its forward-going neighbours
       include 'INCL.H'
       include 'incl_lund.h'
 
+      double precision etmp, etmp1, xij, yij, zij, r2, r6
+
+      integer iat1, iat2, iatt1, iatt2
+
       etmp=0.0
       etmp1=0.0
       print *,'max connection radius is ',mxconr
@@ -940,7 +974,7 @@ c     find all atoms in current cell and all its forward-going neighbours
             zij=zat(iat1)-zat(iat2)
             r2=(xij*xij+yij*yij+zij*zij)
 
-            if (r2.le.exvcutg2) then 
+            if (r2.le.exvcutg2) then
                if (abs(iat2-iat1).gt.mxconr.or.
      &                 matcon(iat2-iat1,iat1).eq.1) then
                   iatt1=ityat(iat1)
@@ -950,7 +984,7 @@ c     find all atoms in current cell and all its forward-going neighbours
                   etmp1=r6*r6+asaexv(iatt1,iatt2)
      &                 +bsaexv(iatt1,iatt2)*r2
                   etmp=etmp+etmp1
-               else 
+               else
 !                  print *,'atoms ', iat1,' and ',iat2,' were close',
 !     #                 'but matcon is ',matcon(iat2-iat1,iat1)
                endif

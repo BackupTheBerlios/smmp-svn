@@ -1,40 +1,42 @@
 ! ****************************************************************
 ! Trial version implementing the semi-local conformational update
 ! BGS (Biased Gaussian Steps). This file presently contains the
-! functions initlund, bgsposs and bgs. 
+! functions initlund, bgsposs and bgs.
 !
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 ! ****************************************************************
 
 
-! Checks if it is possible to perform a BGS update starting at the 
+! Checks if it is possible to perform a BGS update starting at the
 ! variable indexed ipos. Calls: none.
       logical function bgsposs(ips)
       include 'INCL.H'
       include 'incl_lund.h'
+      integer jv, ips, iaa, nursvr, nnonfx, i
+
       logical ians
 
       jv=idvr(ips)
       iaa=nursvr(jv)
       ians=.true.
 !      print *,'evaluating bgs possibility for ',ips,nmvr(jv)
-      if (nmvr(jv).ne.'phi') then 
+      if (nmvr(jv).ne.'phi') then
 !         print *,'bgs not possible because variable name is ',nmvr(jv)
          ians=.false.
-      else if (iaa.gt.(irsml2(mlvr(jv))-3)) then 
+      else if (iaa.gt.(irsml2(mlvr(jv))-3)) then
 !         print *,'bgs impossible, residue too close to end'
 !         print *,'iaa = ',iaa,' end = ',irsml2(mlvr(jv))
          ians=.false.
-      else 
-         nnonfx=0 
+      else
+         nnonfx=0
          do i=iaa,iaa+3
-            if (iphi(i).gt.0) then 
+            if (iphi(i).gt.0) then
                if (.not.fxvr(iphi(i))) then
                   nnonfx=nnonfx+1
                endif
             endif
-            if (.not.fxvr(ipsi(i))) then 
+            if (.not.fxvr(ipsi(i))) then
                nnonfx=nnonfx+1
             endif
          enddo
@@ -51,17 +53,17 @@
       end
 
 ! Biased Gaussian Steps. Implements a semi-local conformational update
-! which modifies the protein backbone locally in a certain range of 
-! amino acids. The 'down-stream' parts of the molecule outside the 
+! which modifies the protein backbone locally in a certain range of
+! amino acids. The 'down-stream' parts of the molecule outside the
 ! region of update get small rigid body translations and rotations.
 !
-! Use the update sparingly. It is rather local, and is not of great 
+! Use the update sparingly. It is rather local, and is not of great
 ! value if we need big changes in the conformation. It is recommended
-! that this update be used to refine a structure around a low energy 
+! that this update be used to refine a structure around a low energy
 ! candidate structure. Even at low energies, if you always
-! perform BGS, the chances of coming out of that minimum are small. 
-! So, there is a probability bgsprob, which decides whether BGS or the 
-! normal single angle update is used. 
+! perform BGS, the chances of coming out of that minimum are small.
+! So, there is a probability bgsprob, which decides whether BGS or the
+! normal single angle update is used.
 !
 ! Calls: energy, dummy (function provided as argument), addang, (rand)
 !
@@ -69,13 +71,19 @@
       integer function bgs(eol1,dummy)
       include 'INCL.H'
       include 'incl_lund.h'
+      double precision grnd, xiv, bv, ab, rv, dv, a, sum, p, r1, r2
+      double precision ppsi, wfw, addang, enw, energy, wbw, rd, delta
+      double precision dummy, eol1
+
+      integer ivar, i, nph, jv, ia, nursvr, icurraa, j, k, l
+
       external dummy
       dimension xiv(8,3),bv(8,3),rv(3,3),dv(3,8,3)
       dimension ab(8), A(8,8),p(8),ppsi(8)
       double precision ovr(mxvr)
 ! Initialize
 !      print *,'using BGS on angle ',nmvr(idvr(ivar))
-      if (bgsnvar.eq.0) then 
+      if (bgsnvar.eq.0) then
          bgs=0
          goto 171
       endif
@@ -90,7 +98,7 @@
 ! Get BGS matrices based on coordinates of atoms in 4 amino acids
       do i=1,4
          icurraa=ia+i-1
-         if (iphi(icurraa).gt.0.and..not.fxvr(iphi(icurraa))) then 
+         if (iphi(icurraa).gt.0.and..not.fxvr(iphi(icurraa))) then
             nph=nph+1
             xiv(nph,1)=xat(iCa(icurraa))
             xiv(nph,2)=yat(iCa(icurraa))
@@ -101,7 +109,7 @@
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
      &           +bv(nph,3)*bv(nph,3)
             iph(nph)=iphi(icurraa)
-         endif 
+         endif
          if (.not.fxvr(ipsi(icurraa))) then
             nph=nph+1
             xiv(nph,1)=xat(iC(icurraa))
@@ -135,7 +143,7 @@
      &           bv(j,2)*(rv(i,1)-xiv(j,1)))
          enddo
       enddo
-      do i=1,nph 
+      do i=1,nph
          do j=i,nph
             A(i,j)=0
             do k=1,3
@@ -156,9 +164,9 @@
             do k=i-1,1,-1
                sum=sum-A(i,k)*A(j,k)
             enddo
-            if (i.eq.j) then 
-               p(i)=sqrt(sum) 
-            else 
+            if (i.eq.j) then
+               p(i)=sqrt(sum)
+            else
                A(j,i)=sum/p(i)
             endif
          enddo
@@ -176,7 +184,7 @@
       do i=1,nph
          dph(i)=0
       enddo
-! Solve lower triangular matrix to get dphi proposals 
+! Solve lower triangular matrix to get dphi proposals
       do i=nph,1,-1
          sum=ppsi(i)
          do k=i+1,nph
@@ -189,7 +197,7 @@
       sum=0
       do i=1,nph
          sum=sum+ppsi(i)*ppsi(i)
-      enddo 
+      enddo
       wfw=exp(-sum)
       do i=1,nph
          wfw=wfw*p(i)
@@ -207,7 +215,7 @@
       nph=0
       do i=1,4
          icurraa=ia+i-1
-         if (iphi(icurraa).gt.0.and..not.fxvr(iphi(icurraa))) then 
+         if (iphi(icurraa).gt.0.and..not.fxvr(iphi(icurraa))) then
             nph=nph+1
             xiv(nph,1)=xat(iCa(icurraa))
             xiv(nph,2)=yat(iCa(icurraa))
@@ -218,8 +226,8 @@
             ab(nph)=bv(nph,1)*bv(nph,1)+bv(nph,2)*bv(nph,2)
      &           +bv(nph,3)*bv(nph,3)
             iph(nph)=iphi(icurraa)
-         endif 
-         if (.not.fxvr(ipsi(icurraa))) then 
+         endif
+         if (.not.fxvr(ipsi(icurraa))) then
             nph=nph+1
             xiv(nph,1)=xat(iC(icurraa))
             xiv(nph,2)=yat(iC(icurraa))
@@ -252,7 +260,7 @@
      &           bv(j,2)*(rv(i,1)-xiv(j,1)))
          enddo
       enddo
-      do i=1,nph 
+      do i=1,nph
          do j=i,nph
             A(i,j)=0
             do k=1,3
@@ -261,7 +269,7 @@
                enddo
             enddo
             A(i,j)=bbgs*A(i,j)
-            if (i.eq.j) then 
+            if (i.eq.j) then
                A(i,j)=A(i,j)+1
             endif
             A(i,j)=0.5*abgs*A(i,j)
@@ -273,9 +281,9 @@
             do k=i-1,1,-1
                sum=sum-A(i,k)*A(j,k)
             enddo
-            if (i.eq.j) then 
-               p(i)=sqrt(sum) 
-            else 
+            if (i.eq.j) then
+               p(i)=sqrt(sum)
+            else
                A(j,i)=sum/p(i)
             endif
          enddo
@@ -284,13 +292,13 @@
          ppsi(i)=p(i)*dph(i)
          do j=i+1,nph
             ppsi(i)=ppsi(i)+A(j,i)*dph(j)
-         enddo  
+         enddo
       enddo
       sum=0
       do i=1,nph
          sum=sum+ppsi(i)*ppsi(i)
       enddo
-      wbw=exp(-sum) 
+      wbw=exp(-sum)
       do i=1,nph
          wbw=wbw*p(i)
       enddo
@@ -305,15 +313,15 @@
 !      print *,'delta = ',delta
 !       call outpdb(0,'after.pdb')
 !      print *,'after outpdb for after.pdb'
-!      do i=1,nph 
+!      do i=1,nph
 !         print *,'BGS>',i,iph(i),vlvr(iph(i)),dph(i)
 !      enddo
-      if (rd.ge.delta) then 
+      if (rd.ge.delta) then
 !     accept
          eol1=enw
          bgs=1
 !         print *,'BGS move accepted'
-      else 
+      else
 !     reject
          vlvr = ovr
 !          enw=energy()

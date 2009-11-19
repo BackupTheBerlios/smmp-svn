@@ -3,7 +3,7 @@
 ! This file contains the subroutines: gradient
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -20,6 +20,10 @@
 
       include 'INCL.H'
 
+
+      double precision esm
+
+      integer i, ivr1, ivr2, j
 
       esm = 0.d0
 

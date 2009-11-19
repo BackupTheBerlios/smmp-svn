@@ -3,7 +3,7 @@
 ! This file contains the subroutines: outpdb
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -23,6 +23,11 @@
 ! ..............................................
 
       include 'INCL.H'
+
+      double precision occ, bva
+
+      integer i0, i9, nml, im1, im2, ibegst, iout, iat, iml, irs, ifirs
+      integer ifiat, nrs, i, j, iendst, nfi, ibd, jj, nbd
 
       dimension ibd(4)
       character chid,cdin,res*3,atnm*5,linty*6,linout*80
@@ -98,7 +103,7 @@
 
             call toupst(atnm)
             call toupst(res)
- 
+
             linout = ' '
             write (linout,1) linty,iat,atnm,res(1:3),chid,irs,cdin,
      &                       xat(i),yat(i),zat(i),occ,bva
@@ -169,7 +174,7 @@
       linout = ' '
       write (linout,'(a3)') 'END'
       write(iout,'(a80)') linout
-      
+
       close(iout)
 
     1 format (a6,i5,1x,a5,a3,1x,a1,i4,a1,3x,3f8.3,2(1x,f5.2))

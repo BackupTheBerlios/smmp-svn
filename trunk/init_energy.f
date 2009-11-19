@@ -4,7 +4,7 @@
 ! This file contains a BLOCK DATA statement
 !
 ! Copyright 2003-2005  Frank Eisenmenger, U.H.E. Hansmann,
-!                      Shura Hayryan, Chin-Ku 
+!                      Shura Hayryan, Chin-Ku
 ! Copyright 2007       Frank Eisenmenger, U.H.E. Hansmann,
 !                      Jan H. Meinke, Sandipan Mohanty
 !
@@ -16,7 +16,7 @@
 ! ----------------------------------------------
 ! PURPOSE: initialize energy parameters
 !        0  => ECEPP2 or ECEPP3 depending on the value of sh2
-!        1  => FLEX 
+!        1  => FLEX
 !        2  => Lund force field
 !        3  => ECEPP with Abagyan corrections
 !
@@ -28,14 +28,16 @@
 
       include 'INCL.H'
 
+      integer ll, iendst, its
+
       character libdir*(*),tesfil*80
-      
+
       if (ientyp.eq.1) then
           flex = .true.
-      else 
+      else
           flex = .false.
       end if
-      
+
       lunlib=10
       ll=iendst(libdir)
 
@@ -55,7 +57,7 @@
 
       endif
 
-      if (ientyp .eq. 2) then 
+      if (ientyp .eq. 2) then
         reslib=libdir(1:ll)//'lib.lun'
       endif
 
@@ -77,7 +79,7 @@
         close(20)
 
       else
- 
+
         if (itysol.ne.0) then
           write(*,'(a)') ' init_energy>  undefined solvent type !'
           stop
@@ -109,6 +111,10 @@
 ! __________________________________________________________
 
       include 'INCL.H'
+
+      double precision hbc, hba, ri, ai, aei, aic, a, aj, c, rij
+
+      integer i, j, iac, ido, jac, jdo
 
       dimension hbc(mxhbdo,mxhbac),hba(mxhbdo,mxhbac)
       logical do(mxtyat),ac(mxtyat)
@@ -307,6 +313,8 @@
       BLOCK DATA
 
       include 'INCL.H'
+      
+      integer i
 
 !  Atom types ------------------------------------------------------------
 !                                    Original types  -Scheraga:  -Flex:
@@ -516,7 +524,7 @@
      & 'glu ','glu-','gly ','his ','hise','hisd','his+','hyp ','hypu',
      & 'ile ','leu ','lys ','lys+','met ','phe ','cpro','pro ','cpru',
      & 'prou','pron','pro+','ser ','thr ','trp ','tyr ','val ' /
-  
+
       data (onltcd(i),i=1,nrsty)/  ! One-letter codes for amino acid types
      & 'A',   'R',   'R',   'N',   'D',   'D',   'C',   'C',   'Q',
      & 'E',   'E',   'G',   'H',   'H',   'H',   'H',   'P',   'P',
@@ -526,23 +534,23 @@
 !     The vdW radii (in Angstr.) for the atomic groups and
 !      coefficients for their solvation free energy (kcal/molxA**2)
 
-!  Method: 
+!  Method:
 
-!  itysol=1 : OONS --> T.Ooi, et al, 
+!  itysol=1 : OONS --> T.Ooi, et al,
 !                      Proc. Natl. Acad. Sci. USA 8 (1987) 3086-3090.
-!  itysol=2 : JRF  --> J.Vila, et al, 
+!  itysol=2 : JRF  --> J.Vila, et al,
 !                      PROTEINS: Struct Funct Genet 10(1991) 199-218.
-!  itysol=3 : WE92 --> L.Wesson, D.Eisenberg, 
+!  itysol=3 : WE92 --> L.Wesson, D.Eisenberg,
 !                      Protein Science 1 (1992) 227-235.
 !  itysol=4 : SCH1 --> D.Eisenberg, et al,
 !                      Chem Scrip 29A (1989) 217-221.
 !  itysol=5 : SCH2 --> A.H.Juffer, et al,
 !                      Proteine Science 4 (1995) 2499-2509.
-!  itysol=6 : SCH3 --> L.Wesson, D.Eisenberg, 
+!  itysol=6 : SCH3 --> L.Wesson, D.Eisenberg,
 !                      Protein Science 1 (1992) 227-235.
 !  itysol=7 : SCH4 --> C.A. Schiffer, et al,
 !                      Mol. Simul. 10(1993) 121-149.
-!  itysol=8 : EM86 --> D.Eisenberg, A.D. Mclachlan, 
+!  itysol=8 : EM86 --> D.Eisenberg, A.D. Mclachlan,
 !                      Nature 319 (1986) 199-203.
 !  itysol=9 : BM   --> B. Freyberg, et al,
 !                      J. Mol. Biol. 233 (1993) 275-292.

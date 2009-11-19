@@ -24,6 +24,13 @@
 ! CALLS: NONE
 !
       include 'INCL.H'
+      
+      double precision dn, dnp, dnh, dx, dxp, dy, dyp, dyh, dz, dzp, dzh
+      double precision d2, d2p, d2h, xi, yi, zi, dxh, rg2, rg2p, rg2h
+      double precision rgy, ee
+
+      integer nml, nml1, nml2, nat, i, i1, i2
+
 !f2py intent(in) nml
 !f2py intent(out) rgy
 !f2py intent(out) ee
