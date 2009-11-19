@@ -1,6 +1,10 @@
 ! ......................
 ! contents of a PDB file
 ! ......................
+      integer MXCHP, MXRSP, MXATP, nchp, nchrsp, nrsp, irsatp, nrsatp
+      integer natp, noatp
+      
+      double precision xatp, yatp, zatp
 
       parameter (MXCHP =100,    ! max. no. of polypeptide chains
      &           MXRSP =1000,   ! max. no. of residues

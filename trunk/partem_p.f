@@ -37,7 +37,16 @@
 !     nswp:   number of Monte Carlo sweeps
 !     nmes:   number of Monte Carlo sweeps between measurments
 !     newsta: .true. for new simulations, .false. for re-start
+      double precision temp, eavm, sph, geavm, gsph, dv, grnd, vr
+      double precision addang, dummy, eol, energy, acz, rmsv, rmsdfun
+      double precision rgy, ee, tmhb, dham, swp, wij, rd, e_final
 
+      integer ifrrm, nmes, nswp, num_rep, i, j, nresi, iold, inode
+      integer intem, iv, jold, idum1, idum2, idum3, mpi_integer
+      integer mpi_comm_world, ierr, mpi_double_precision, nsw, nequi
+      integer nml, nhel, mhel, nbet, mbet, mhb, imhb, nctot, ncnat
+      integer mpi_comm_null, k1, k, nu, no1, in, jn
+      
       dimension  eavm(MAX_PROC),sph(MAX_PROC),intem(MAX_PROC),
      &     inode(MAX_PROC), geavm(MAX_PROC), gsph(MAX_PROC)
       double precision    pbe(MAX_PROC),yol(MAX_PROC),acy(MAX_PROC),

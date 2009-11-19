@@ -309,7 +309,8 @@
 !
 ! ....................................................
 
-      implicit integer*4 (i-n)
+      implicit none
+      integer mx, j, n, j1, l1, j2, l2, i1, i2, ja, k
 
       dimension l1(mx),l2(mx)
 

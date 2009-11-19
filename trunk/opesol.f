@@ -31,7 +31,14 @@
 ! ......................................................................
 
       include 'INCL.H'
+      double precision xfvr, yfvr, zfvr, xfrvr, yfrvr, zfrvr, esolan, dx
+      double precision dy, dz, xfat, yfat, zfat, xi, yi, zi, xfrat
+      double precision yfrat, zfrat, xb, yb, zb, ex, ey, ez, xfiv, yfiv
+      double precision zfiv, xfriv, yfriv, zfriv
 
+      integer ntlvr, nml, ix2, ifivr, ilavr, i, i1s, i1a, io, iv, it, ia
+      integer ib, i2s, ims, i1, i2, i2a, iad, lad, ivw, j, i14
+      
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
      &          xfrat(mxat),yfrat(mxat),zfrat(mxat),
 
@@ -243,6 +250,11 @@
 ! .....................................................................
 
       include 'INCL.H'
+      
+      double precision del, vlvrx, ovr, eynw, esolan, gda, gdn
+
+      integer i, it, iv, nml
+
 
       parameter (del=1.d-6)
 

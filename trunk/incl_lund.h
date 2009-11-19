@@ -1,3 +1,4 @@
+      integer nhptyp, mxconr, mxcell, iN, iCa, iC, mlvr, iphi, ipsi
       parameter (nhptyp=3,mxconr=40,mxcell=125000)
       dimension iN(mxrs),iCa(mxrs),iC(mxrs),mlvr(mxvr)
       dimension iphi(mxrs),ipsi(mxrs)
@@ -12,11 +13,13 @@
       integer bgsnvar,bgsvar(mxrs), iph(8)
       common /bgs_i/ bgsnvar,iph
       common /bgs_r/ abgs,bbgs,dph, bgsvar
+      integer ihpat, nhpat
       dimension ihpat(mxrs,6),nhpat(mxrs)
       double precision hpstrg
       dimension hpstrg(nhptyp*nhptyp)
       
       double precision exvk,exvcut,exvcut2
+      integer matcon
       dimension matcon(-mxconr:mxconr,mxat)
 
       double precision sigsa,sig2lcp,asalcp,bsalcp
@@ -29,7 +32,7 @@
       double precision sig2exv,asaexv,bsaexv
       dimension sig2exv(mxtyat,mxtyat)
       dimension asaexv(mxtyat,mxtyat),bsaexv(mxtyat,mxtyat)
-
+      integer lcp1, lcp2, ilpst, ilpnd
       common /lundff/kbias,                                             &
      &     epshb1,epshb2,powa,powb,sighb,cthb,                          &
      &     cthb2,                                                       &

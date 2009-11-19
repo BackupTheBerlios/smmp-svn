@@ -31,6 +31,12 @@
 
 !     external rand
       external can_weight
+      
+      double precision bmin, bmax, db, dv, grnd, vr, addang, eol, energy
+      double precision acz, ymin, vlvrm, rgy, ee, temp
+
+      integer nresi, i, iv, nsw, nemin, j
+      
 !      parameter(lrand=.true.)
 !      parameter(nequi=100, nswp=100000,nmes=1000)
 !      parameter(tmax=1000.0,tmin=100.0)

@@ -26,6 +26,10 @@
 !f2py intent(out) mbet
            
       logical lhel,lbet
+      double precision hlim, philim, psilim, hlim2, philim2, psilim2
+      double precision xphi, xpsi
+
+      integer nhel, mhel, nbet, mbet, i, iv
 
       parameter(hlim=30.0d0,philim=-70.0d0,psilim=-37.0d0)
       parameter(hlim2=30.0d0,philim2=-150.0d0,psilim2=150.0d0)

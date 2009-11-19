@@ -26,6 +26,8 @@
 ! CALLS: ibegst,iendst
 ! ..........................................................
       integer ib, ie, l
+      integer ln, is, ibegst, j, iendst
+
       character spr,blnk,str*(*),strn*(*)
       
       data blnk/' '/
@@ -90,8 +92,8 @@
 !
 ! .............................................................
 
-      implicit integer*4 (i-n)
-
+      implicit none
+      integer i
       character blnk,str*(*)
       data blnk/' '/
 
@@ -116,8 +118,8 @@
 !
 ! ..............................................................
 
-      implicit integer*4 (i-n)
-
+      implicit none
+      integer i
       character blnk,str*(*)
       data blnk/' '/
 
@@ -145,8 +147,8 @@
 ! CALLS: ibegst,iendst
 ! ..........................................
 
-      implicit integer*4 (i-n)
-
+      implicit none
+      integer mxd, ib, ibegst, ie, iendst, il, i0, i9, i, ii, in
       parameter (mxd=9)                 ! max. # of digits
 
       character blnk,value*(mxd),line*(*)
@@ -185,8 +187,8 @@
 ! CALLS: ibegst,iendst
 ! ..........................................
 
-      implicit integer*4 (i-n)
-
+      implicit none
+      integer mxd, mxap, mxip, ib, ibegst, ie, iendst, il, ip, ibp
       parameter (mxd =17,   ! max. # of digits
      &           mxap= 6,   ! max. # of digits after period
      &           mxip=mxd-mxap)
@@ -291,7 +293,7 @@
 ! ........................................................
 
       integer lun
-
+      integer i, ibegst, j, k
       logical exs
       character*(*) filnam,stat,format
               

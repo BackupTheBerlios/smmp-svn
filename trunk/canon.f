@@ -26,6 +26,11 @@
 
 !     external rand
       external can_weight
+      
+      double precision dv, grnd, vr, addang, eol, energy, acz, rgy, ee
+
+      integer i, iv, nsw, nhel, mhel, nbet, mbet, mhb
+
      
       logical lrand
 !      parameter(lrand=.false.)
@@ -131,8 +136,9 @@
 !
 ! CALLS: none
 !
+      implicit none
+      double precision beta, x
 
-      implicit real*8 (a-h,o-z) 
 
       common/bet/beta
 

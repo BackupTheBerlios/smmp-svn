@@ -5,6 +5,8 @@
 subroutine init_lund
     include 'INCL.H'
     include 'incl_lund.h'
+    integer i, npprs, j, k
+
     logical bgsposs
     do i=1,mxrs
         iN(i)=-1

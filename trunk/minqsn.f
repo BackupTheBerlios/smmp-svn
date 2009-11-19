@@ -55,8 +55,16 @@
 !  TINY - prevent division by zero during cubic extrapolation
 ! .............................................................
 
-      implicit real*8 (a-h,o-z)
-      implicit integer*4 (i-n)
+      implicit none
+
+      double precision eps1, eps2, tiny, zero, dff, c, g, scal, h, fa, f
+      double precision xa, x, ga, d, w, dga, di, fmin, gmin, stmin
+      double precision stepub, steplb, acur, step, xb, fb, gb, gl1, gl2
+      double precision si, dgb, sig
+
+      integer izero, ione, mxn, nfun, itr, i, n, n1, i1, j, isfv, maxfun
+      integer ir
+
 
       parameter ( eps1=0.1d0,
      &            eps2=0.7d0,
@@ -248,8 +256,11 @@
 !
 ! CALLS: none
 !
-      implicit real*8 (a-h,o-z)
-      implicit integer*4 (i-n)
+      implicit none
+
+      double precision sig, ti, w, z, a, v, eps, tim, al, r, b, gm, y
+
+      integer mxn, n, ir, np, ij, mk, i, j, mm
 
       dimension a(mxn*(mxn+1)/2),z(mxn),w(mxn)
 
@@ -372,8 +383,10 @@
 !
 ! CALLS: none
 !
-      implicit real*8 (a-h,o-z)
-      implicit integer*4 (i-n)
+      implicit none
+      double precision w, z, v, a
+
+      integer mxn, ir, n, i, ij, i1, j, np, nip, ii, ip
 
       dimension a(mxn*(mxn+1)/2),z(mxn),w(mxn)
 

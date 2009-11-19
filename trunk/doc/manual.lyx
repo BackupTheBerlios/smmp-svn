@@ -1,4 +1,4 @@
-#LyX 1.5.0rc2 created this file. For more info see http://www.lyx.org/
+#LyX 1.5.6 created this file. For more info see http://www.lyx.org/
 \lyxformat 276
 \begin_document
 \begin_header
@@ -38,7 +38,8 @@
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "Jan H. Meinke" 
+\author "" 
+\author "" 
 \end_header
 
 \begin_body
@@ -2535,7 +2536,13 @@ The amino acid residue libraries contain chemical and structural data for
  The atom and torsional parameters in the libraries are the same as in the
  original ECEPP/2/3 and FLEX potentials.
  However, it should be noted that SMMP has its own numeration of the atom
- types and the types of torsions (see [1,2] for more details).
+ types and the types of torsions (see 
+\begin_inset LatexCommand cite
+key "Eisenmenger2001,Eisenmenger2006"
+
+\end_inset
+
+ for more details).
 \end_layout
 
 \begin_layout Standard

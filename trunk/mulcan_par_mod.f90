@@ -43,7 +43,9 @@ module multicanonical
       integer, intent(in) :: kmin, kmax, nsweep, nup
       real*8, intent(in) :: binWidth, temp
       logical,  intent(in) :: l_iter
-
+      
+      double precision :: grnd, addang, eol, energy
+      
       integer :: i,j
       integer :: iv,nsw,muold
       real*8 :: bi,bi_1,vr,g0,dv
@@ -213,7 +215,10 @@ module multicanonical
 
       real*8, allocatable :: xhist(:),g1(:),ent(:)
       integer, allocatable :: ihist(:)
+      
+      double precision :: eol_old, x, grnd, addang, eol, energy, dham
 
+      integer :: nresi, nswm, nhy, nhx
       integer :: i,j
       integer :: iv,nsw,muold
       real*8 :: bi,bi_1,vr,g0,dv

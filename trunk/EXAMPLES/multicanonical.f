@@ -30,7 +30,7 @@
 !     Directory for SMMP libraries
 !     Change the following directory path to where you want to put SMMP
 !     libraries of residues. 
-      libdir='../SMMP/'
+      libdir='../../SMMP/'
 
 !!     Choose energy type with the following switch
 !        0  => ECEPP2 or ECEPP3 depending on the value of sh2
@@ -57,7 +57,7 @@
 
       iabin = 1  ! =0: read from PDB-file
                  ! =1: ab Initio from sequence (& variables)
-      seqfile='enkefa.seq'
+      seqfile='1vp.seq'
 !      varfile='EXAMPLES/enkefa.var'
       varfile = ' '
       ntlml = 0
@@ -76,11 +76,11 @@
       l_iter = .false.
       temp=1000.0
 
-      call mulcan_par(nsweeps, nup, temp, kmin, kmax, binWidth, l_iter)
+!      call mulcan_par(nsweeps, nup, temp, kmin, kmax, binWidth, l_iter)
 ! Uncomment the following three lines to perform a multi canonical simulation with
 ! the parameters stored in muca.d
-!       nmes = 1000
-!       call mulcan_sim(nmes, nsweeps, nmes, nup, kmin, kmax, binWidth, 
-!      &                l_iter)
+       nmes = 1000
+       call mulcan_sim(nmes, nsweeps, nmes, nup, kmin, kmax, binWidth, 
+     &                l_iter)
       end program multicanonical_main
 
