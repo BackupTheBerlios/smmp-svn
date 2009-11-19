@@ -43,19 +43,44 @@
       include 'INCL.H'
       
       
+      integer nmol, ks0, ks2
+Cf2py intent(in) nmol
+      
       parameter (ks0=mxat*(mxat+1))
       parameter (ks2=mxat+mxat)
-      
-      dimension neib(0:mxat),vertex(ks0,4),ax(ks0,2),
-     &          pol(mxat),neibp(0:mxat),as(mxat),ayx(ks0,2),
-     &          ayx1(ks0),probe(ks0),dd(mxat),ddat(mxat,4),ivrx(ks0)
-       
-      dimension grad(mxat,mxat,3),dadx(4,3),gp(4),dalp(4),dbet(4),
+! Functions
+      real*8 grnd
+
+      integer neib, neibp, ivrx, iv, ial, i, ij, j, iii, idi,ivr, ifu,
+     &          ita2, ita3, ine, kk, j2, jkk, jjj, jj, jk, k, l, ll, 
+     &          nb, numat, nyx
+      real*8 vertex, ax, pol, as, ayx, ayx1, probe, dd, ddat, dadx, gp,
+     &          dalp,dbet, daalp, dabet, vrx, dv, dx, dy, dz, dt, di,
+     &          dii, ss, dta, dtb, di1, di2, gs, xold, yold, zold, 
+     &          energy, sss, a1, a, ab1, a2, aa, ac2, ac1, ab2, am2,
+     &          am, aia, ak, alp, am1, ap1, amibe, amabe, amaal, amial,
+     &          ang, D, ddp, cf, b2, arg2, arg1, ap2, b, b1, b2c2, ca,
+     &          ba, bcd, bc, bet, c1, c, c2, cc, sfcg, caba, cg, cfsg,
+     &          cfcg, daba, ct, cs, d1, d2, dbe, dal, dcotbma, dcbet,
+     &          dcalp, dcbetmalp, dcbetpalp, ddp2, div, dsbetmalp, 
+     &          dsalp, dsbet, yy, dsbetpalp, enr, p1, p2, r42, r22, 
+     &          r22p, r2, pom, prob, r, r42p, ratom, rr, s, sfsg, sf,
+     &          sg, vv1, t, ufi, tt, uga, uv, vv, vv2, wv, xx, xv, yv, 
+     &          zz, zv
+      dimension neib(0:mxat),neibp(0:mxat),ivrx(ks0)
+      dimension vertex(ks0,4),ax(ks0,2),
+     &          pol(mxat),as(mxat),ayx(ks0,2),
+     &          ayx1(ks0),probe(ks0),dd(mxat),ddat(mxat,4)
+      dimension dadx(4,3),gp(4),dalp(4),dbet(4),
      &   daalp(4),dabet(4),vrx(ks0,4),dv(4),dx(4),dy(4),dz(4),dt(4),
      &   di(4),dii(4,3),ss(mxat),dta(4),dtb(4),di1(4),di2(4),gs(3)
       dimension xold(-1:mxat),yold(-1:mxat),zold(-1:mxat)
       integer ta2(0:mxat),ta3(0:mxat),fullarc(0:mxat),al(0:ks2)
       real*8 neibor(mxat,4)
+      
+      real*8, dimension(:, :, :), allocatable :: grad
+      
+      allocate(grad(mxat, mxat, 3))
       
       
 !     open(3,file='solvation.dat')! Output file with solvation data
@@ -1012,7 +1037,8 @@
 !     write(3,*)'Total solvation energy: ',energy
 
       esolan=sss
-
+      
+      deallocate(grad)
 !     close(3)
       return
 
