@@ -167,3 +167,28 @@
       end function fileNameMP 
 !     End fileNameMP
 
+
+!----------------------------------------------------------------------
+!     Add messages to log. This routine takes the log (debugging) mes-
+!     sages and writes them to the log file if the log level is less or
+!     equal to the maximum log level given by the global variable 
+!     MAXLOGLEVEL.
+!
+!     @author Jan H. Meinke
+!
+!     @param loglevel level at which this message should be added to 
+!            the log.
+!     @param message message to be written to the log.
+!     @param rank global rank of this node if running an MPI job zero 
+!            otherwise.
+!----------------------------------------------------------------------
+      subroutine addLogMessage(loglevel, message, rank)
+      
+         integer :: loglevel, rank
+         character(LEN=*) :: message
+         
+         if (loglevel <= MAXLOGLEVEL) then
+            write(LOGFILEUNIT, *) message
+         end if
+         
+      end subroutine addLogMessage

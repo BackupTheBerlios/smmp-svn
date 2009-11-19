@@ -31,8 +31,8 @@
       include 'INCL.H'
       include 'INCP.H'
 
-!f2py character*80 optional, intent(in) :: seqfile = ' '
-!f2py character*80 optional, intent(in) :: varfile = ' ' 
+Cf2py character*80 optional, intent(in) :: seqfile = ' '
+Cf2py character*80 optional, intent(in) :: varfile = ' ' 
       
       character grpn*4,grpc*4
       character navr*3, nars*4  

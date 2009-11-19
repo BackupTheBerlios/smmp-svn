@@ -39,7 +39,7 @@
 !     nmes:  Number of sweeps between measurments
       integer nmes
 !     temp:  Temperature of simulation
-      double precision temp
+      double precision temp, e_min
 !
 !      common/bet/beta
 
@@ -62,6 +62,7 @@
       end if
 
       eol = energy()
+      e_min = eol
       write (*,'(a,e12.5,/)')  'energy of start configuration:',eol
 
 ! Write start configuration in pdb-format into file
@@ -78,6 +79,12 @@
       acz = 0.0d0
       do nsw=0,nswp
         call metropolis(eol,acz,can_weight)
+        if (eol.lt.e_min) then
+           write (*,*) "New minimum energy:", eol, "t=", nsw
+           write (*,*) eyel,eyhb,eyvr,eysl
+           e_min = eol
+           call outpdb(0, "minen.pdb")
+        endif
 !
         if(mod(nsw,nmes).eq.0) then
 ! Measure radius of gyration and end-to-end distance
@@ -95,8 +102,9 @@
          call hbond(i,mhb,0)
         end do
 ! Write down information on actual conformation
-         write(13,'(i5,2f12.3,5i7)')  nsw,  eol, rgy,
-     &                              nhel,mhel,nbet,mbet,mhb
+         write(13,'(i7,2f15.3,5i7,4f15.3)')  nsw,  eol, rgy,
+     &                              nhel,mhel,nbet,mbet,mhb,
+     &                              eyel,eyhb,eyvr,eysl
         end if
 !
       end do

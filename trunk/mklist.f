@@ -18,7 +18,9 @@
 ! ......................................................................
 ! TODO: Calculate van-der-Waals regions over all molecules.
       include 'INCL.H'
+      integer nml
 
+      integer mxh, mx2, l1st1, l1st2, l2nd1, l2nd2, l1i, l2i
       parameter (mxh=50,         ! max. # of atom regions
      &           mx2=50)
 
@@ -26,6 +28,10 @@
 
       dimension l1st1(mxh),l1st2(mxh),l2nd1(mxh),l2nd2(mxh)
      &         ,l1i(mxbd),l2i(mx2)
+
+      integer ia, i, i1s, i2s, ibd, ib, ifivr, ifiat, ilaat, im, ilavr,
+     &        iob, io, ioiob, iow, it, is, iv, jbd, j, n1i, n14, n1st,
+     &        n2nd, n2i, ntlms, nvw
 
 ! _______________________ indices of 1st vdw-region/14-partner for 'nml'
       if (nml.eq.1) then

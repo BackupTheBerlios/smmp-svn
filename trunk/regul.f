@@ -43,7 +43,7 @@
      &  ' ====================== Regularization only',
      &  '   Wt(energy) = ',wtey,'  Wt(regul.) = ',wtrg
 
-      call minim(1, nsteps, acc)
+      call minim(2, nsteps, acc)
 
       write(*,*) ' '
       write(*,*) ' ---------- contacts after 1st regularization'

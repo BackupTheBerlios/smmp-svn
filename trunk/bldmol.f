@@ -28,7 +28,13 @@
 ! .................................................
 
       include 'INCL.H'
-
+      ! Subroutine arguments
+      integer nml
+      
+      integer i, i1, i2, i3, ifirs, jow, j, jj
+      double precision x1, x2, x3, y1, y2, y3, z1, z2, z3
+      
+      double precision xg, zg
       dimension xg(3),zg(3)
 
 
@@ -96,7 +102,10 @@
 ! .................................................
  
       include 'INCL.H'
-
+! arguments      
+      integer nml, i1, i2, i3
+      
+      integer ibd, i, irs, ix
       dimension ibd(4)
       logical bb
 
@@ -177,7 +186,11 @@
 ! .........................................................
 
       include 'INCL.H'
-
+!     arguments
+      integer i, ia
+      double precision ct, st, ca, sa, bl, x1, x2, x3, z1, z2, z3
+      double precision y1, y2, y3, h2, h3, dx, dz
+      
       ct=cstoat(i)
       st=sntoat(i)
       ca=csbaat(i)
@@ -248,7 +261,11 @@
 
 
       include 'INCL.H'
-
+!     arguments
+      integer i1, i2, i3
+      double precision x1, x2, x3, y1, y2, y3, z1, z2, z3, h1, h2, h3
+      double precision dz, dx
+      
       h1=xat(i2)
       h2=yat(i2)
       h3=zat(i2)
@@ -307,9 +324,14 @@
 ! ..............................................
 
       include 'INCL.H'
-      
+!     arguments
+      integer nml, i1, i2, i3
+      double precision xg, zg, ag
       dimension xg(3),zg(3),ag(3,3)
 
+      integer i
+      double precision ca, sa, cb,sb, cg, sg, d, ct2, ct3, dx, dz
+      double precision x1, x2, x3, y1, y2, y3, z1, z2, z3, st2, sa2, st3
 
       ca = cos(gbpr(4,nml))  ! alpha
       sa = sin(gbpr(4,nml))

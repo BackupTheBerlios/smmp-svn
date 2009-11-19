@@ -27,7 +27,11 @@
 
       include 'INCL.H'
 
+      ! Function definitions
+      integer iofil, iendst, ibegst, iopfil
+
       character blnk,res*4,line*132,hlin*132
+      integer i, i1, i2, ifirs, ie, id, ib, ic, ii, l, lg, nln, nrs
       data blnk/' '/
 
       if (iopfil(lunseq,seqfil,'old','formatted').le.izero) then

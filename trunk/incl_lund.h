@@ -30,15 +30,15 @@
       dimension sig2exv(mxtyat,mxtyat)
       dimension asaexv(mxtyat,mxtyat),bsaexv(mxtyat,mxtyat)
 
-      common /lundff/kbias,
-     &     epshb1,epshb2,powa,powb,sighb,cthb,
-     &     cthb2,
-     &     alhb,blhb,sighb2,cdon,cacc,casc,
-     &     ihpat,nhpat,hpstrg,
-     &     exvk,exvcut,exvcut2,
-     &     matcon,
-     &     sigsa,sig2lcp,asalcp,bsalcp,
-     &     lcp1,lcp2,ilpst,ilpnd,
-     &     exvlam,exvcutg,exvcutg2,
-     &     sig2exv,asaexv,bsaexv
+      common /lundff/kbias,                                             &
+     &     epshb1,epshb2,powa,powb,sighb,cthb,                          &
+     &     cthb2,                                                       &
+     &     alhb,blhb,sighb2,cdon,cacc,casc,                             &
+     &     ihpat,nhpat,hpstrg,                                          & 
+     &     exvk,exvcut,exvcut2,                                         &
+     &     matcon,                                                      & 
+     &     sigsa,sig2lcp,asalcp,bsalcp,                                 &
+     &     lcp1,lcp2,ilpst,ilpnd,                                       &
+     &     exvlam,exvcutg,exvcutg2,                                     &
+     &     sig2exv,asaexv,bsaexv 
       save /lundff/

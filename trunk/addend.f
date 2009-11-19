@@ -27,6 +27,11 @@
 
       character res*4,rpat*4,sbrs*4,grn*4,grc*4
 
+      integer nml
+      
+      integer i, ifirs, ilars
+      
+      double precision cg
 
       grn = grpn
       call tolost(grn)
@@ -169,10 +174,22 @@
 
       character rpat*4,sbrs*4
       logical ntbb,bb
+      integer nml, nrs, ibd, iybd
 
       dimension ibd(mxbd+1),iybd(mxbd+1)
+      
+      integer iopfil, iendst
+      
+      double precision valang, dihedr
 
-
+      integer ish, i, i1, irng1, irng2, ilavr, ilaat, i2, i3, ibdrg,
+     &        ib, iat, ifirs, ifivr, ii, iow, isgbb1, ity, nfi, ilars,
+     &        ivrrp, ivrsb, jsh, j, iybdrg, k, lvrrp, nb, natsb, nla, 
+     &        nfirp, nxt, nsb, nlarp, nfisb, nlasb, nrp, nsh,
+     &        nvrsb, nxtbb1, nxtbb2, nxtsb
+      double precision ba, ca, ct, dx, dz, h3, h2, sa, st,to, x1, x2,
+     &        x3, y1, y2, y3, z1, z2, z3
+      
       ifirs=irsml1(nml)
       ilars=irsml2(nml)
 
@@ -637,6 +654,11 @@
       include 'INCL.H'
 
       character rpat*4,sbrs*4,atnm*4,res*4,cgty*5,line*100
+      integer nml, nrs
+
+      integer iopfil, iendst
+
+      integer ifirs, ilars, ifvr, ilib, i, l, j, nchg
 
       ifirs=irsml1(nml)
       ilars=irsml2(nml)

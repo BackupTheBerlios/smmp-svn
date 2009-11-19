@@ -238,7 +238,7 @@ module multicanonical
       open(8,file='start.d')
 ! File with contact map of reference configuration
 ! FIXME: This must go. Reference structure needs to be read in main()
-      open(9,file='enkefa.ref')
+      open(9,file='1vp.ref')
 ! File with multicanonical parameter
       open(10,file='muca.d')
 ! Result file: Time series of certain quantities

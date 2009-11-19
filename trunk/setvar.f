@@ -22,8 +22,17 @@
 ! ....................................................
 
       include 'INCL.H'
-
+Cf2py intent(in) nml, vlvrx
+      integer nml
+      double precision vlvrx
       dimension vlvrx(mxvr)
+      
+!     functions
+      double precision difang
+
+      integer i, iat,ity, iow, j, jat, i1vr
+      double precision ba, to, tsh
+      
 
       i1vr=ivrml1(nml)
       do i=i1vr,i1vr+nvrml(nml)-1  ! __________________ Variables of 'nml'

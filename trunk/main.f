@@ -24,6 +24,8 @@
       character*80 libdir, seqfile, varfile
       character grpn*4,grpc*4
       logical lrand,bgsposs
+      integer argc, status, argv_length
+      character(len=255) :: argv
 
 ! =================================================== Energy setup
 
@@ -31,6 +33,13 @@
 !     Change the following directory path to where you want to put SMMP
 !     libraries of residues. 
       libdir='./SMMP/'
+      
+!     Set the maximum log level. The larger the number the more detailed
+!     the log.
+      MAXLOGLEVEL = 1
+!     File unit to use for the log file.
+      LOGFILEUNIT = 27
+      open(LOGFILEUNIT, file="smmp.log")
 
 !      The switch in the following line is now not used.
       flex=.false.        ! .true. for Flex  / .false. for ECEPP
@@ -61,7 +70,7 @@
       iabin = 1  ! =0: read from PDB-file
                  ! =1: ab Initio from sequence (& variables)
       seqfile='EXAMPLES/enkefa.seq'
-      varfile='EXAMPLES/enkefa.var'
+      varfile='EXAMPLES/enkefa.ann'
 !       varfile = ' '
       
       ntlml = 0
@@ -94,6 +103,7 @@
       maxit = 15000 ! maximum number of iterations in minimization
       eps = 1.0d-7 ! requested precision
       call minim(imin, maxit, eps)
+      call outvar(0, ' ')
 !     To do a canonical Monte Carlo simulation uncomment the lines below
 !       nequi = 100
 !       nsweep = 50000

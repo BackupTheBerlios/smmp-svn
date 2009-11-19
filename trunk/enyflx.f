@@ -21,6 +21,14 @@
 ! .......................................................................
 
       include 'INCL.H'
+      
+      integer nml
+      
+      integer ntlvr, i, i14, i1, i1s, i2, i2s, ia, ic, ijhb, ifivr, 
+     &        ims, io, iowh, it, jowh, ity, iv, ivw, j, jty
+      double precision cqi, cth, qp, e0, evw, vr, ep, rij, py, px, pz, 
+     &                 rij2, rij6, rij12, sr, xij, xi, yij, xj, yj, yi, 
+     &                 zj, zi, zij
 
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then

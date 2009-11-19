@@ -24,6 +24,23 @@
 !
 ! -------------------------------------------------------------
 ! TODO: Check the solvent energy for multiple molecules     
+!     arguments
+      integer nmol
+      
+!     functions
+      integer nursat
+
+      integer numbox, inbox, indsort, look, i, ii, ia, ib, ibox, icount
+      integer ilk, il, ik, ix, iy, iz, j, jy, jbox, jbi, jres, jj, jcnt
+      integer jtk, jx, jz, lbn, lst, mhx, mx, nsy, ndy, mz, my, nboxj
+      integer ndx, ncbox, nbt, nez, ndz, nex, ney, nlow, nhx, nnei
+      integer nrshi, nqxy, nrslow, mbt, nsx, nsz, numat, nup
+      double precision xyz, radb, radb2, ymin, diamax, area, akrad
+      double precision avr_x, avr_y, avr_z, dd, dr, dx, dy, dz, sizex
+      double precision rmax, shiftx, shifty, shiftz, sizey, sizez
+      double precision sizes, trad, zmin, xmax, xmin, ymax, zmax
+      double precision sdr, sdd, volume
+      
       dimension numbox(mxat),inbox(mxbox+1),indsort(mxat),look(mxat)
       dimension xyz(mxinbox,3),radb(mxinbox),radb2(mxinbox)
       logical surfc(mxpoint)
@@ -322,7 +339,7 @@
       subroutine tessel
       include 'INCL.H'
       character lin*80
-
+      integer i
 !    Skipping comment lines, which begin with '!'  
       read(20,'(a)') lin
       do while(lin(1:1).eq.'!')

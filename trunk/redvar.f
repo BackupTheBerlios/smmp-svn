@@ -69,11 +69,19 @@
 
       include 'INCL.H'
 
+!     functions
+      integer iopfil, iendst, iredin, iredrl, ibegst
 ! maxfld: max. # of fields in one command
 ! maxide: max. # of identifiers in a field
 ! maxcmd: max. # of commands to be interpreted
 ! ilrg:   a large integer
 
+      integer maxfld, maxide, maxcmd, ilrg, ifdend, icb, i, ib, ibz
+      integer ife, ifb, ide, id, ice, ie, ieh, ieh1, iez, ihz, ifx, ifld
+      integer ile, ii, ihy, ilb, iml, it, in ,io, inum, kbz, iv, ity, jb
+      integer j, k, l, kez, kk, kv, lez, lbz,ll, ll1, ll2, n, nfi, ncmd
+      integer nfld, nide, nml, ntlvr
+      double precision vlvrx, rn, vr, val
       parameter (maxfld=4,
      &           maxide=30,
      &           maxcmd=5000,

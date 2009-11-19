@@ -21,6 +21,11 @@
 ! .............................................
 
       include 'INCL.H'
+      
+      integer i1, i2, i3, i4
+      
+      double precision x1, y1, z1, x2, y2, z2, ux1,uy1, uz1, a, u, u1,
+     &                 u2, ux2, uy2, uz2
 
       x1=xat(i2)-xat(i1)
       y1=yat(i2)-yat(i1)
@@ -76,6 +81,11 @@
 ! .............................................
 
       include 'INCL.H'
+      
+      integer i1, i2, i3
+      
+      double precision h1, h2, h3, x1, x2, x3, y1, y2, y3, x, y, u, a
+      
       h1=xat(i2)
       h2=yat(i2)
       h3=zat(i2)

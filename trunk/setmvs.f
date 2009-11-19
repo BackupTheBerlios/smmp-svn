@@ -46,12 +46,20 @@
 ! ......................................................................
 
       include 'INCL.H'
+!     ID of molecule
+      integer nml
+
+      integer nursvr
 
       logical bb
-
+      integer mxh, lvw1h, lvw2h, l1h, l2h
       parameter (mxh=10)
       dimension lvw1h(mxh),lvw2h(mxh),l1h(mxh),l2h(mxh)
 
+      integer ifivr, i, i1, ia, ib, ic, ifirs, ifiat, ko, ilaat, ii,
+     &        ilars, ilavr, io, ir, irg1, is, it, iv, j, k, j1, jns,
+     &        j2, j1s, ja, jb, jv, jo, l, i2, irg2, n, nad, nms,
+     &        ntlvr
 
       ntlvr=nvrml(nml)
 
@@ -417,9 +425,14 @@
 
       include 'INCL.H'
 
+      integer nml, nrs, ifirg, ilarg, irg1, irg2
+                  
       logical bb
+      integer ibd
       dimension ibd(4)
 
+      integer i, ib, ila, ifi, il, ixt, k, j, jb            
+                  
       ilarg=ifirg
 
       bb=.false.

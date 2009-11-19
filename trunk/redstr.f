@@ -25,11 +25,12 @@
 !
 ! CALLS: ibegst,iendst
 ! ..........................................................
-
-      implicit integer*4 (i-n)
-
+      integer ib, ie, l
       character spr,blnk,str*(*),strn*(*)
+      
       data blnk/' '/
+      
+      integer i, ic, ish, ii
 
       if (spr.eq.blnk) then
         write (*,*) ' extstr> Separator should not be blank'
@@ -233,7 +234,10 @@
       include 'INCL.H'
 
       character*(*) str
-
+      
+      integer ibegst, iendst
+      
+      integer i, ic, ii, ish
       ii=ibegst(str)
       if (ii.gt.0) then
         ish=idupa-idloa
@@ -257,6 +261,10 @@
       include 'INCL.H'
 
       character str*(*)
+      
+      integer iendst, ibegst
+      
+      integer i, ii, ic, ish
 
       ii=ibegst(str)
       if (ii.gt.0) then
@@ -282,7 +290,7 @@
 ! CALLS: ibegst
 ! ........................................................
 
-      implicit integer*4 (i-n)
+      integer lun
 
       logical exs
       character*(*) filnam,stat,format

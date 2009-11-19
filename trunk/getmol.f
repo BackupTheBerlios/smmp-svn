@@ -37,7 +37,14 @@
 ! ...................................................................
 
       include 'INCL.H'
-
+!     arguments
+      integer nml
+!     functions      
+      integer iopfil, iendst
+      
+      integer i, iat, iow, ifirs, ibd, ilars, j, mvr, nbd, n, nbd1, nj
+      integer nh, nrs, ntlat, ntlvr, nat, nxt
+      double precision ba, t, to
       character res*4
 
       if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
@@ -269,11 +276,19 @@
 ! .......................................................
 
       include 'INCL.H'
-
+!     arguments
+      integer nat, nxt, nvrr
+      
+!     functions
+      integer iendst
+      
+      integer icl, ibd, ib3, i, ib1, ib2, ic, iow, iexcp, ity, jow, lg
+      integer nln, j
       dimension icl(3),ibd(mxbd)
       character blnk,fix(3),nm(3)*3,res*4,resl*4,line*132
       data blnk/' '/
 
+      double precision ba, to
 
       nln=0
       do i=1,mxbd
