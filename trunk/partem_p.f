@@ -42,7 +42,7 @@
      &     inode(MAX_PROC), geavm(MAX_PROC), gsph(MAX_PROC)
       double precision    pbe(MAX_PROC),yol(MAX_PROC),acy(MAX_PROC),
      &     acy1(MAX_PROC),acx1(MAX_PROC),
-     &     rgyrp(MAX_PROC),rmsdp(MAX_PROC), eol0,rgyp,acz0
+     &     rgyrp(MAX_PROC),rmsdp(MAX_PROC), eol0,acz0
       
       double precision    e_min, e_minp(MAX_PROC), e_minpt(MAX_PROC)
       integer   h_max, h_maxp(MAX_PROC)
@@ -66,7 +66,7 @@
 !     Collect information about accessible surface and van-der-Waals volume
 !     asap      storage array for solvent accessible surface
 !     vdvolp     storage array for van-der-Waals volume
-      double precision asap(MAX_PROC), vdvolp(MAX_PROC)
+      double precision asa_p(MAX_PROC), vdvolp(MAX_PROC)
 
       integer nhelp(MAX_PROC),nbetp(MAX_PROC), mhbp(MAX_PROC),
      &     ncnatp(MAX_PROC),nctotp(MAX_PROC)
@@ -324,7 +324,7 @@
      &              MPI_DOUBLE_PRECISION,0,partem_comm,IERR)
                CALL MPI_GATHER(eysmi,1,MPI_DOUBLE_PRECISION,eysmip,1,
      &              MPI_DOUBLE_PRECISION,0,partem_comm,IERR)
-               CALL MPI_GATHER(asa,1,MPI_DOUBLE_PRECISION,asap,1,
+               CALL MPI_GATHER(asa,1,MPI_DOUBLE_PRECISION,asa_p,1,
      &              MPI_DOUBLE_PRECISION,0,partem_comm,IERR)
                CALL MPI_GATHER(vdvol,1,MPI_DOUBLE_PRECISION,vdvolp,1,
      &              MPI_DOUBLE_PRECISION,0,partem_comm,IERR)
@@ -373,7 +373,7 @@
                   j=intem(i)
                      write(14,*) iold,i,j,pbe(i), dirp(j),
      &                 yol(j),eyslr(j), eyelp(j), eyvwp(j), eyhbp(j), 
-     &                    eyvrp(j),eysmip(j), asap(j), vdvolp(j),
+     &                    eyvrp(j),eysmip(j), asa_p(j), vdvolp(j),
      &                    rgyrp(j),nhelp(j),nbetp(j),mhbp(j),
      &                 imhbp(j), nctotp(j),ncnatp(j), e_minp(j), 
      &                 eyabp(j),rmsdp(j)
