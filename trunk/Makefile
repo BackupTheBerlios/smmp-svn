@@ -17,14 +17,14 @@
 	$(F90) $(F_FLAGS) $<
 
 # ==================================== Variables for compiling and linking
-# L_FLAGS=-g
+L_FLAGS=-g
 # Linker flags
 # Default flags, e.g., for gfortran, g77
-L_FLAGS=-O2 -g
+#L_FLAGS=-O2 -g
 
 # Flags for Intel's ifort
-# L_FLAGS=-O3 -axW -g
-
+#L_FLAGS=-O3 -axT -g
+#L_FLAGS=-fast -parallel
 # FLAGS for Cray
 # L_FLAGS=-fastsse -Mipa
 
@@ -36,11 +36,12 @@ L_FLAGS=-O2 -g
 
 # Compiler flags
 # Default flags, e.g., for gfortran, g77
-F_FLAGS=-c -O2 -g
+#F_FLAGS=-c -O2 -g
 # Flags for Intel's ifort
-# F_FLAGS=-c -O3 -axW -g
+#F_FLAGS=-c -O3 -axT -g
+#F_FLAGS=-c -fast -parallel
 # Flags for debugging build
-# F_FLAGS=-c -O0 -g
+ F_FLAGS=-c -O0 -g
 # FLAGS for Cray
 # F_FLAGS=-c -fastsse -Mipa
 # Flags for xlf
@@ -50,10 +51,10 @@ F_FLAGS=-c -O2 -g
 # F_FLAGS=-c -fPIC -O3 -funroll-loops -mmmx -msse2 -msse -march=i686 -malign-double -fomit-frame-pointer
 
 # Select your compiler
-#F90=ifort
+F90=ifort
 #F90=pgf90
 #F90=xlf
-F90=gfortran
+#F90=gfortran
 MPIF90=mpif90
 
 
@@ -67,7 +68,7 @@ canon.o mulcan_par_mod.o  outvar.o outpdb.o  \
 pdbread.o  rmsdfun.o enyreg.o opereg.o mincjg.o cnteny.o \
 init_energy.o init_molecule.o gradient.o energy.o \
 regul.o nursvr.o twister.o eninteract.o bgs.o eyabgn.o enylun.o utilities.o\
-partem_s.o esolan.o opesol.o
+partem_s.o esolan.o opesol.o init_lund.o
 #_________Serial implementation of ECEPP/3 and solvent
 SOBJ=enyshe.o enysol.o
 #_________Parallel implementation of ECEPP/3 and solvent
@@ -83,9 +84,11 @@ mulcan_par_mod.f90 esolan.f opesol.f
 # partem_s.f
 
 
-pyInterface=init_molecule init_energy mulcan_par mulcan_sim \
-init_lund sgrnd energy helix zimmer rgyr rmsdfun \
-anneal canon  outpdb  minim  regul contacts interhbond hbond
+pyInterface=init_molecule init_energy 
+#mulcan_par mulcan_sim \
+#init_lund sgrnd energy helix zimmer rgyr rmsdfun \
+#anneal canon  outpdb  minim  regul contacts interhbond hbond setvar\
+#enysol
 # metropolis
 # ============================================== Linking
 
@@ -124,13 +127,13 @@ bgp: $(OBJ) $(POBJ) main_p.o
 # Build the python bindings
 pybind: $(FILES)
 	#./rmexclpoint.py $(FILES)
-	f2py -c -m smmp smmp.pyf $(FILES) --f90exec=$(F90) --f77exec=$(F90)
+# 	f2py -c -m smmp min_smmp.pyf $(FILES) --fcompiler=gnu95
 	#./restoreexclpoint.py $(FILES)
 
 newpybind: $(FILES)
 	./rmexclpoint.py $(FILES)
-	mv smmp.pyf smmp.pyf.bak
-	f2py -h smmp.pyf -m smmp only: ${pyInterface} : $(FILES)
+#	mv smmp.pyf smmp.pyf.bak
+	f2py -h min_smmp.pyf -m smmp only: ${pyInterface} : $(FILES)
 	./restoreexclpoint.py $(FILES)
 
 doc:
