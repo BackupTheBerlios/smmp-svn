@@ -26,6 +26,25 @@
 
       include 'INCL.H'
 
+      integer nml
+      
+      double precision enyflx
+      
+      integer ims, i1a, i14, i1, i, i1s, i2s, i2, i2a, j, io, ifivr
+      integer iad, ia, ib, ic, ilavr, ijhb, iowh, it, ity, iv, ivw, jty
+      integer jowh, lad, ntlvr
+      double precision cqi,c, ep, e0, deyds, cqiqj, eynw, eyol, deel
+      double precision ex, cth, dhb, deyrp, eel, eyds, ey, eyrp, ez
+      double precision fvr, hhb, gda, gdn, vrn, p, py, px, pz, yfiv
+      
+      double precision rij6, rij12, rij, rij2, sr, sr2, vr, xti
+      double precision xb, xj, xfriv, xfiv, xfi, xfji, xij, xi, xsr
+      double precision yb, yfi, yfji, yfriv, yi, yij, yj, zfi, yti
+      double precision zb, zfiv, zfji, zfriv, zij, zi, zj, zti, del
+  
+      
+      double precision xfat, yfat, zfat, xtat, ytat, ztat, xfvr, yfvr
+      double precision zfvr, xfrvr, yfrvr, zfrvr
       dimension xfat(mxat),yfat(mxat),zfat(mxat),
      &          xtat(mxat),ytat(mxat),ztat(mxat),
      &          xfvr(mxvr),yfvr(mxvr),zfvr(mxvr),
@@ -453,8 +472,13 @@
 
       include 'INCL.H'
 
+      integer nml, iv, it, i
+      double precision enyflx
+      
+      double precision del
       parameter (del=1.d-7)
 
+      double precision eynw, eyol, gda, gdn, ovr, vlvrx
       dimension vlvrx(mxvr)
 
 ! ____________________________ get & save values of variables
