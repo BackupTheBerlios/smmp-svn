@@ -1,13 +1,13 @@
-      implicit none
-!      implicit integer*4 (i-n)
-!      implicit real*8 (a-h,o-z)
+!      implicit none
+      implicit integer*4 (i-n)
+      implicit real*8 (a-h,o-z)
       character*255 version
 
       integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath
       integer mxvr, mxms, mxvw, mx14, mxvrh, mxtyat, mxhbdo
       integer mxhbac, mxtybl, mxtyba, mxtyto, mxrt, mxvrrt, mxrtsu
       integer nrsty
-      integer MAXLOGLEVEL, LOGFILEUNIT
+!      integer MAXLOGLEVEL, LOGFILEUNIT
       double precision pi, pi2, pi4, crd, cdr, zero, one
       integer izero, ione
 
@@ -222,10 +222,10 @@
 !  yat    - | cartesian coordinates of atom
 !  zat    - |
 !  nmat   - atom name
-      integer ityat, iowat, iyowat, nbdat, ibdat, iybdat, ixmsat, cgat
+      integer ityat, iowat, iyowat, nbdat, ibdat, iybdat, ixmsat
       double precision xbaat, ybaat, zbaat, baat, snbaat, csbaat, xtoat
       double precision ytoat, ztoat, toat, sntoat, cstoat, blat, xat
-      double precision yat, zat
+      double precision yat, zat, cgat
       common /atm_i/ ityat(mxat),iowat(mxat),iyowat(mxat),nbdat(mxat),  &
      &               ibdat(mxbd,mxat),iybdat(mxbd,mxat),ixmsat(mxat)    
       common /atm_r/ cgat(mxat),                                        &
