@@ -35,7 +35,7 @@
       data blnk/' '/
 
       if (iopfil(lunseq,seqfil,'old','formatted').le.izero) then
-        write (*,'(a,/,a,i3,2a)') 
+        write (logString, '(a,/,a,i3,2a)') 
      &    ' redseq> ERROR opening sequence file:',
      &      ' LUN=',lunseq,' FILE=',seqfil(1:iendst(seqfil))
         stop
@@ -66,14 +66,15 @@
             irsml2(ntlml) = nrs
 
             if ((nrs-irsml1(ntlml)+1).eq.0) then
-              write(*,'(2a)') ' redseq> IGNORE molecule: ',
+              write (logString, '(2a)') ' redseq> IGNORE molecule: ',
      &                        nmml(ntlml)(1:iendst(nmml(ntlml)))
               ntlml=ntlml-1
             endif
           endif
           ntlml=ntlml+1
           if (ntlml.gt.mxml) then
-            write(*,'(a,i4,2a)')' redseq> NUMBER of molecules > '
+            write (logString, '(a,i4,2a)') 
+     &                          ' redseq> NUMBER of molecules > '
      &                          ,mxml,' in ',seqfil(1:iendst(seqfil))
             close(lunseq)
             stop
@@ -123,7 +124,7 @@
           endif
 
           if (id.gt.4) then
-            write (*,'(4a)') ' redseq> INVALID residue NAME >',
+            write (logString, '(4a)') ' redseq> INVALID residue NAME >',
      &                       line(ib:ii),'< in ',
      &      seqfil(1:iendst(seqfil))
             close(lunseq)
@@ -132,7 +133,8 @@
 
             nrs=nrs+1
             if (nrs.gt.mxrs) then
-              write(*,'(a,i4,2a)') ' redseq> NUMBER of residues > '
+              write (logString, '(a,i4,2a)') 
+     &                       ' redseq> NUMBER of residues > '
      &                       ,mxrs,' in ',seqfil(1:iendst(seqfil))
               close(lunseq)
               stop
@@ -161,7 +163,7 @@
 ! ___________________________________ output
 
       if (nrs.eq.0) then
-        write (*,'(2a)') ' redseq> no residues found in ',
+        write (logString, '(2a)') ' redseq> no residues found in ',
      &                   seqfil(1:iendst(seqfil))
         stop
       else
@@ -178,12 +180,13 @@
 
           if (i.eq.ntlml) then   ! Check last molecule
             if ((nrs-ifirs+1).eq.0) then
-              write(*,'(2a)') ' redseq> IGNORE molecule '
+              write (logString, '(2a)') ' redseq> IGNORE molecule '
      &                        ,nmml(ntlml)(1:iendst(nmml(ntlml)))
               ntlml=ntlml-1
               if (ntlml.eq.0) then
-                write (*,'(2a)') ' redseq> no residues found in ',
-     &          seqfil(1:iendst(seqfil))
+                write (logString, '(2a)') 
+     &             ' redseq> no residues found in ',
+     &             seqfil(1:iendst(seqfil))
                 stop
               endif
               return
@@ -191,10 +194,10 @@
             irsml2(i)=nrs
           endif
 
-!          write (*,'(/,a,i4,2a)') ' redseq> ',irsml2(i)-irsml1(i)+1,
+!          write (logString, '(/,a,i4,2a)') ' redseq> ',irsml2(i)-irsml1(i)+1,
 !     &           ' residue(s) in molecule: ',
 !     &           nmml(i)(1:iendst(nmml(i)))
-!          write (*,'(15(1x,a))') (seq(j),j=irsml1(i),irsml2(i))
+!          write (logString, '(15(1x,a))') (seq(j),j=irsml1(i),irsml2(i))
 
         enddo
 
@@ -202,7 +205,7 @@
       return
 ! _______________________________________________ error
 
-    4 write (*,'(a,i4,2a)') ' redseq> ERROR reading line No. ',nln,
+    4 write (logString, '(a,i4,2a)') ' redseq> ERROR reading line No. ',nln,
      & ' in ',seqfil(1:iendst(seqfil))
       close(lunseq)
       stop

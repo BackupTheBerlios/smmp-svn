@@ -48,7 +48,7 @@
       character res*4
 
       if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
-        write (*,'(a,/,a,i3,2a)') 
+        write (logString, '(a,/,a,i3,2a)') 
      &    ' getmol> ERROR opening library of residues:',
      &    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
         stop
@@ -73,12 +73,12 @@
         call tolost(res)  ! ensure lower case for residue name
 
         if (res(:3).eq.'nme'.and.nrs.ne.ilars) then
-          write (*,'(3a)') ' getmol> residue >',res,
+          write (logString, '(3a)') ' getmol> residue >',res,
      &                     '< allowed at C-terminus only !'
           close(lunlib)
           stop
         elseif (res(:3).eq.'ace'.and.nrs.ne.ifirs) then
-          write (*,'(3a)') ' getmol> residue >',res,
+          write (logString, '(3a)') ' getmol> residue >',res,
      &                     '< allowed at N-terminus only !'
           close(lunlib)
           stop
@@ -87,12 +87,13 @@
         call redres(res,nat,nxt,nvr)
 
         if ((nat+ntlat).gt.mxat) then
-          write (*,'(a,i5)') ' getmol> number of atoms > ',mxat
+          write (logString, '(a,i5)') ' getmol> number of atoms > ',mxat
           close(lunlib)
           stop
         endif
         if ((nvr+ntlvr).gt.mxvr) then
-          write (*,'(a,i5)') ' getmol> number of variables > ',mxvr
+          write (logString, '(a,i5)') ' getmol> number of variables > '
+     &       ,mxvr
           close(lunlib)
           stop
         endif
@@ -138,7 +139,7 @@
 ! ___________________________ correct atom to 'next' res.
               nbd=nbdat(nh)
               if (nbd.eq.mxbd) then
-                write(*,'(a,i2,a,i4,2a,i4,a)') 
+                write (logString, '(a,i2,a,i4,2a,i4,a)') 
      &           ' getmol> need ',(mxbd+2),
      &           'th bond to connect residues ',
      &           nrs-1,seq(nrs-1),' and ',nrs,seq(nrs)
@@ -153,7 +154,7 @@
                   t=toat(nj)
 
                   if (t.eq.0.0) then
-                    write (*,'(3a,/,2a)') 
+                    write (logString, '(3a,/,2a)') 
      &               ' getmol> DIHEDRAL for atom ',nmat(nj),
      &               ' should be PHASE angle with respect to atom ',
      &               nmat(n),' & therefore must be not 0.0 !!'
@@ -311,7 +312,7 @@
         read (line(6:13),'(2i4)',err=3) nat,nxt
 
         if (nat.gt.mxath) then
-          write (*,'(a,i5)') ' redres> number of atoms > ',mxath
+          write (logString, '(a,i5)') ' redres> number of atoms > ',mxath
           close(lunlib)
           stop
         endif
@@ -339,10 +340,11 @@
 
           if (iexcp.eq.0.and.i.le.jow) then
             if (i.eq.jow) then
-              write (*,'(5a)') ' redres> atom ',nmath(i),' of ',
+              write(logString,'(5a)') ' redres> atom ',nmath(i),' of ',
      &                          resl,' cannot preceed itself '
             else
-              write (*,'(5a,i4)') ' redres> atom ',nmath(i),' of ',
+              write (logString, '(5a,i4)') 
+     &                    ' redres> atom ',nmath(i),' of ',
      &                    resl,' should be placed AFTER atom #',jow
             endif
             goto 5
@@ -393,7 +395,8 @@
               nvrr=nvrr+1
 
               if (nvrr.gt.mxvrh) then
-                write (*,'(a,i5)') ' redres> number of variables > ',
+                write (logString, '(a,i5)') 
+     &           ' redres> number of variables > ',
      &                             mxvrh
                 close(lunlib)
                 stop
@@ -422,30 +425,33 @@
       goto 1
 
 ! ____________________________________________________________ ERRORS
-    2 write (*,'(4a)') ' redres> residue >',resl,'< NOT FOUND in ',
+    2 write (logString, '(4a)') ' redres> residue >',resl,
+     &      '< NOT FOUND in ',
      &reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
-    3 write (*,'(a,i4,2a)') ' redres> ERROR reading line No. ',nln,
-     &' in ',reslib(1:iendst(reslib))
+    3 write (logString, '(a,i4,2a)') ' redres> ERROR reading line No. ',
+     &   nln,
+     &   ' in ',reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
-    4 write (*,'(4a)') ' redres> Incorrect order of bonds for atom ',
+    4 write (logString, '(4a)') 
+     &   ' redres> Incorrect order of bonds for atom ',
      &                      nmath(i),' of ',resl
 
-    5 write (*,'(8x,2a)') '... must correct ',
+    5 write (logString, '(8x,2a)') '... must correct ',
      &                      reslib(1:iendst(reslib))
       close(lunlib)
       stop
 
-    6 write (*,'(a,i2,4a)') ' redres> unknown type :',ity,
+    6 write (logString, '(a,i2,4a)') ' redres> unknown type :',ity,
      &                   ': for atom ',nmath(i),' in residue ',resl
       close(lunlib)
       stop
 
-    7 write (*,'(a,i2,4a)') ' redres> unknown class :',ic,
+    7 write (logString, '(a,i2,4a)') ' redres> unknown class :',ic,
      &                   ': for variable ',nm(j),' in residue ',resl
       close(lunlib)
       stop

@@ -82,8 +82,8 @@
        enddo
 !
       eol = energy()
-      write (*,'(a,e12.5,/)')  'Energy of start configuration: ',eol
-      write(*,*)
+      write (logString, '(a,e12.5,/)')  'Energy of start configuration: ',eol
+      write (logString, *)
 
       call outpdb(1, 'start.pdb')
 !
@@ -99,7 +99,7 @@
 
        muold = int(min(xmax,max(xmin,eol/ebin+sign(0.5d0,eol))))
        ihist(muold) = ihist(muold) + 1
-       write (*,*) nsw, eol, acz
+       write (logString, *) nsw, eol, acz
 !
 ! ITERATE MULTICANONICAL WEIGHTS EVERY NUP SWEEPS 
        if(mod(nsw,nup).eq.0) then
@@ -142,15 +142,15 @@
 
 ! FINAL OUTPUT:
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'last energy',eol
-      write(*,*) 'aczeptance rate:',acz
+      write (logString, *) 'last energy',eol
+      write (logString, *) 'aczeptance rate:',acz
 !
 ! OUTPUT OF FINAL HISTOGRAM
 !
-      write(*,*) 'Histogram:'
+      write (logString, *) 'Histogram:'
       do i=kmin,kmax
        if(xhist(i).gt.0.0d0) then
-        write(*,*) i,xhist(i)
+        write (logString, *) i,xhist(i)
        end if
       end do
 !

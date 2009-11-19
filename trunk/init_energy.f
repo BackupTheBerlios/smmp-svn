@@ -65,8 +65,8 @@
 
 
 !----Initialize solvation part if necessary
-      write (*,*) 'init_energy: itysol = ',itysol
-      write(*,*) 'init_energy: esol_scaling = ',isolscl
+      write (logString, *) 'init_energy: itysol = ',itysol
+      write (logString, *) 'init_energy: esol_scaling = ',isolscl
 
       its = iabs(itysol)
 
@@ -81,7 +81,8 @@
       else
 
         if (itysol.ne.0) then
-          write(*,'(a)') ' init_energy>  undefined solvent type !'
+          write (logString, '(a)') 
+     &      ' init_energy>  undefined solvent type !'
           stop
         endif
 
@@ -95,7 +96,8 @@
 
       return
 
- 10   write (*, '(a)') 'Cannot open the file with surface points'
+ 10   write (logString,  '(a)') 
+     &   'Cannot open the file with surface points'
       stop
 
       end

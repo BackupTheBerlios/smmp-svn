@@ -32,7 +32,8 @@
         endif
       enddo
 
-      write (*,'(a,i5)') ' nursvr > Cannot find variable # ',ivr
+      write (logString, '(a,i5)') ' nursvr > Cannot find variable # '
+     &   ,ivr
       stop
 
       end
@@ -69,7 +70,7 @@
         endif
       enddo
 
-      write (*,'(a,i5)') ' nursat > Cannot find atom # ',iat
+      write (logString, '(a,i5)') ' nursat > Cannot find atom # ',iat
       stop
 
       end

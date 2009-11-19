@@ -43,14 +43,14 @@
 ! ------------------- code to list all PDB information
 !      ir=0
 !      do i=1,nchp
-!        write(*,*) ' ===== chain |',chnp(i),'|'
+!        write (logString, *) ' ===== chain |',chnp(i),'|'
 !        do j=1,nchrsp(i)
 !          ir=ir+1
-!          write(*,*) ' ----- ',rsidp(ir),' ',rsnmp(ir),' ',nrsatp(ir)
+!          write (logString, *) ' ----- ',rsidp(ir),' ',rsnmp(ir),' ',nrsatp(ir)
 !          k1=irsatp(ir)
 !          k2=k1+nrsatp(ir)-1
 !          do k=k1,k2
-!            write(*,*) ' ',noatp(k),' ',atnmp(k),' ',(xyzp(l,k),l=1,3)
+!            write (logString, *) ' ',noatp(k),' ',atnmp(k),' ',(xyzp(l,k),l=1,3)
 !          enddo
 !        enddo
 !      enddo

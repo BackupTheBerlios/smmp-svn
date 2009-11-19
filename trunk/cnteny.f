@@ -36,7 +36,7 @@
       ntlvr=nvrml(nml)
 
       if (ntlvr.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' cnteny> No variables defined in molecule #',nml
         return
       endif
@@ -183,8 +183,8 @@
         if (ey.gt.coey) then
           nbc=nbc+1
           ir=nursat(i)
-          write(*,'(1x,i4,1x,a4,1x,a4,a2,e11.4)') ir,seq(ir),nmat(i),
-     &                                            ': ',ey
+          write (logString, '(1x,i4,1x,a4,1x,a4,a2,e11.4)') ir,seq(ir),
+     &       nmat(i), ': ',ey
         endif
       enddo
 

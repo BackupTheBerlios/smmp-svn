@@ -80,7 +80,7 @@
        varfile = ' '
 
       ntlml = 0
-      write (*,*) 'Solvent: ', itysol
+      write (logString, *) 'Solvent: ', itysol
 !     Initialize random number generator.
       call sgrnd(31433)
 
@@ -117,10 +117,10 @@
        temp = 300.0
        lrand = .true.
        E = energy()
-       write(*,*) E, eyel,eyvw,eyhb,eyvr
+       write (logString, *) E, eyel,eyvw,eyhb,eyvr
        call outpdb(1, "polyA.pdb")
 !      Canonical Monte Carlo
-!        call canon(nequi, nsweep, nmes, temp, lrand)
+       call canon(nequi, nsweep, nmes, temp, lrand)
 
 !      For simulated annealing uncomment the lines below
 !      tmin = 200.0

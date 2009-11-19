@@ -65,7 +65,8 @@
       integer izero, ione, mxn, nfun, itr, i, n, n1, i1, j, isfv, maxfun
       integer ir
 
-
+      character(255) logString
+      
       parameter ( eps1=0.1d0,
      &            eps2=0.7d0,
      &            tiny=1.d-32,
@@ -141,7 +142,7 @@
       endif
 
     3 if (nfun.ge.maxfun) then
-!c        write (*,*) ' minfor> exceeded max. number of function calls'
+!c        write (logString, *) ' minfor> exceeded max. number of function calls'
         return
       endif
 
@@ -223,7 +224,8 @@
             fa=fb
             goto 2
           else               ! rank of new matrix is deficient
-            write (*,*) ' minfor> rank of hessian < number of variables'
+            write (logString, *) 
+     &       ' minfor> rank of hessian < number of variables'
             return
           endif
 

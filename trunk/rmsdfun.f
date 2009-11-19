@@ -81,7 +81,8 @@
 
 
       if (nml.lt.1.or.nml.gt.ntlml) then
-        write(*,*) ' rmsdopt>  Sorry, there is no molecule #',nml
+        write (logString, *) ' rmsdopt>  Sorry, there is no molecule #',
+     &     nml
         stop
       endif
 
@@ -136,7 +137,7 @@
       enddo  ! molecules
 
       if (n.lt.3) then
-        write(*,*) ' rmsdopt>  <3 atoms selected !'
+        write (logString, *) ' rmsdopt>  <3 atoms selected !'
         stop
       endif
 
@@ -289,7 +290,7 @@
 
       integer n,nrot,i,ip,iq,j
 
-
+      character(255) logString
       real*8 a(n,n),d(n),v(n,n),
      &       c,g,h,s,sm,t,tau,theta,tresh,b(NMAX),z(NMAX),smeps
 
@@ -402,7 +403,7 @@
 
       enddo
 
-      write(*,*) ' jacobi> too many iterations'
+      write (logString, *) ' jacobi> too many iterations'
       stop
 
       return

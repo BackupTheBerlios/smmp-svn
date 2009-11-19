@@ -50,7 +50,7 @@
 
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' opeshe> No variables defined in molecule #',nml
         return
       endif
@@ -376,7 +376,7 @@
       gdn=(eynw-eyol)/del    ! numerical derivative
       gda=gdeyvr(iv)         ! analytical der.
 
-      write (*,'(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
+      write (logString, '(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
      &       abs(gda-gdn),')'
 
 ! _________________________ restore

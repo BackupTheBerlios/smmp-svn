@@ -76,7 +76,7 @@
       endif
 
       if (ntlvr.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' setmvs> No variables defined in molecule #',nml
         nmsml(nml)=0
         nadml(nml)=0
@@ -175,7 +175,7 @@
               if (bb) k=ilaat
               if (i1.ne.0) then  ! combine ranges
                 if (j.gt.(i2+1).or.k.lt.(i1-1)) then
-                  write (*,'(3a,/,2a,i4,a,i3)') 
+                  write (logString, '(3a,/,2a,i4,a,i3)') 
      &             ' setmvs> Cannot combine disjunct ranges of atom',
      &             ' indices for torsion ',nmvr(iv),' in residue ',
      &             seq(ir),ir,' of molecule # ',nml
@@ -197,7 +197,7 @@
         endif
 
         if ((nms+1).gt.mxms) then
-          write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
+          write (logString, '(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
      &    ': Number of moving sets > ',mxms
           stop
         endif
@@ -230,7 +230,8 @@
                 if (ja.gt.0) then  ! +1 moving set
                   nms=nms+1
                   if (nms.gt.mxms) then
-                    write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',
+                    write (logString, '(a,i4,a,i5)') 
+     &                ' setmvs> Molecule # ',
      &               nml,': Number of moving sets > ',mxms
                      stop
                   endif
@@ -319,7 +320,8 @@
             enddo
             nad=nad+1
             if (nad.gt.mxvr) then
-              write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
+              write (logString, '(a,i4,a,i5)') ' setmvs> Molecule # ',
+     &                         nml,
      &                         ': Number of added variables > ',mxvr
               stop
             endif
@@ -334,7 +336,8 @@
                 enddo
                 nad=nad+1
                 if (nad.gt.mxvr) then
-                  write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
+                  write (logString, '(a,i4,a,i5)') 
+     &                         ' setmvs> Molecule # ',nml,
      &                         ': Number of added variables > ',mxvr
                   stop
                 endif
@@ -348,7 +351,8 @@
               enddo
               nad=nad+1
               if (nad.gt.mxvr) then
-                write (*,'(a,i4,a,i5)') ' setmvs> Molecule # ',nml,
+                write (logString, '(a,i4,a,i5)') ' setmvs> Molecule # ',
+     &                       nml,
      &                       ': Number of added variables > ',mxvr
                 stop
               endif
@@ -374,32 +378,32 @@
 !            i1=latms1(i)
 !            i2=latms2(i)
 !            if (i.eq.i1s) then
-!              write (*,'(a,i3,7a,i4,3a,i4,a)') 'res # ',nursvr(iv),
+!              write (logString, '(a,i3,7a,i4,3a,i4,a)') 'res # ',nursvr(iv),
 !     #        ' var: ',nmvr(iv),' base:',nmat(ib),'    atoms= ',
 !     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
 !            else
-!              write (*,'(39x,2a,i4,3a,i4,a)')
+!              write (logString, '(39x,2a,i4,3a,i4,a)')
 !     #        nmat(i1),'(',i1,') - ',nmat(i2),'(',i2,')'
 !            endif
 !          enddo
 !        else
-!          write (*,'(a,i3,5a)') 'res # ',nursvr(iv),
+!          write (logString, '(a,i3,5a)') 'res # ',nursvr(iv),
 !     #    ' var: ',nmvr(iv),' base:',nmat(ib),'  No atoms'
 !        endif
 !        i1a=iadvr1(iv)
 !        i2a=iadvr2(iv)
 !        if (i1a.le.i2a) then
-!          write (*,'(a,30(1x,a))') ' Depending variables:',
+!          write (logString, '(a,30(1x,a))') ' Depending variables:',
 !     #                    (nmvr(ladvr(i)),i=i1a,i2a)
 !        else
-!          write (*,'(a)') ' No dep. variables'
+!          write (logString, '(a)') ' No dep. variables'
 !        endif
 !      enddo
 ! _____________________________________ Summary - End
  
       return
 
-    6 write (*,'(a,i4,/,2(a,i5),a)') 
+    6 write (logString, '(a,i4,/,2(a,i5),a)') 
      & ' setmvs> Error in atom numbering of molecule # ',nml,
      & ': atom ranges for variables # ',iv,' and # ',jv,
      & ' overlap only PARTLY'

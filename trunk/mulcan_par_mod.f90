@@ -102,8 +102,8 @@ module multicanonical
        enddo
 
       eol = energy()
-      write (*,'(a,e12.5,/)')  'Energy of start configuration: ',eol
-      write(*,*)
+      write (logString, '(a,e12.5,/)')  'Energy of start configuration: ',eol
+      write (logString, *)
 
       call outpdb(1, 'start.pdb')
 
@@ -157,13 +157,13 @@ module multicanonical
 
 ! Final output
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'last energy',eol
-      write(*,*) 'acceptance rate:',acz
+      write (logString, *) 'last energy',eol
+      write (logString, *) 'acceptance rate:',acz
 
-      write(*,*) 'Histogram:'
+      write (logString, *) 'Histogram:'
       do i=kmin,kmax
        if(xhist(i).gt.0.0d0) then
-        write(*,*) i,xhist(i)
+        write (logString, *) i,xhist(i)
        end if
       end do
 
@@ -265,7 +265,7 @@ module multicanonical
         if(iref(i,j).eq.1) nci = nci + 1
        end do
       end do
-      write(*,*) 'Number of contacts in reference conformation:',nci
+      write (logString, *) 'Number of contacts in reference conformation:',nci
 
 ! Read in fields with multicanonical parameter
       Do j=kmin,kmax
@@ -281,7 +281,7 @@ module multicanonical
         iv = idvr(j)
         vlvr(iv) = x
        end do
-       write(*,*) 'Last iteration, energy:',nswm,eol_old
+       write (logString, *) 'Last iteration, energy:',nswm,eol_old
       else
 ! _________________________________ random start
        do i=1,nvr
@@ -293,15 +293,15 @@ module multicanonical
       end if
 
       eol = energy()
-      write (*,'(e12.5,/)')  eol
+      write (logString, '(e12.5,/)')  eol
       call contacts(nhy,nhx,dham)
-      write(*,*) 'Number of contacts in start configuration:',nhy
-      write(*,*) 'Number of native contacts in start configuration:',   &
+      write (logString, *) 'Number of contacts in start configuration:',nhy
+      write (logString, *) 'Number of native contacts in start configuration:',   &
      &            nhx
       do i=1,nresi
-       write(*,'(62I1)') (ijcont(i,j), j=1,nresi)
+       write (logString, '(62I1)') (ijcont(i,j), j=1,nresi)
       end do
-      write(*,*)
+      write (logString, *)
 
 
       
@@ -354,13 +354,13 @@ module multicanonical
       end do ! End of simulation
 
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'last energy',eol
-      write(*,*) 'acceptance rate:',acz
+      write (logString, *) 'last energy',eol
+      write (logString, *) 'acceptance rate:',acz
 
 ! WRITE DOWN (UN-REWEIGHTED) HISTOGRAM OF MULTICANONICAL SIMULATION
       do i=kmin,kmax
        if(xhist(i).gt.0.0d0) then
-        write(*,*) i,xhist(i)
+        write (logString, *) i,xhist(i)
        end if
       end do
 

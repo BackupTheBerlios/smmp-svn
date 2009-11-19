@@ -326,9 +326,9 @@
          vlvr = ovr
 !          enw=energy()
 !          if (abs(enw-eol1).gt.0.000001) then
-!             write(*,*) 'rejected bgs move: energy change :',eol1,enw
+!             write (logString, *) 'rejected bgs move: energy change :',eol1,enw
 !          endif
-!         write(*,*) 'rejected bgs move: ',eol1,enw,wfw,wbw,rd
+!         write (logString, *) 'rejected bgs move: ',eol1,enw,wfw,wbw,rd
          bgs=0
       endif
  171  continue

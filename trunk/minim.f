@@ -57,7 +57,7 @@
       acc=eps   
 
       if (msv.gt.msvmx) then
-        write (*,'(a,i5)') ' minreg> parameter MSV > ',msvmx
+        write (logString, '(a,i5)') ' minreg> parameter MSV > ',msvmx
         stop
       endif
 
@@ -65,20 +65,20 @@
 
       call gradient()
 
-      write(*,'(/,a,/)') ' Energy BEFORE minimization:' 
+      write (logString, '(/,a,/)') ' Energy BEFORE minimization:' 
 
       if (ireg.eq.0) then
 
-        write (*,'(a,e12.5,/,3(a,e11.4),/,2(a,e11.4),/)') ' Total: ',
-     &    eysm,
+        write (logString, '(a,e12.5,/,3(a,e11.4),/,2(a,e11.4),/)') 
+     &    ' Total: ', eysm,
      &    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
      &    '   Variables: ',eyvr,'  Solvatation: ',eysl
 
        else
 
 
-        write (*,'(a,e12.5,/,3(a,e11.4),/,3(a,e11.4),/)') ' Total: ',
-     &    wtey*eysm + wtrg*eyrg,
+        write (logString, '(a,e12.5,/,3(a,e11.4),/,3(a,e11.4),/)') 
+     &    ' Total: ', wtey*eysm + wtrg*eyrg,
      &    '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
      &    '   Variables: ',eyvr,'  Solvatation: ',eysl,
      &    ' Regularization: ',eyrg
@@ -147,8 +147,8 @@
 !          gdey2 = max(acc,gdey2)
 !          gdrg2 = max(acc,gdrg2)
 !          wtrg = wtrg * sqrt(gdey2/gdrg2)
-!          write(*,*)  ' -->    Wt_energy = ',wtey,'  Wt_regul. = ',wtrg
-!          write(*,*)  '  '
+!          write (logString, *)  ' -->    Wt_energy = ',wtey,'  Wt_regul. = ',wtrg
+!          write (logString, *)  '  '
 !        endif
 
         esm=wtey*eysm+wtrg*eyrg
@@ -183,34 +183,34 @@
 
 
       if (nop.lt.mxop) then
-        write (*,'(a)') ' ---- CONVERGENCE ----'
+        write (logString, '(a)') ' ---- CONVERGENCE ----'
       else
-        write (*,'(a)')  '---- STEP LIMIT ----'
+        write (logString, '(a)')  '---- STEP LIMIT ----'
       endif
 
 
-      write (*,'(/,2a,/)') ' Final energies ',
+      write (logString, '(/,2a,/)') ' Final energies ',
      & '__________________________________________________'
 
       eysm = energy()
 
       if (ireg.eq.0) then
 
-        write (*,'(a,e12.5,/,3(a,e11.4),/,2(a,e11.4))') ' Total: ',eysm,
-     &  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
-     &  '   Variables: ',eyvr,'  Solvatation: ',eysl
+        write (logString, '(a,e12.5,/,3(a,e11.4),/,2(a,e11.4))') 
+     &  ' Total: ',eysm,'   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,
+     &  ' HB: ',eyhb, '   Variables: ',eyvr,'  Solvatation: ',eysl
 
       else
 
-        write (*,'(a,e12.5,/,3(a,e11.4),/,3(a,e11.4))') ' Total: ',
-     &      wtey*eysm + wtrg*eyrg,
+        write (logString, '(a,e12.5,/,3(a,e11.4),/,3(a,e11.4))') 
+     &  ' Total: ', wtey*eysm + wtrg*eyrg,
      &  '   Coulomb: ',eyel,' Lennard-Jones: ',eyvw,' HB: ',eyhb,
      &  '   Variables: ',eyvr,'  Solvatation: ',eysl,
      &  ' Regularization: ',eyrg
 
       endif
 
-      write (*,'(/,a,/)') ' Variables _________________'
+      write (logString, '(/,a,/)') ' Variables _________________'
 
       nv = 0
       do i=1,ntlvr  !! nvr
@@ -220,8 +220,8 @@
           vr=vlvrn(nv)
           if (abs(vr).gt.pi) vr=vr-sign(pi2,vr)
 
-          write (*,'(1x,a,1x,i4,f8.1,a,f5.1,a)') nmvr(i),nursvr(i),
-     &        vr*crd,'    (',abs(difang(vr,vlvro(i)))*crd,')'
+          write (logString, '(1x,a,1x,i4,f8.1,a,f5.1,a)') nmvr(i),
+     &        nursvr(i), vr*crd,'    (',abs(difang(vr,vlvro(i)))*crd,')'
 
           vlvr(i) = vr
         endif
@@ -230,29 +230,30 @@
 
       if (ireg.ne.0) then
 
-        write (*,'(/,a,/)') ' Global Variables ___________'
+        write (logString,'(/,a,/)') ' Global Variables ___________'
 
         do i=1,ntlml
-          write(*,*) ' Molecule #',i,' old          new'
+          write (logString, *) ' Molecule #',i,' old          new'
           do j=1,3
-            write(*,*) gbpro(j,i),' ',gbpr(j,i)
+            write (logString, *) gbpro(j,i),' ',gbpr(j,i)
           enddo
           do j=4,6
-            write(*,*) gbpro(j,i)*crd,' ',gbpr(j,i)*crd
+            write (logString, *) gbpro(j,i)*crd,' ',gbpr(j,i)*crd
           enddo
         enddo
 
       endif
 
-      write (*,'(/,2a)') ' Gradient ',
+      write (logString,'(/,2a)') ' Gradient ',
      & '______________________________________________________________'
 
-      write (*,'(8(1x,f8.3))') (gdvr(i),i=1,nv)
+      write (logString,'(8(1x,f8.3))') (gdvr(i),i=1,nv)
 
       if (ireg.ne.0) then
 
-        write (*,*) ' -------------- global variables ------------'
-        write (*,'(6(1x,f8.3))') (gdvr(i+nv),i=1,ngbvr)
+        write (logString, *) 
+     &             ' -------------- global variables ------------'
+        write (logString, '(6(1x,f8.3))') (gdvr(i+nv),i=1,ngbvr)
 
       endif
 
@@ -335,8 +336,8 @@
 
         esm=eysm
 
-        write (*,'(a,i5,a,2(e13.6,a))') ' Step ',nop,': energy ',esm
-     &                                 ,'  (',gdsmey,' )'
+        write (logString, '(a,i5,a,2(e13.6,a))') ' Step ',nop,
+     &                    ': energy ', esm, '  (',gdsmey,' )'
 
       else
 
@@ -354,8 +355,8 @@
 
         esm=wtey*eysm+wtrg*eyrg
 
-        write (*,'(a,i5,a,3(e13.6,a))') ' Step ',nop,': energy ',esm
-     &                                 ,'  (',gdsmey,',',gdsmrg,' )'
+        write (logString, '(a,i5,a,3(e13.6,a))') ' Step ',nop,
+     &             ': energy ',esm,'  (',gdsmey,',',gdsmrg,' )'
 
       endif
 

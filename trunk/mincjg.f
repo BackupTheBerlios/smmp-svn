@@ -56,7 +56,8 @@
       dimension x(mxn),g(mxn),
      &          d(mxn),xa(mxn),ga(mxn),dt(mxn),yt(mxn),gt(mxn)
 
-
+      character(255) logString
+      
       ier = 0
       iter = 0
       iterfm = 0
@@ -92,7 +93,7 @@
       enddo
 
       if ( gdit .ge. 0.d0 ) then
-        write(*,*) ' mincjg>  search direction is uphill'
+        write (logString, *) ' mincjg>  search direction is uphill'
         ier = 3
         goto 6
       endif
@@ -161,7 +162,8 @@
      &       abs(gdmi/gdit) .gt. EPS ) then
 
           ier=2
-          write(*,*) ' mincjg>  too small step in search direction'
+          write (logString, *) 
+     &       ' mincjg>  too small step in search direction'
         endif
 
         goto 6
@@ -229,7 +231,8 @@
 
       if ( iter .ge. (iterfm + MXFCON) ) then
         ier = 4
-        write(*,*) ' mincjg>  line search failed to reduce function'
+        write (logString, *) 
+     &    ' mincjg>  line search failed to reduce function'
         return
       endif
 
@@ -303,7 +306,7 @@
       nfun = nfun + 1
       call move(nfun,n,f,x,g)
 
-      write(*,*) ' mincjg> ier = ',ier
+      write (logString, *) ' mincjg> ier = ',ier
 
       return
       end

@@ -83,7 +83,8 @@
       end if
 
       eol=energy()
-      write (*,'(a,e12.5,/)')  'energy of start configuration: ',eol
+      write (logString, '(a,e12.5,/)')  
+     &   'energy of start configuration: ',eol
 
 ! Write start configuration in pdb-format into file
         call outpdb(0, "start.pdb")
@@ -93,7 +94,8 @@
       do nsw=1,nequi
          call metropolis(eol,acz,can_weight)
       end do
-      write(*,*) 'Energy after  equilibration:',eol
+      write (logString, *) 
+     &   'Energy after  equilibration:', eol
 
 !======================Simulation by simulated annealing
       acz = 0.0d0
@@ -130,17 +132,17 @@
       end do
 
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'acceptance rate:',acz
-      write(*,*)
+      write (logString, *) 'acceptance rate:',acz
+      write (logString, *)
 ! ------------ Output Dihedreals of final configuration
-      write(*,*) 'last energy',eol
+      write (logString, *) 'last energy',eol
       call outvar(0,' ')
 !     Output final conformation as pdb-file
       call outpdb(0,"final.pdb")
-      write(*,*)
+      write (logString, *)
 
 ! ------------ Output Dihedreals of conformation with lowest energy
-      write(*,*) 'lowest energy ever found:',nemin,ymin
+      write (logString, *) 'lowest energy ever found:',nemin,ymin
       close(14)
 ! =====================
 

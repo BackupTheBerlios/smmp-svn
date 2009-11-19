@@ -56,7 +56,7 @@
           eysl = 0.d0
         else
 
-          write(*,*)  'gradient> Set itysol < 0'
+          write (logString, *)  'gradient> Set itysol < 0'
           stop
         endif
 

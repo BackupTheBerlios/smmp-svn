@@ -171,7 +171,8 @@
 !     
       enw = energy()
       if(abs(eol-enw).gt.0.000001)  then
-         write(*,*) 'metropolis: eol,enw,difference:', eol, enw, eol-enw
+         write (logString, *) 'metropolis: eol,enw,difference:', eol, 
+     &      enw, eol-enw
          if (eol.lt.100000) then 
             stop 'metropolis: eol and enw difference unacceptable'
          endif

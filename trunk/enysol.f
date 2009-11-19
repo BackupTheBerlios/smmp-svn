@@ -30,6 +30,7 @@
 !     functions
       integer nursat
 
+
       integer numbox, inbox, indsort, look, i, ii, ia, ib, ibox, icount
       integer ilk, il, ik, ix, iy, iz, j, jy, jbox, jbi, jres, jj, jcnt
       integer jtk, jx, jz, lbn, lst, mhx, mx, nsy, ndy, mz, my, nboxj
@@ -156,12 +157,13 @@
         nboxj=mx+my*ndx+mz*nqxy+1
         numbox(j)=nboxj
         if (nboxj.gt.mxbox) then
-         write(*,'(a)') 'enysol> bad mxboxe-2'
-         write(*,*) 'diagnostics ...'
-         write(*,*) 'atom ',j
-         write(*,*) 'position ',xat(j),yat(j),zat(j)
-         write(*,*) 'box indices ',mx,my,mz
-         write(*,*) 'resulting boxindex and limit ',nboxj,mxbox
+         write (logString, '(a)') 'enysol> bad mxboxe-2'
+         write (logString, *) 'diagnostics ...'
+         write (logString, *) 'atom ',j
+         write (logString, *) 'position ',xat(j),yat(j),zat(j)
+         write (logString, *) 'box indices ',mx,my,mz
+         write (logString, *) 'resulting boxindex and limit ',
+     &      nboxj,mxbox
 
          stop
         else
@@ -349,7 +351,7 @@
 !   The first non-comment line is the number of the surface points
 
       read(lin(1:5),'(i5)') npnt
-!       write(*,'(a,i5)') 'the number of points---->',npnt
+!       write (logString, '(a,i5)') 'the number of points---->',npnt
 
 !    Read the surface points
 

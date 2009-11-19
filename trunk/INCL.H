@@ -1,6 +1,7 @@
       implicit none
       
       character*255 version
+      character*255 logString
 
       integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath
       integer mxvr, mxms, mxvw, mx14, mxvrh, mxtyat, mxhbdo

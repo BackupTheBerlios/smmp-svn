@@ -68,7 +68,7 @@
 
       eol = energy()
       e_min = eol
-      write (*,'(a,e12.5,/)')  'energy of start configuration:',eol
+      write (logString, '(a,e12.5,/)')  'energy of start configuration:',eol
 
 ! Write start configuration in pdb-format into file
       call outpdb(0,'start.pdb')
@@ -78,15 +78,15 @@
       do nsw=1,nequi
          call metropolis(eol,acz,can_weight)
       end do
-      write(*,*) 'Energy after equilibration:',eol
+      write (logString, *) 'Energy after equilibration:',eol
 
 !======================Simulation in canonical ensemble
       acz = 0.0d0
       do nsw=0,nswp
         call metropolis(eol,acz,can_weight)
         if (eol.lt.e_min) then
-           write (*,*) "New minimum energy:", eol, "t=", nsw
-           write (*,*) eyel,eyhb,eyvr,eysl
+           write (logString, *) "New minimum energy:", eol, "t=", nsw
+           write (logString, *) eyel,eyhb,eyvr,eysl
            e_min = eol
            call outpdb(0, "minen.pdb")
         endif
@@ -115,10 +115,10 @@
       end do
 
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'acceptance rate:',acz
-      write(*,*)
+      write (logString, *) 'acceptance rate:',acz
+      write (logString, *)
 ! ------------ Output Dihedreals of final configuration
-      write(*,*) 'last energy',eol
+      write (logString, *) 'last energy',eol
       call outvar(0,'lastconf.var')
 !     Output final conformation as pdb-file
       call outpdb(0,'final.pdb')

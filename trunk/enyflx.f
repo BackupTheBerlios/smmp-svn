@@ -32,7 +32,7 @@
 
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' enyflx> No variables defined in molecule #',nml
         return
       endif

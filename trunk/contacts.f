@@ -160,7 +160,7 @@
 
            do nr_j=nr_i+3,irsml2(nmol) ! Over res. j 
 
-!             write(*,'(2i3)'),nr_i,nr_j
+!             write (logString, '(2i3)'),nr_i,nr_j
 
               ic=0
 
@@ -172,7 +172,7 @@
      &                   + (zat(ialf)-zat(jalf))**2
               if(sqrt(rij2).lt.rcut) ic=1
 
-!             write(*,'(2i3)'),nr_i,nr_j
+!             write (logString, '(2i3)'),nr_i,nr_j
 
               ijcont(nr_i,nr_j)=ic
               ijcont(nr_j,nr_i)=ic ! The matrix is symmetrical

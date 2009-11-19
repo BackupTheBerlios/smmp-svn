@@ -129,8 +129,9 @@ Cf2py intent(in) nmol
        ddp=(xold(j)-xold(i))**2+(yold(j)-yold(i))**2
      &   +(zold(j)-zold(i))**2! Distance between atom i and j
        if(ddp.lt.1e-10) then
-         write(*,*)'ERROR in data: centres of two atoms coincide!'
-         write(*,*)i,j,xold(i),yold(i),zold(i),rvdw(i),
+         write (logString, *)
+     &      'ERROR in data: centres of two atoms coincide!'
+         write (logString, *)i,j,xold(i),yold(i),zold(i),rvdw(i),
      &                   xold(j),yold(j),zold(j),rvdw(j)
          stop 'Centres of atoms coincide!'
        endif

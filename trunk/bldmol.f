@@ -133,7 +133,7 @@
         if (iowat(ibd(i)).ne.i1) then
 
           if (ix.ne.0) then
-            write (*,'(2a,i3)') 
+            write (logString, '(2a,i3)') 
      &         ' fnd3ba> Can handle only simple ring at 1st',
      &         ' atom of molecule #',nml
             stop
@@ -165,7 +165,7 @@
 
       endif
 
-      write (*,'(4a,i4,a,i4)') 
+      write (logString, '(4a,i4,a,i4)') 
      &   ' fnd3ba> Cannot find backbone atom following ',nmat(i2),
      &   ' of residue ',seq(irs),irs,' in molecule #',nml
       stop

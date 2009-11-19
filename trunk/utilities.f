@@ -65,8 +65,9 @@
          end do
       end do
       ipps = isum / num_ppr
-      write (*,*) "Total number of interactions:", isum
-      write (*,*) "Average # of interactions per processor", ipps
+      write (logString, *) "Total number of interactions:", isum
+      write (logString, *) "Average # of interactions per processor", 
+     &   ipps
 
       totalct = 0
       irank = 1
@@ -100,10 +101,10 @@
      &         (abs(totalct-itarget)
      &            .lt.abs(totalct + isum - itarget))) then
                workPerProcessor(nml, irank) = io + 1
-!                write (*,*) io + 1, totalct, itarget
+!                write (logString, *) io + 1, totalct, itarget
             else
                workPerProcessor(nml, irank) = io
-!                write (*,*) io, totalct + isum, itarget
+!                write (logString, *) io, totalct + isum, itarget
             end if
             irank = irank + 1
             itarget = int(irank * ipps)
@@ -126,7 +127,7 @@
 !     \code
 !     rank = 11
 !     fileName = fileNameMP('base_0000.dat', 6, 9, rank)
-!     write (*,*), fileName
+!     write (logString, *), fileName
 !     \endcode
 !     will output base_0011.dat.
 !

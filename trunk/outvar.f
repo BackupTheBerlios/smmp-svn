@@ -29,7 +29,7 @@
       character*(*) fileName
 
       if (nml.lt.0.or.nml.gt.ntlml) then
-        write(*,*) ' outvar>  No such molecule #',nml,' !'
+        write (logString, *) ' outvar>  No such molecule #',nml,' !'
         return
       endif
 
@@ -56,7 +56,7 @@
       character mlfd*7,strg(6)*17
 
       if (nml.lt.0.or.nml.gt.ntlml) then
-        write(*,*) ' outvbs>  No such molecule #',nml,' !'
+        write (logString, *) ' outvbs>  No such molecule #',nml,' !'
         return
       elseif (nml.gt.0) then
         im1 = nml

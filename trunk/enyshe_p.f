@@ -45,7 +45,7 @@
       endif
 
       if (ntlvr.eq.0) then
-         write (*,'(a,i4)')
+         write (logString, '(a,i4)')
      &        ' enyshe> No variables defined in molecule #',nml
          return
       endif

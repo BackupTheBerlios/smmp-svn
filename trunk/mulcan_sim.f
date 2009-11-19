@@ -71,7 +71,7 @@
         if(iref(i,j).eq.1) nci = nci + 1
        end do
       end do
-      write(*,*) 'Number of contacts in reference conformation:',nci
+      write (logString, *) 'Number of contacts in reference conformation:',nci
 
 ! READ IN FIELDS WITH MULTICANONICAL PARAMETER
       Do j=kmin,kmax
@@ -87,7 +87,7 @@
         iv = idvr(j)
         vlvr(iv) = x
        end do
-       write(*,*) 'Last iteration, energy:',nswm,eol_old
+       write (logString, *) 'Last iteration, energy:',nswm,eol_old
       else
 ! _________________________________ random start
        do i=1,nvr
@@ -99,15 +99,15 @@
       end if
 !
       eol = energy()
-      write (*,'(e12.5,/)')  eol
+      write (logString, '(e12.5,/)')  eol
       call contacts(nhy,nhx,dham)
-      write(*,*) 'Number of contacts in start configuration:',nhy
-      write(*,*) 'Number of native contacts in start configuration:',
+      write (logString, *) 'Number of contacts in start configuration:',nhy
+      write (logString, *) 'Number of native contacts in start configuration:',
      &            nhx
       do i=1,nresi
-       write(*,'(62I1)') (ijcont(i,j), j=1,nresi)
+       write (logString, '(62I1)') (ijcont(i,j), j=1,nresi)
       end do
-      write(*,*)
+      write (logString, *)
 !
 
       
@@ -164,13 +164,13 @@
 
 ! FINAL OUTPUT:
       acz = acz/dble(nsw*nvr)
-      write(*,*) 'last energy',eol
-      write(*,*) 'aczeptance rate:',acz
+      write (logString, *) 'last energy',eol
+      write (logString, *) 'aczeptance rate:',acz
 
 ! WRITE DOWN (UN-REWEIGHTED) HISTOGRAM OF MULTICANONICAL SIMULATION
       do i=kmin,kmax
        if(xhist(i).gt.0.0d0) then
-        write(*,*) i,xhist(i)
+        write (logString, *) i,xhist(i)
        end if
       end do
 ! =====================

@@ -147,8 +147,8 @@
             do nsw=1,nequi
                CALL METROPOLIS(energ,acz,can_weight)
             end do
-            write(*,*) 'Start energy after equilibration for replica:',
-     &                 k, energ
+            write (logString, *) 
+     &         'Start energy after equilibration for replica:',k, energ
             do i=1,nvr
                iv = idvr(i)
                coor_G(i,k) = vlvr(iv)

@@ -29,13 +29,14 @@
       integer ln, is, ibegst, j, iendst
 
       character spr,blnk,str*(*),strn*(*)
+      character*255 logString
       
       data blnk/' '/
       
       integer i, ic, ish, ii
 
       if (spr.eq.blnk) then
-        write (*,*) ' extstr> Separator should not be blank'
+        write (logString, *) ' extstr> Separator should not be blank'
         stop
       endif
 
@@ -78,7 +79,8 @@
 
       return
 ! ______________________________________________________________ Error
-    1 write (*,'(a)') ' extstr> Substring to be extracted is too long !'
+    1 write (logString, '(a)') 
+     &   ' extstr> Substring to be extracted is too long !'
       stop
 
       end

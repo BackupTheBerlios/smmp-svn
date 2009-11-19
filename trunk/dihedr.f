@@ -56,13 +56,14 @@
      &      uz1*(ux2*y2-uy2*x2).lt.zero) dihedr =-dihedr
         return
       else
-        write (*,'(a,4i5)')' dihedr> Error in coordinates of atoms #: '
+        write (logString, '(a,4i5)')
+     &     ' dihedr> Error in coordinates of atoms #: '
      &                     ,i1,i2,i3,i4
 
-        write (*,*) 'stored coordinates are xvals :',
+        write (logString, *) 'stored coordinates are xvals :',
      &       xat(i1),xat(i2),xat(i3),xat(i4) 
-        write (*,*) 'yvals:', yat(i1),yat(i2),yat(i3),yat(i4) 
-        write (*,*) 'zvals:', zat(i1),zat(i2),zat(i3),zat(i4) 
+        write (logString, *) 'yvals:', yat(i1),yat(i2),yat(i3),yat(i4) 
+        write (logString, *) 'zvals:', zat(i1),zat(i2),zat(i3),zat(i4) 
         call outvar(0,'crash.var')        
         stop
       endif
@@ -109,12 +110,13 @@
         return
 
       else
-        write (*,'(a,3i5)')' valang> Error in coordinates of atoms #: '
+        write (logString, '(a,3i5)')
+     &   ' valang> Error in coordinates of atoms #: '
      &                     ,i1,i2,i3
-        write (*,*) 'stored coordinates are xvals :',
+        write (logString, *) 'stored coordinates are xvals :',
      &       xat(i1),xat(i2),xat(i3) 
-        write (*,*) 'yvals:', yat(i1),yat(i2),yat(i3) 
-        write (*,*) 'zvals:', zat(i1),zat(i2),zat(i3) 
+        write (logString, *) 'yvals:', yat(i1),yat(i2),yat(i3) 
+        write (logString, *) 'zvals:', zat(i1),zat(i2),zat(i3) 
         call outvar(0,'crash.var') 
         stop
       endif

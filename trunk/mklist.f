@@ -44,7 +44,7 @@
 
       ntlms=nmsml(nml)
       if (ntlms.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' mklist> No mov. sets defined in molecule #',nml
         nvwml(nml)=0
         n14ml(nml)=0
@@ -106,7 +106,8 @@
      &            quench(ibd,ibd,n2nd,mxh,l2nd1,l2nd2) ) then
                 n2i=n2i+1
                 if (n2i.gt.mx2) then
-                  write (*,'(a,i3,2a)')  ' mklist> Molecule # ',nml,
+                  write(logString, '(a,i3,2a)')  ' mklist> Molecule # ',
+     &                nml,
      &                ': too many atoms bound to ',nmat(iob)
                   stop
                 endif
@@ -124,7 +125,8 @@
      &                quench(j,j,n2nd,mxh,l2nd1,l2nd2) ) then
                     n2i=n2i+1
                     if (n2i.gt.mx2) then
-                      write (*,'(a,i3,a)')  ' mklist> Molecule # '
+                      write (logString, '(a,i3,a)')  
+     &                         ' mklist> Molecule # '
      &                         ,nml,': too many atoms in list L2I'
                       stop
                     endif
@@ -140,7 +142,7 @@
               if( quench(ioiob,ioiob,n2nd,mxh,l2nd1,l2nd2) ) then
                 n2i=n2i+1
                 if (n2i.gt.mx2) then
-                  write (*,'(a,i3,2a)')  ' mklist> Molecule # '
+                  write (logString, '(a,i3,2a)')  ' mklist> Molecule # '
      &             ,nml,': too many atoms bound to ',nmat(iob)
                   stop
                 endif
@@ -164,7 +166,8 @@
      &        quench(ibd,ibd,n2nd,mxh,l2nd1,l2nd2) ) then
               n1i=n1i+1
               if (n1i.gt.mxbd) then
-                write (*,'(a,i3,2a)')  ' mklist> Molecule # ',nml,
+                write (logString, '(a,i3,2a)')  ' mklist> Molecule # ',
+     &              nml,
      &             ': too many atoms bound to ',nmat(ib)
                 stop
               endif
@@ -176,8 +179,9 @@
      &              quench(jbd,jbd,n2nd,mxh,l2nd1,l2nd2) ) then
                   n2i=n2i+1
                   if (n2i.gt.mx2) then
-                    write (*,'(a,i3,2a)')  ' mklist> Molecule # ',nml,
-     &              ': too many atoms bound to branches of ',nmat(ib)
+                    write (logString, '(a,i3,2a)')  
+     &                 ' mklist> Molecule # ',nml,
+     &                 ': too many atoms bound to branches of ',nmat(ib)
                     stop
                   endif
                   l2i(n2i)=jbd
@@ -193,8 +197,9 @@
               if (quench(i,i,n2nd,mxh,l2nd1,l2nd2) ) then
                 n2i=n2i+1
                 if (n2i.gt.mx2) then
-                  write (*,'(a,i3,a)')  ' mklist> Molecule # ',nml,
-     &            ': too many atoms n list L2I '
+                  write (logString, '(a,i3,a)')  ' mklist> Molecule # ',
+     &               nml,
+     &               ': too many atoms n list L2I '
                   stop
                 endif
                 l2i(n2i)=i
@@ -206,7 +211,8 @@
             do i=latms1(is),latms2(is)  ! ============= atoms in m.s of 'iv'
 ! ________________________________________ Current 2ND list -> VdW-interact.
               if ((nvw+n2nd).gt.mxvw) then
-                write (*,'(a,i4,a,i5)') ' mklist> Molecule # ',nml,
+                write (logString, '(a,i4,a,i5)') ' mklist> Molecule # ',
+     &            nml,
      &            ': Number of vdw-domains > ',mxvw
                 stop
               endif
@@ -272,26 +278,26 @@
 
 ! ____________________________________________ Summary
 !      do i=ifiat,ilaat
-!        write (*,'(3a,i5,a)') ' ######## atom ',nmat(i),'(',i,')'
+!        write (logString, '(3a,i5,a)') ' ######## atom ',nmat(i),'(',i,')'
 !        iv1=ivwat1(i)
 !        iv2=ivwat2(i)
 !        if (iv1.le.iv2) then
-!          write(*,'(a)') ' ---> vdW :'
+!          write (logString, '(a)') ' ---> vdW :'
 !          do j=iv1,iv2
-!            write (*,'(i5,a,i5)') lvwat1(j),'-',lvwat2(j)
+!            write (logString, '(i5,a,i5)') lvwat1(j),'-',lvwat2(j)
 !          enddo
 !        endif
 !        i41=i14at1(i)
 !        i42=i14at2(i)
 !        if (i41.le.i42) then
-!          write(*,'(a)') ' ---> 1-4 :'
-!          write(*,'(10i5)') (l14at(j),j=i41,i42)
+!          write (logString, '(a)') ' ---> 1-4 :'
+!          write (logString, '(10i5)') (l14at(j),j=i41,i42)
 !        endif
 !      enddo
 
       return
 
-    1 write (*,'(a,i4,a,i5)') ' mklist> Molecule # ',nml,
+    1 write (logString, '(a,i4,a,i5)') ' mklist> Molecule # ',nml,
      &                     ': Number of 1-4 interactions > ',mx14
       stop
       end
@@ -311,7 +317,7 @@
 
       implicit none
       integer mx, j, n, j1, l1, j2, l2, i1, i2, ja, k
-
+      character(255) logString
       dimension l1(mx),l2(mx)
 
       quench=.false.  ! initialize
@@ -333,7 +339,7 @@
             if (ja.gt.0) then  ! +1 set
               n=n+1
               if (n.gt.mx) then
-                write (*,'(a)') ' quench> too many sets'
+                write (logString, '(a)') ' quench> too many sets'
                 stop
               endif
               do k=n,j+2,-1  ! shift sets

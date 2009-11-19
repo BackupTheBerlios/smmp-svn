@@ -47,7 +47,7 @@
       nat = iatrs2(irsml2(nml2))-iatrs1(irsml1(nml1))+1
 
       if (nat.le.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &     ' rgyr> No atoms found for molecule #',nml
         return 
       endif

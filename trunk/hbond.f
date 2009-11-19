@@ -58,7 +58,7 @@
       else
         ntlvr=nvrml(nml)
         if (ntlvr.eq.0) then
-          write (*,'(a,i4)')
+          write (logString, '(a,i4)')
      &           ' hbond> No variables defined in molecule #',nml
           return
         endif
@@ -107,7 +107,8 @@
                     nutyhb(ntyhb)=1
                     ixtyhb(ntyhb)=ixhb
                   else
-                    write(*,*) ' hbond> increase parameter MXTYHB'
+                    write (logString, *) 
+     &                    ' hbond> increase parameter MXTYHB'
                     stop
                   endif
 
@@ -138,7 +139,8 @@
                   nutyhb(ntyhb)=1
                   ixtyhb(ntyhb)=ixhb
                 else
-                  write(*,*) ' hbond> increase parameter MXTYHB'
+                  write (logString, *) 
+     &               ' hbond> increase parameter MXTYHB'
                   stop
                 endif
 
@@ -157,7 +159,8 @@
 !      mhb = mhb+nutyhb(inhb)
 !     enddo
 
-      if (ipr.gt.0) write(*,'(1x,a,/)') ' hbond>  Hydrogen Bonds:'
+      if (ipr.gt.0) write (logString, '(1x,a,/)') 
+     &   ' hbond>  Hydrogen Bonds:'
 
       if (ntyhb.gt.0) then
 
@@ -286,10 +289,10 @@
       ahab=valang(ih,ia,ib)*crd
       adab=valang(id,ia,ib)*crd
 
-      write(*,*) '  '
-      write(*,*) ' Dah: ',dah,' Dad: ',dad
-      write(*,*) ' Adha: ',adha,' Ahab: ',adha,' Adab: ',adab
-      write(*,*) '  '
+      write (logString, *) '  '
+      write (logString, *) ' Dah: ',dah,' Dad: ',dad
+      write (logString, *) ' Adha: ',adha,' Ahab: ',adha,' Adab: ',adab
+      write (logString, *) '  '
 
       return
       end

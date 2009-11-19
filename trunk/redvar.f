@@ -100,14 +100,14 @@
 ! ___________________________________ Checks
       ntlvr=ivrml1(ntlml)+nvrml(ntlml)-1
       if (ntlvr.eq.0) then
-        write (*,*) ' redvar> No variables defined in molecule(s)'
+        write(logString,*)'redvar> No variables defined in molecule(s)'
         return
       endif
 ! ___________________________________ Initialize
 
       io=iopfil(lunvar,varfil,'old','formatted')
       if (io.eq.0) then
-        write (*,'(a,/,a,i3,2a)') 
+        write (logString, '(a,/,a,i3,2a)') 
      &    ' redvar> ERROR opening file to set variables:',
      &    ' LUN=',lunvar,' FILE=',varfil(1:iendst(varfil))
         stop
@@ -135,7 +135,7 @@
         elseif (it.eq.1) then  ! b.length
           vr=blat(iatvr(i))
         else
-          write(*,*) 'redvar>  unknown variable type: ',it,' !'
+          write(logString,*) 'redvar>  unknown variable type: ',it,' !'
           stop
         endif
         vlvrx(i)=vr
@@ -158,7 +158,8 @@
 
             if (iredin(lincmd,nml).le.0.or.
      &          nml.le.0.or.nml.gt.ntlml) then
-              write (*,*) 'redvar> ','Incorrect molecule number >',
+              write (logString, *) 
+     &                 'redvar> ','Incorrect molecule number >',
      &                    lincmd(1:l),'<  Must be in range [1,',
      &                    ntlml,'] !'
               close(lunvar)
@@ -309,7 +310,7 @@
 ! ################### impossible # (inum) of molecule
 
                         if (inum.le.0.or.inum.gt.ntlml) then
-                          write (*,*) ' # 1: ',inum
+                          write (logString, *) ' # 1: ',inum
                           goto 104
                         endif
 
@@ -323,7 +324,7 @@
 ! ################### impossible # of residue (inum) in molecule
 
                             if (k.lt.nfi.or.k.gt.irsml2(j)) then
-                              write (*,*) ' # 2: ',inum
+                              write (logString, *) ' # 2: ',inum
                               goto 104
                             endif 
 
@@ -342,7 +343,7 @@
 
                                 if (l.lt.nfi.or.
      &                              l.gt.nfi+nvrrs(k)-1) then
-                                  write (*,*) ' # 3: ',inum
+                                  write (logString, *) ' # 3: ',inum
                                   goto 104
                                 endif
 
@@ -426,7 +427,7 @@
 ! ################### impossible zone '-' (without integer)
 
                     if (ide.eq.1.and.ihy.eq.ide) then
-                      write (*,*) ' # 4: ',ide
+                      write (logString, *) ' # 4: ',ide
                       goto 104
                     endif
 
@@ -440,7 +441,7 @@
 
                       if (iredin(linh,ibz).le.0.or.ibz.le.0)
      &                  then
-                        write (*,*) ' # 5 '
+                        write (logString, *) ' # 5 '
                         goto 104
                       endif
 
@@ -455,7 +456,7 @@
 
                       if (iredin(linh,iez).le.0.or.iez.le.0.or.
      &                  iez.lt.ibz) then
-                        write (*,*) ' # 6 '
+                        write (logString, *) ' # 6 '
                         goto 104
                       endif
 
@@ -523,14 +524,14 @@
                   stvr(i)=.true.
                 endif
               enddo
-              if (.not.did) write (*,'(3a)')
+              if (.not.did) write (logString, '(3a)')
      &          ' redvar> No variables affected by command >',
      &          lincmd(1:ice),'<'
             else
 
               ll1=ibegst(linfld(nfld))
               ll2=iendst(linfld(nfld))
-              write (*,*) 'll1,ll2, linfld(nfld): ',ll1,ll2,
+              write (logString, *) 'll1,ll2, linfld(nfld): ',ll1,ll2,
      &           '>',linfld(nfld)(ll1:ll2),'<'
 
               goto 102
@@ -558,7 +559,8 @@
                 write(strg(k),'(f17.6)') (gbpr(k,i)*crd)
              enddo
 
-             write (*,'(3a,/,1x,5(a,2x),a)') ' redvar> ',nmml(i)(1:ie),
+             write (logString, '(3a,/,1x,5(a,2x),a)') ' redvar> ',
+     &                               nmml(i)(1:ie),
      &                                    ' with global parameters:',
      &                              (strg(k)(ibegst(strg(k)):),k=1,6)
              call setvar(i,vlvrx)
@@ -578,11 +580,11 @@
               if (stvr(iv)) then
                 did=.true.
                 if (fxvr(iv)) then
-                  write (*,'(3a,i4,1x,4a,f10.3,a)') ' redvar> ',
+                  write(logString,'(3a,i4,1x,4a,f10.3,a)') ' redvar> ',
      &                nmml(i)(1:ie),': residue ',j-jb,seq(j),
      &                ': ',nmvr(iv),' set ',vlvrx(iv),'   Fixed'
                 else
-                  write (*,'(3a,i4,1x,4a,f10.3)') ' redvar> ',
+                  write (logString, '(3a,i4,1x,4a,f10.3)') ' redvar> ',
      &                nmml(i)(1:ie),': residue ',j-jb,seq(j),
      &                ': ',nmvr(iv),' set ',vlvrx(iv)
                 endif
@@ -596,12 +598,12 @@
             enddo
           enddo
           if (did) then
-            if (in.gt.0) write (*,'(3a,i5,a)')
+            if (in.gt.0) write (logString, '(3a,i5,a)')
      &        ' redvar> Molecule ',nmml(i)(1:ie),': ',in,
      &        ' variable(s) remain unchanged'
             call setvar(iml,vlvrx)
           else
-            write (*,'(3a)') ' redvar> Molecule ',
+            write (logString, '(3a)') ' redvar> Molecule ',
      &        nmml(i)(1:ie),': No internal variables changed'
           endif
         endif
@@ -609,32 +611,35 @@
 
       return
 ! ____________________________________________________________ Errors
-  100 write (*,'(3a)') ' redvar> Cannot interpret command >',
+  100 write (logString, '(3a)') ' redvar> Cannot interpret command >',
      &                 lincmd(1:ice),'<'
       close(lunvar)
       stop
-  101 write (*,'(a,i5,a)') ' redvar> Command number ',ncmd,' reached'
+  101 write (logString, '(a,i5,a)') ' redvar> Command number ',ncmd,
+     &       ' reached'
       close(lunvar)
       stop
-  102 write (*,'(3a)') ' redvar> Cannot read value from >',
+  102 write (logString, '(3a)') ' redvar> Cannot read value from >',
      &                   lincmd(1:ice),'<'
       close(lunvar)
       stop
-  103 write (*,'(a,i3,3a)') ' redvar> Cannot read >',maxide,
+  103 write (logString, '(a,i3,3a)') ' redvar> Cannot read >',maxide,
      &         ' identifiers from >',linfld(ii)(1:ife),'<'
       close(lunvar)
       stop
-  104 write (*,'(5a)') ' redvar> Error in identifier >',
+  104 write (logString, '(5a)') ' redvar> Error in identifier >',
      &            linide(1:ide),'< of command >',lincmd(1:ice),'<'
       close(lunvar)
       stop
-  105 write (*,'(a,/,a,/,2a,/)') ' redvar> line with global paramters:',
+  105 write (logString, '(a,/,a,/,2a,/)') 
+     &                           ' redvar> line with global paramters:',
      &                           line(1:ile),' must contain 6 floating',
      &                           ' point numbers separated by commas !'
       close(lunvar)
       stop
 
-  106 write (*,'(a,/,a,/,2a,/)') ' redvar> line with global paramters:',
+  106 write (logString, '(a,/,a,/,2a,/)') 
+     &                           ' redvar> line with global paramters:',
      &                           line(1:ile),' angles must be inside ',
      &'ranges [-180,180], [-90,90], and [-180,180] Deg., respectively !'
       close(lunvar)

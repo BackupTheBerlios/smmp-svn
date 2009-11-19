@@ -150,7 +150,7 @@
          proc_range(3) = 1
          call mpi_group_range_incl(group_world, 1, proc_range, group(i)
      &                              ,error)
-         write (*,*) "Assigning rank ", j, proc_range,
+         write (logString, *) "Assigning rank ", j, proc_range,
      &               "to group", group(i)
          call flush(6)
          j = j + num_ppr
@@ -161,13 +161,13 @@
          if (comm(i).ne.MPI_COMM_NULL) then
              my_mpi_comm = comm(i)
              rep_id = i - 1
-             write (*,*) rep_id, "has comm", my_mpi_comm
+             write (logString, *) rep_id, "has comm", my_mpi_comm
              call flush(6)
          endif
       enddo
 
 !     Setup the communicator used for parallel tempering
-      write (*,*) "PTGroup=", ranks(:num_replica)
+      write (logString, *) "PTGroup=", ranks(:num_replica)
       call flush(6)
       call mpi_group_incl(group_world, num_replica, ranks, group_partem,
      &                    error)
@@ -175,13 +175,14 @@
      &                     error)
 
       if (partem_comm.ne.MPI_COMM_NULL) then
-         write (*,*) partem_comm,myrank, "is master for ", rep_id, "."
+         write (logString, *) partem_comm,myrank, "is master for ", 
+     &      rep_id, "."
       endif
 
       call mpi_comm_rank(my_mpi_comm,myrank,ierr)
       call mpi_comm_size(my_mpi_comm,no,ierr)
 
-      write (*,*) "My new rank is ", myrank, "of", no
+      write (logString, *) "My new rank is ", myrank, "of", no
       call flush(6)
 ! = Done setting up communicators =====================================
 
@@ -219,7 +220,7 @@
       end do
 
 !     ========================================  start of parallel tempering run
-      write (*,*) "There are ", no,
+      write (logString, *) "There are ", no,
      &            " processors available for ",rep_id
       call flush(6)
       nml = 1
@@ -233,7 +234,7 @@
 
 
       if(my_pt_rank.eq.0) then
-         write(*,*) "time for simulation using ", num_proc,
+         write (logString, *) "time for simulation using ", num_proc,
      &        " processors =",  endwtime - startwtime, " seconds"
          call flush(6)
       endif

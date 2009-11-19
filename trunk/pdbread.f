@@ -31,7 +31,7 @@
 ! -------------------------- local
       dimension cor(3)
       character atm*4,rsn*3,rsno*3,chn,chno,
-     &          rsid*5,rsido*5,line*132
+     &          rsid*5,rsido*5,line*132, logString*255
 
       natp=0
       nchp=0
@@ -47,7 +47,7 @@
       if (l.gt.0) then
         lunpdb = 99
       else
-        write (*,'(a)')
+        write (logString, '(a)')
      &    ' pdbread> empty file name to read pdb-structure'
 
         return
@@ -56,7 +56,7 @@
       io=iopfil(lunpdb,pdbfil,'old','formatted')
 
       if (io.le.0) then
-        write (*,'(a,/,a)')
+        write (logString, '(a,/,a)')
      &  ' pdbread> ERROR opening file to read pdb-structure: ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -69,7 +69,7 @@
       if (l.lt.54.or.index(line(1:4),'ATOM').le.0) goto 1
 
       if ( line(17:17).ne.' ' )  then
-        write (*,'(a,/,a,/,a,/,2a)')
+        write (logString, '(a,/,a,/,a,/,2a)')
      &  ' pdbread> found alternate atom location: ',
      &  '                !',
      &  line(:l),' in file: ',pdbfil(1:iendst(pdbfil))
@@ -85,7 +85,7 @@
       read(line,10,err=2) iat,rsn,chn,rsid,(cor(i),i=1,3)
 
       if ((natp+1).gt.MXATP) then
-        write (*,'(a,i5,a,/,a)')
+        write (logString, '(a,i5,a,/,a)')
      &  ' pdbread>  >MXATP (',MXATP,') ATOM lines in PDB file ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -96,7 +96,7 @@
       if (chn.ne.chno) then      ! new chain
 
         if ((nchp+1).gt.MXCHP) then
-          write (*,'(a,i3,a,/,a)')
+          write (logString, '(a,i3,a,/,a)')
      &    ' pdbread>  >MXCHP (',MXCHP,') chains in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -105,7 +105,7 @@
         endif
 
         if ((nrsp+1).gt.MXRSP) then
-          write (*,'(a,i3,a,/,a)')
+          write (logString, '(a,i3,a,/,a)')
      &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -140,7 +140,7 @@
       elseif (rsid.ne.rsido.or.rsn.ne.rsno) then      ! new residue
 
         if ((nrsp+1).gt.MXRSP) then
-          write (*,'(a,i3,a,/,a)')
+          write (logString, '(a,i3,a,/,a)')
      &    ' pdbread>  >MXRSP (',MXRSP,') residues in PDB file ',
      &    pdbfil(1:iendst(pdbfil))
 
@@ -171,7 +171,7 @@
 
       goto 1
 
-    2 write (*,'(a,/,a,/,2a)')
+    2 write (logString, '(a,/,a,/,2a)')
      &  ' pdbread> ERROR reading ATOM line ',
      &  line(:l),
      &  ' from file ',pdbfil(1:iendst(pdbfil))
@@ -194,7 +194,7 @@
 
       else
 
-        write (*,'(a,/,a)')
+        write (logString, '(a,/,a)')
      &  ' pdbread> NO atom coordinates selected from file ',
      &  pdbfil(1:iendst(pdbfil))
 
@@ -244,7 +244,7 @@
 ! =============================== SMMP molecule
         nml=nml+1
         if (nml.gt.mxml) then
-          write(*,'(a,i4,2a)')' pdbvars> NUMBER of chains > '
+          write (logString, '(a,i4,2a)')' pdbvars> NUMBER of chains > '
      &                          ,mxml,' in ',' ?'
           stop
         endif
@@ -265,8 +265,8 @@
           nrs=nrs+1
 
           if (nrs.gt.mxrs) then
-            write(*,'(a,i4,2a)') ' pdbvars> NUMBER of residues > '
-     &                       ,mxrs,' in ',' ?'
+            write (logString, '(a,i4,2a)') 
+     &         ' pdbvars> NUMBER of residues > ', mxrs, ' in ',' ?'
             stop
           endif
 
@@ -420,8 +420,8 @@
             yat(ii)=yatp(ix)
             zat(ii)=zatp(ix)
           else
-            write(*,'(3a)') ' pdbvars> missing PDB atom ',nmat(ii),
-     &       ' is ref. point for SMMP - cannot proceed !'
+            write (logString, '(3a)') ' pdbvars> missing PDB atom ',
+     &         nmat(ii), ' is ref. point for SMMP - cannot proceed !'
           endif
         enddo
 
@@ -435,8 +435,8 @@
        endif
 ! ++++++++++
 
-       write(*,*) ' '
-       write(*,*) ' Initial RMSD ',rmsd
+       write (logString, *) ' '
+       write (logString, *) ' Initial RMSD ',rmsd
 
       enddo ! chains(molecules)
 
@@ -484,7 +484,7 @@
               endif
             enddo
 
-!            write(*,'(8a)') ' pdbvars> ',atm,' not found in '
+!            write (logString, '(8a)') ' pdbvars> ',atm,' not found in '
 !     #       ,chnp(nc),' ',rsidp(irs),' ',rsnmp(irs)
 
           endif

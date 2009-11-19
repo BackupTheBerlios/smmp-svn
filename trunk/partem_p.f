@@ -94,8 +94,8 @@
       frame = ifrrm
       trackID = 1
       odd = 1
-      write (*,*) 'Starting parallel tempering.'
-      write (*,*) 'parameters, ',switch,newsta,nmes,nswp,nmes,
+      write (logString, *) 'Starting parallel tempering.'
+      write (logString, *) 'parameters, ',switch,newsta,nmes,nswp,nmes,
      &            rep_id, num_rep, partem_comm, myrank
       call flush(6)
 !     
@@ -166,7 +166,7 @@
             read(13,*) iold
             do i=1,num_rep
                read(13,*) j,inode(i),intem(i),yol(i),e_minp(i),h_maxp(i)
-               write (*,*) "par_R.in:",i,j
+               write (logString, *) "par_R.in:",i,j
             end do
             jold=(iold/nmes)*num_rep
             rewind 14
@@ -177,7 +177,7 @@
      &              ,dummy, idum1, idum2, idum3
      &              ,idum1, idum2, idum3, e_min
      &              ,dummy, dummy
-               write (*,*) i
+               write (logString, *) i
                call flush(6)
             end do
             close(13)
@@ -196,21 +196,22 @@
       BETA = pbe(inode(rep_id+1))
       e_min = e_minp(rep_id+1)
       h_max = h_maxp(rep_id+1)
-      write (*,*) "E_min=",e_min," for ", rep_id + 1 
+      write (logString, *) "E_min=",e_min," for ", rep_id + 1 
       eol=energy()
       if(.not.newsta.and.abs(yol(rep_id + 1) - eol).gt.0.1) then
-         write(*,*) rep_id, ' Warning: yol(rep_id).ne.eol:'
-         write(*,*) rep_id, yol(rep_id + 1), eol
+         write (logString, *) rep_id, ' Warning: yol(rep_id).ne.eol:'
+         write (logString, *) rep_id, yol(rep_id + 1), eol
       endif
 !     Start of simulation
-      write (*,*) '[',rep_id, myrank, beta, partem_comm,
+      write (logString, *) '[',rep_id, myrank, beta, partem_comm,
      &            '] Energy before equilibration:', eol
 !     =====================Equilibration by canonical Metropolis
       do nsw=1,nequi
          call metropolis(eol,acz,can_weight)
       end do
       CALL MPI_BARRIER(MPI_COMM_WORLD,IERR)
-      write (*,*) '[',rep_id,'] Energy after equilibration:', eol
+      write (logString, *) '[',rep_id,'] Energy after equilibration:', 
+     &   eol
       call flush(6)
 !     
 !======================Multiple Markov Chains
@@ -221,7 +222,7 @@
          iold = iold + 1	
          eol0 = eol
          if (myrank.eq.0.and.rep_id.eq.0) then
-            write (*,*) "Finished sweep", nsw
+            write (logString, *) "Finished sweep", nsw
             call flush(6)
          endif
          if(mod(iold,nmes).eq.0.and.myrank.eq.0) then
@@ -493,11 +494,11 @@
                CALL MPI_BCAST(randomCount,1,MPI_INTEGER,0,my_mpi_comm,
      &                IERR)
                if (myrank.ne.0) then
-!                  write (*,*) '[', myrank,'] Missed', randomCount, 
+!                  write (logString, *) '[', myrank,'] Missed', randomCount, 
 !     &                            'random numbers.'
                   do i = 1, randomCount
                      rd = grnd()
-!                     write (*,*) '[', myrank,'] rd=', rd
+!                     write (logString, *) '[', myrank,'] rd=', rd
                   enddo
                endif
             endif
@@ -518,7 +519,7 @@
       call outvar(0, fileNameMP(filebase, 6, 9, nu))
       e_final=energy()
       if (partem_comm.ne.MPI_COMM_NULL) then
-         write (*,*) rep_id, ' E_final', e_final
+         write (logString, *) rep_id, ' E_final', e_final
       endif
       eol0 = eol
       acz0 = acz

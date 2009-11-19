@@ -41,8 +41,9 @@
       if (grn(:3).eq.'ace'.or.grc(:3).eq.'ace'
      &.or.grn(:3).eq.'nme'.or.grc(:3).eq.'nme') then
 
-        write(*,'(2a)') ' addend> N-Acetyl (ace) or N-Methylamide (nme)'
-     &   ,' should be put in SEQUENCE file, not added as end groups'
+        write (logString, '(2a)') 
+     &   ' addend> N-Acetyl (ace) or N-Methylamide (nme)',
+     &   ' should be put in SEQUENCE file, not added as end groups'
 
         stop
       endif
@@ -58,7 +59,7 @@
             if(sh2) then
               sbrs='nh2+'
             else
-              write (*,'(2a)') ' addend> ',
+              write (logString, '(2a)') ' addend> ',
      &         ' No N-terminal Hyp possible with ECEPP/3 dataset'
               stop
             endif
@@ -86,7 +87,7 @@
 
         else
 
-          write(*,'(2a)') ' addend> Can add only ',
+          write (logString, '(2a)') ' addend> Can add only ',
      &     'nh2 or nh3+ to N-terminus'
           stop
 
@@ -97,7 +98,7 @@
 
       else ! ace
 
-        write(*,'(2a)') ' addend> Acetyl group',
+        write (logString, '(2a)') ' addend> Acetyl group',
      &     ' at N-terminus not modified'
       endif
 
@@ -127,7 +128,7 @@
 
         else
 
-          write(*,'(2a)') ' addend> Can add only ',
+          write (logString, '(2a)') ' addend> Can add only ',
      &     'cooh or coo- to C-terminus'
           stop
 
@@ -138,7 +139,7 @@
 
       else  ! N'-methylamide
 
-        write(*,'(2a)') ' addend> N-Methylamide',
+        write (logString, '(2a)') ' addend> N-Methylamide',
      &     ' at C-terminus not modified'
 
       endif
@@ -148,9 +149,11 @@
       do i=iatrs1(irsml1(nml)),iatrs2(irsml2(nml))
         cg = cg + cgat(i)
       enddo
-      if (abs(cg).gt.1.d-5) write(*,'(a,i2,a,f7.3,/)')
-     &        ' addend> Net charge of molecule #'
+      if (abs(cg).gt.1.d-5) then
+         write (logString, '(a,i2,a,f7.3)') 
+     &      ' addend> Net charge of molecule #'
      &        ,nml,': ',cg
+      endif
 
       return
       end
@@ -203,8 +206,9 @@
           goto 1
         endif
       enddo
-      write (*,'(4a,i4,a,i4)') ' rplgrp> cannot find atom >',rpat,
-     &'< to be replaced in residue ',seq(nrs),nrs,' of molecule ',nml
+      write (logString, '(4a,i4,a,i4)') ' rplgrp> cannot find atom >',
+     &   rpat,
+     &   '< to be replaced in residue ',seq(nrs),nrs,' of molecule ',nml
       stop
 
     1 call fndbrn(nml,nrs,nfirp,nlarp,irng1,irng2,bb)
@@ -233,7 +237,7 @@
           do i=1,nbdat(nfirp)+1
             if (iowat(ibd(i)).ne.nfirp) then
               if (ibdrg.ne.0) then
-                write (*,'(2a,i3)') 
+                write (logString, '(2a,i3)') 
      &             ' rplgrp> Can handle only simple ring at 1st',
      &             ' atom of molecule #',nml
                 stop
@@ -260,7 +264,7 @@
           endif
           goto 11
         else
-          write (*,'(4a,i4,a,i4)') 
+          write (logString, '(4a,i4,a,i4)') 
      &      ' rplgrp> Cannot replace BACKBONE atom ',rpat,
      &      ' of residue ',seq(nrs),nrs,' in molecule #',nml
           stop
@@ -274,7 +278,7 @@
       nxtbb2=iowat(nxtbb1)
 ! _______________________________ get data for substituent atoms
     3 if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
-        write (*,'(a,/,a,i3,2a)') 
+        write (logString, '(a,/,a,i3,2a)') 
      &    ' rplgrp> ERROR opening library of residues:',
      &    ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
         stop
@@ -288,7 +292,7 @@
           goto 4
         endif
       enddo
-      write (*,'(4a)') ' rplgrp> Cannot find atom >',rpat,
+      write (logString, '(4a)') ' rplgrp> Cannot find atom >',rpat,
      &'< in substituent residue ',sbrs
       stop
 
@@ -371,7 +375,8 @@
           i3=1
         else  ! more atoms
           if ((ilaat+nsh).gt.mxat) then
-            write (*,'(a,i5)') ' rplgrp> number of atoms > ',mxat
+            write (logString, '(a,i5)') ' rplgrp> number of atoms > ',
+     &         mxat
             stop
           endif
 
@@ -465,7 +470,7 @@
         if (ibdrg.ne.0) then
           nb=nb+1
           if (nb.gt.mxbd) then
-            write (*,'(6a,/,2a,3(i4,a))')
+            write (logString, '(6a,/,2a,3(i4,a))')
      &      ' rplgrp> Cannot add atoms following ',rpat,
      &      ' from group ',sbrs,' to atom ',rpat,
      &      ' of residue ',seq(nrs),nrs,' in molecule #',nml,
@@ -592,7 +597,8 @@
           i3=1
         else
           if ((ilavr+jsh).gt.mxvr) then
-            write (*,'(a,i5)') ' rplgrp> number of variables > ',mxvr
+            write (logString, '(a,i5)') 
+     &         ' rplgrp> number of variables > ',mxvr
             stop
           endif
           i1=ilavr
@@ -627,12 +633,12 @@
 
       return
 ! __________________________________________ Errors
-   10 write (*,'(3a,/,2a,i4,a,i4,/,2a)') 
+   10 write (logString, '(3a,/,2a,i4,a,i4,/,2a)') 
      &   ' rplgrp> Cannot replace atom(s) following ',rpat,
      &   ' from INSIDE a ring','    in residue: ',seq(nrs),nrs,
      &   ' in molecule #',nml,' or in substitute: ',sbrs
       stop
-   11 write (*,'(4a,i4,a,i4,/,a)') 
+   11 write (logString, '(4a,i4,a,i4,/,a)') 
      &   ' rplgrp> Cannot replace atom(s) following ',rpat,
      &   ' of residue ',seq(nrs),nrs,' in molecule #',nml,
      &   ' since necessary 2 previous atoms are not available' 
@@ -685,7 +691,8 @@
             goto 10
           endif
         else
-          write (*,*) ' redchg> dont know which end goup is present'
+          write(logString,*)
+     &                  ' redchg> dont know which end goup is present'
           stop
         endif
         ilib=1
@@ -697,7 +704,7 @@
       if (ilib.eq.1) then
 
         if (iopfil(lunchg,chgfil,'old','formatted').le.izero) then
-          write (*,'(a,/,a,i3,2a)') 
+          write (logString, '(a,/,a,i3,2a)') 
      &      ' redchg> ERROR opening library of charges:',
      &      ' LUN=',lunchg,' FILE=',chgfil(1:iendst(chgfil))
           stop
@@ -721,14 +728,15 @@
                   goto 2
                 endif
               enddo
-              write (*,'(6a)') ' redchg> Cannot find atom: ',atnm,
+              write (logString, '(6a)') ' redchg> Cannot find atom: ',
+     &                        atnm,
      &                        ' for entry: ',cgty,' in library: ',
      &                        chgfil(1:iendst(chgfil))
               stop
     2       enddo
             return
           else
-            write (*,'(4a)')
+            write (logString, '(4a)')
      &       ' redchg> must increase MXATH to read data for entry: ',
      &        cgty,' in library: ',chgfil(1:iendst(chgfil))
             close(lunchg)
@@ -736,7 +744,7 @@
           endif
         endif
         goto 1
-    3   write (*,'(4a)')
+    3   write (logString, '(4a)')
      &   ' redchg> Cannot find entry: ',cgty,' in library: ',
      &      chgfil(1:iendst(chgfil))
         close(lunchg)
@@ -745,7 +753,7 @@
       elseif (ilib.eq.2) then
 
         if (iopfil(lunlib,reslib,'old','formatted').le.izero) then
-          write (*,'(a,/,a,i3,2a)') 
+          write (logString, '(a,/,a,i3,2a)') 
      &      ' redchg> ERROR opening library of residues:',
      &      ' LUN=',lunlib,' FILE=',reslib(1:iendst(reslib))
           stop
@@ -768,14 +776,15 @@
                   goto 5
                 endif
               enddo
-              write (*,'(6a)') ' redchg> Cannot find atom: ',atnm,
+              write (logString, '(6a)') ' redchg> Cannot find atom: ',
+     &                        atnm,
      &                        ' for entry: ',cgty,' in library: ',
      &                        reslib(1:iendst(reslib))
               stop
     5       enddo
             return
           else
-            write (*,'(4a)')
+            write (logString, '(4a)')
      &       ' redchg> must increase MXATH to read data for entry: ',
      &        cgty,' in library: ',reslib(1:iendst(reslib))
             close(lunchg)
@@ -783,7 +792,7 @@
           endif
         endif
         goto 4
-    6   write (*,'(4a)')
+    6   write (logString, '(4a)')
      &   ' redchg> Cannot find entry: ',cgty,' in library: ',
      &      reslib(1:iendst(reslib))
         close(lunchg)
@@ -791,7 +800,7 @@
 
       endif
 
-   10 write (*,'(4a)')
+   10 write (logString, '(4a)')
      &    ' redchg> Do not have charges for N/C-terminal residue ',
      &    res,' modified with group :',sbrs
       stop

@@ -158,12 +158,13 @@
         nboxj=mx+my*ndx+mz*nqxy+1
         numbox(j)=nboxj
         if (nboxj.gt.mxbox) then
-         write(*,'(a)') 'enysol> bad mxboxe-2'
-         write(*,*) 'diagnostics ...'
-         write(*,*) 'atom ',j
-         write(*,*) 'position ',xat(j),yat(j),zat(j)
-         write(*,*) 'box indices ',mx,my,mz
-         write(*,*) 'resulting boxindex and limit ',nboxj,mxbox
+         write (logString, '(a)') 'enysol> bad mxboxe-2'
+         write (logString, *) 'diagnostics ...'
+         write (logString, *) 'atom ',j
+         write (logString, *) 'position ',xat(j),yat(j),zat(j)
+         write (logString, *) 'box indices ',mx,my,mz
+         write (logString, *) 'resulting boxindex and limit ',nboxj,
+     &      mxbox
 
          stop
         else
@@ -194,8 +195,8 @@
       iboxmax = boxpp * (myrank + 1) - 1
       if (myrank.eq.(no - 1)) iboxmax = ncbox
       if (myrank.eq.-1) then
-         write (*,*) 'enysol> Summary:', enysolct, ncbox, boxpp,
-     &               ndx, ndy, ndz
+         write (logString, *) 'enysol> Summary:', enysolct, ncbox, 
+     &               boxpp, ndx, ndy, ndz
       endif
       do ibox = iboxmin + 1, iboxmax + 1
          iz = (ibox - 1) / nqxy
@@ -332,7 +333,7 @@
        end do
       call MPI_ALLREDUCE(eysl, eyslsum, 1, MPI_DOUBLE_PRECISION,
      &      MPI_SUM,my_mpi_comm, ierror)
-!       write(*,*) 'enysol>', myrank, eysl, eyslsum
+!       write (logString, *) 'enysol>', myrank, eysl, eyslsum
       tsurfres = surfres
       call MPI_ALLREDUCE(tsurfres, surfres, mxrs, MPI_DOUBLE_PRECISION,
      &      MPI_SUM,my_mpi_comm, ierror)
@@ -340,7 +341,7 @@
 
       endwtime = MPI_Wtime()
       if (myrank.le.-1) then
-         write (*,*) 'enysol>',myrank,enysolct,
+         write (logString, *) 'enysol>',myrank,enysolct,
      &               iboxmin + 1, iboxmax + 1,
      &               endwtime - startwtime, "s"
       endif
@@ -375,7 +376,7 @@
 !   The first non-comment line is the number of the surface points
 
       read(lin(1:5),'(i5)') npnt
-!        write(*,'(a,i5)') 'the number of points---->',npnt
+!        write (logString, '(a,i5)') 'the number of points---->',npnt
 
 !    Read the surface points
 

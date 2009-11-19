@@ -53,7 +53,7 @@
 
       ntlvr=nvrml(nml)
       if (ntlvr.eq.0) then
-        write (*,'(a,i4)')
+        write (logString, '(a,i4)')
      &           ' opereg> No variables defined in molecule #',nml
         return
       endif
@@ -329,7 +329,7 @@
 
         gdn = ( enyreg(nml) - eyrg ) / del
 
-        write (*,*) ' Gb. var #',(ii+i),': ',gdeygb(ii+i),gdn,
+        write (logString, *) ' Gb. var #',(ii+i),': ',gdeygb(ii+i),gdn,
      &                                   abs(gdn-gdeygb(ii+i))
 ! ----------------------------- restore
         gbpr(i,nml) = pro
@@ -381,7 +381,7 @@
       gdn=(eynw-eyrg)/del    ! numerical derivative
       gda=gdeyrg(iv)         ! analytical der.
 
-      write (*,'(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
+      write (logString, '(1x,2a,2(e12.6,a))') nmvr(iv),': ',gda,' (',
      &       abs(gda-gdn),')'
 
 ! _________________________ restore vars

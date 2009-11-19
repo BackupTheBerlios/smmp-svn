@@ -43,22 +43,22 @@
       wtrg = 1.d0
       wtey = 0.d0
 
-      write(*,'(/,a,2(a,f4.2),/)')
+      write (logString, '(/,a,2(a,f4.2),/)')
      &  ' ====================== Regularization only',
      &  '   Wt(energy) = ',wtey,'  Wt(regul.) = ',wtrg
 
       call minim(2, nsteps, acc)
 
-      write(*,*) ' '
-      write(*,*) ' ---------- contacts after 1st regularization'
-      write(*,*) ' '
+      write (logString, *) ' '
+      write (logString, *) ' -------- contacts after 1st regularization'
+      write (logString, *) ' '
       call cnteny(nml)
-      write(*,*) ' '
+      write (logString, *) ' '
 
       nrs = irsml2(nml)-irsml1(nml)+1
       call rmsdopt(nml,1,nrs,ixatp,xatp,yatp,zatp,0,rm,av1,av2,rmsd)
 
-      write(*,*) ' RMSD = ',rmsd
+      write (logString, *) ' RMSD = ',rmsd
 
 ! --------------------------------------- fix vars. defined in PDB
 
@@ -69,15 +69,15 @@
       enddo  ! vars.
       ireg = 0
 
-      write(*,'(/,a,2(a,f4.2),/)')
+      write (logString, '(/,a,2(a,f4.2),/)')
      &  ' ====================== Internal Energy for Hydrogens only',
      &  '   Wt(energy) = ',wtey,'  Wt(regul.) = ',wtrg
 
       call minim(1, nsteps, acc)
 
-      write(*,*) ' '
-      write(*,*) ' ---------- contacs after Emin. for hydrogens'
-      write(*,*) ' '
+      write (logString, *) ' '
+      write (logString, *) ' -------- contacs after Emin. for hydrogens'
+      write (logString, *) ' '
       call cnteny(nml)
 
       do i = ivrml1(nml),nvrml(nml)
@@ -97,7 +97,7 @@
         wtrg = 1.d0 - dn*dble(it)
         wtey = 1.d0 - wtrg
 
-        write(*,'(/,a,i2,2(a,e11.3),/)')
+        write (logString, '(/,a,i2,2(a,e11.3),/)')
      &    ' ================ Minimization #',it,
      &        '   Wt(energy) = ',wtey,'  Wt(regul.) = ',wtrg
 
@@ -106,20 +106,21 @@
         nrs = irsml2(nml)-irsml1(nml)+1
         call rmsdopt(nml,1,nrs,ixatp,xatp,yatp,zatp,0,rm,av1,av2,rmsd)
 
-        write(*,*) ' '
-        write(*,*) ' RMSD = ',rmsd
+        write (logString, *) ' '
+        write (logString, *) ' RMSD = ',rmsd
 
       enddo
 
-      write(*,*) ' '
-      write(*,*) ' ---------- contacts after full regularization'
-      write(*,*) ' '
+      write (logString, *) ' '
+      write (logString, *) ' ------- contacts after full regularization'
+      write (logString, *) ' '
       call cnteny(nml)
 
 !      call outpdb(nml,12)
 
 ! Output of dihedral angles of the regularized structure
-      write(*,*) 'Dihedral angles of the regularized structure;'
+      write (logString, *) 
+     &   'Dihedral angles of the regularized structure;'
       call outvar(nml, 'regd.var')
 
       ireg = 0

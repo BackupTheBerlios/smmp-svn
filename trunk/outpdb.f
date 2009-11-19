@@ -42,7 +42,7 @@
       i9 = ichar('9')
 
       if (nml.lt.0.or.nml.gt.ntlml) then
-        write(*,*) ' outpdb>  No such molecule #',nml,' !'
+        write (logString, *) ' outpdb>  No such molecule #',nml,' !'
         return
       elseif (nml.gt.0) then
         im1 = nml
