@@ -1,5 +1,6 @@
-      implicit integer*4 (i-n)
-      implicit real*8 (a-h,o-z)
+      implicit none
+!      implicit integer*4 (i-n)
+!      implicit real*8 (a-h,o-z)
       character*255 version
 
       integer MAX_REPLICA, MAX_PROC, mxml, mxrs, mxat, mxbd, mxath
@@ -49,6 +50,7 @@
 
       integer seed
       integer enysolct
+      double precision boxsize
       common /counter/enysolct
       common /commonrandom/ seed
       common /bounds/ boxsize
@@ -56,10 +58,11 @@
       integer myrank, no, my_mpi_comm
       integer workPerProcessor(0:mxml, 0:MAX_PROC)
       common/paral/myrank,no,my_mpi_comm,workPerProcessor
-      integer beta
+      double precision beta
       common /bet/beta
 !==   For solvent============================
       integer mxpoint, mxbox, mxinbox, mxtysol
+      double precision rwater
       parameter (mxpoint=2000)                                          !
       parameter(mxbox=80000)                                          !
       parameter(mxinbox=80000)                                        !
@@ -67,8 +70,11 @@
       parameter (rwater=1.4) !The Wdv radius of the water molecule
 
 !==   Solvent types 
+      integer itysol
       logical isolscl
       common /isolty/ itysol, isolscl
+      double precision spoint, coef_sl, rad_vdw, surfres, rsstrg
+      integer npnt
       common /tes/ spoint(mxpoint,3)
       common /pnt/ npnt
       common /sol/ coef_sl(mxtysol,mxtyat),rad_vdw(mxtysol,mxtyat)
@@ -77,24 +83,29 @@
       common /abgncor/rsstrg
 
 !----  The vdW radii of the atoms and solvation coefficients
+       double precision rvdw, sigma
        common /solvent/ rvdw(mxat),sigma(mxat)
 
 !     vdvol - van der Waals volume of the molecule
 !     asa   - Surface of molecule
+      double precision vdvol, asa, asap, asah
       common /v_sol/ vdvol,asa,asap,asah
 
 !     gradan - analytical gradients of solv. energy against atomic coordinates
+      double precision gradan
       common /deriv/ gradan(mxat,3)
 
 
 !-----For calculation of hydrogen bonds
+      integer mxtyhb, ntyhb, ixtyhb, nutyhb, mmhb, nvr
       parameter(mxtyhb=100) !  Maximum number of hydrogen bond types
       common /h_bond/ ntyhb,ixtyhb(mxtyhb),nutyhb(mxtyhb),              &
      &                mmhb(mxml, mxml)
 !-----For molecule parameter
       common/mol_par/ nvr
-
+      
 !-----Hydrophobic/polar radius of gyration
+      double precision rgyh, rgyp
       common /rgy/ rgyh, rgyp
 !=======================================  
        
@@ -108,11 +119,12 @@
 ! upchswitch=2 => More sophisticated, temperature dependent choice between
 ! simple pivot update and BGS
       logical rndord
-      integer upchswitch
+      integer upchswitch, idloa, idloz, idupa, idupz
       double precision bgsprob
       common /updchois/rndord,upchswitch,bgsprob
       common /con_i/ idloa,idloz,idupa,idupz      
 !---- The contact matrix and the indices of C_alpha atoms
+      integer ijcont, ind_alf, iref, nci
       common/cont_i_j/ ijcont(mxrs,mxrs),ind_alf(mxrs)
       common /jref/ iref(mxrs,mxrs),nci
 
@@ -130,7 +142,7 @@
 !  chgfil - name of file with charges for terminal residues
 !  varfil - name of file with commands to set variables
 !  rstfil - name of file with variable restraints
-
+      integer lunlib, lunseq, lunchg, lunvar, lunrst
       common /fil_i/ lunlib,lunseq,lunchg,lunvar,lunrst
       character reslib*80,seqfil*80,chgfil*80,varfil*80,rstfil*80
       common /fil_c/ reslib,seqfil,chgfil,varfil,rstfil
@@ -153,7 +165,8 @@
 !                      according to global angles alpha,beta,gamma)
 !  gbpr - 6 global parameters per molecule (3 shifts, 3 angles)
 ! --------------------------------------------------------------------
-
+      integer ntlml, irsml1, irsml2, ivrml1, nvrml, imsml1, nmsml
+      integer iadml1, nadml, ixrfpt, ixatp, ireg
       common /mol_i/ ntlml,irsml1(mxml),irsml2(mxml),ivrml1(mxml),      &
      &nvrml(mxml),imsml1(mxml),nmsml(mxml),iadml1(mxml),nadml(mxml)     &
      &,ixrfpt(3,mxml)                                                   &
@@ -167,7 +180,8 @@
       character nmml(mxml)*80
       common /mol_c/ nmml
 
-! ----------------------------------------- new
+! ----------------------------------------- 
+      double precision rfpt, gbpr, xrfax, yrfax, zrfax
       common /mol_r/ rfpt(3,mxml),gbpr(6,mxml),                         &
      &xrfax(3,mxml),yrfax(3,mxml),zrfax(3,mxml)
 ! ---------------------------------------------
@@ -176,7 +190,7 @@
 !  ixatrs  - index of last backbone atom (may be bound to next res.)
 !  ivrrs1,nvrrs  - index of 1st/number of local variable for residue
 !  seq    - names of residues
-
+      integer iatrs1, iatrs2, ixatrs, ivrrs1, nvrrs
       common /res_i/ iatrs1(mxrs),iatrs2(mxrs),ixatrs(mxrs),ivrrs1(mxrs)&
      &              ,nvrrs(mxrs)
       character seq(mxrs)*4
@@ -208,7 +222,10 @@
 !  yat    - | cartesian coordinates of atom
 !  zat    - |
 !  nmat   - atom name
-
+      integer ityat, iowat, iyowat, nbdat, ibdat, iybdat, ixmsat, cgat
+      double precision xbaat, ybaat, zbaat, baat, snbaat, csbaat, xtoat
+      double precision ytoat, ztoat, toat, sntoat, cstoat, blat, xat
+      double precision yat, zat
       common /atm_i/ ityat(mxat),iowat(mxat),iyowat(mxat),nbdat(mxat),  &
      &               ibdat(mxbd,mxat),iybdat(mxbd,mxat),ixmsat(mxat)    
       common /atm_r/ cgat(mxat),                                        &
@@ -238,6 +255,9 @@
 !  ladvr - list of variable indices which are related to other variables
 !  fxvr - .true. if variable will be fixed throughout calculations
 
+      double precision olvlvr, vlvr, axvr
+      integer iatvr, ityvr, iclvr, iorvr, imsvr1, imsvr2, latms1
+      integer latms2, iadvr1, iadvr2, ladvr, idvr
       common /var_r/ olvlvr(mxvr),vlvr(mxvr),axvr(mxvr)
       common /var_i/ iatvr(mxvr),ityvr(mxvr),iclvr(mxvr),iorvr(mxvr),   &
      &               imsvr1(mxvr),imsvr2(mxvr),latms1(mxms),latms2(mxms)&
@@ -258,7 +278,8 @@
 !  e0to_s,sgto_s,rnto_s - barrier[kcal/mole],sign,multiplicity of tors.potential
 !  eps_s - distance-INdependent diel. constant
 !  do_s,ac_s - flag to define atom-types serving as donors/acceptors in HB
-
+      double precision ehm, atpl, efel, emin, rmin, chb_s, ahb_s, e0to_s
+      double precision sgto_s, rnto_s, eps_s
       common /sche_r/ ehm,atpl(mxtyat),efel(mxtyat),emin(mxtyat),       &
      &    rmin(mxtyat),chb_s(mxhbdo,mxhbac),ahb_s(mxhbdo,mxhbac),       &
      &            e0to_s(mxtyto),sgto_s(mxtyto),rnto_s(mxtyto),         &
@@ -275,6 +296,8 @@
 !  cohb_f - cut-off distance between H- & acceptor atom in Hydrogen-Bonds
 !  do_f,ac_f - flags atom-types serving as donors/acceptors in HB
 
+      double precision c_f, a_f, chb_f, ahb_f, e0to_f, sgto_f, rnto_f
+      double precision plt_f, slp_f, cohb_f
       common /flex_r/ c_f(mxtyat,mxtyat),a_f(mxtyat,mxtyat),            &
      &            chb_f(mxhbdo,mxhbac),ahb_f(mxhbdo,mxhbac),            &
      &            e0to_f(mxtyto),sgto_f(mxtyto),rnto_f(mxtyto),         &
@@ -297,7 +320,9 @@
 !  flex - .true. if FLEX-parametrization is to be used (obsolete)
 !  ientyp : 0 => ECEPP, 1 => FLEX, 2 => Lund, 3 => ECEPP+Abagyan
 !  tesgrd - .true. if GRADTEST to be included
-
+      integer ihbty, ientyp
+      double precision cij, aij, a14, chb, ahb, e0to, sgto, rnto, esnto
+      double precision conv, plt, slp, cohb
       common /epar_i/ ihbty(mxtyat,mxtyat)
       common /epar_r/ cij(mxtyat,mxtyat),aij(mxtyat,mxtyat),            &
      & a14(mxtyat,mxtyat),chb(mxtyat,mxtyat),ahb(mxtyat,mxtyat),        &
@@ -325,6 +350,11 @@
 !  gdeysl - partial derivative of solvatation energy vs. variable (Gradient)
 !  wtey - weight to energy & energy gradient
 !  wtrg - weight to reg. target & its gradient
+      integer nvwml, ivwml1, n14ml, i14ml1, ivwat1, ivwat2, i14at1
+      integer i14at2, lvwat1, lvwat2, l14at, ixatvw, ixat14
+      double precision eyel, eyvw, eyhb, eyvr, eysm, eysl, eyrg, eyslh
+      double precision eyslp, eyab, eysmi, eyhbi, eyeli, eyvwi, gdeyvr
+      double precision gdeyrg, gdeysl, gdeygb, wtey, wtrg
       common /eny_i/ nvwml(mxml),ivwml1(mxml),n14ml(mxml),i14ml1(mxml), &
      &               ivwat1(mxat),ivwat2(mxat),i14at1(mxat),i14at2(mxat)&
      &              ,lvwat1(mxvw),lvwat2(mxvw),l14at(mx14)              &
@@ -347,6 +377,9 @@
 !  iprtsu - pointers from subsets --> restr. types
 !  i1vrsu,i2vrsu - 1st,last pointer in 'ipvrsu' per var. subset
 !  ipvrsu - pointers var. subset -> variables
+      integer ntlrt, ntlsu, i1vrrt, i2vrrt, i1rtsu, nrtsu
+      integer iprtsu, i1vrsu, i2vrsu, ipvrsu
+      double precision pbrt, vuvrrt, dvvrrt
 
       common /rstr_i/ ntlrt,ntlsu,i1vrrt(mxrt),i2vrrt(mxrt),            &
      &                iprtsu(mxrtsu),i1rtsu(mxvr),nrtsu(mxvr),          &
@@ -361,7 +394,9 @@
       common /rsnm_c/ rsnmcd,onltcd
 
 !   arrays for help
-
+      integer ityath, iowath, iyowath, nbdath, ibdath, iybdath, ityvrh
+      integer iclvrh, iatvrh
+      double precision blath, baath, toath, cgath
       common /help_i/ ityath(mxath),iowath(mxath),iyowath(mxath),       &
      &                nbdath(mxath),ibdath(mxbd,mxath),                 &
      &                iybdath(mxbd,mxath),                              &
