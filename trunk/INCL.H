@@ -57,6 +57,7 @@
       common/paral/myrank,no,my_mpi_comm,workPerProcessor
       common /bet/beta
 !==   For solvent============================
+      integer mxpoint, mxbox, mxinbox, mxtysol
       parameter (mxpoint=2000)                                          !
       parameter(mxbox=80000)                                          !
       parameter(mxinbox=80000)                                        !
